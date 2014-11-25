@@ -122,6 +122,11 @@ public class Tournee {
         // TODO implement here
     }
 
+    @Deprecated
+    public LinkedList<Troncon> testCaculDijkstra(Noeud noeudDepart, Noeud noeudDestination) {
+    	return  calculerDijkstra(noeudDepart, noeudDestination);
+    }
+    
     /**
      * Méthode calculant le plus court chemin entre deux noeuds
      * @param noeudDepart
@@ -257,6 +262,10 @@ public class Tournee {
 			plagesHoraires.add(nouvellePlage);
 		}
 		return Controleur.PARSE_OK;
+	}
+	
+	public void setPlanTournee(Plan planTournee){
+		this.planTournee = planTournee;
 	}
 
 }

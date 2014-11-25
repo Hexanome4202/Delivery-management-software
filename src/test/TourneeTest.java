@@ -2,11 +2,13 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 
 import modele.Noeud;
 import modele.Plan;
+import modele.Tournee;
 import modele.Troncon;
 
 import org.junit.Test;
@@ -71,6 +73,9 @@ public class TourneeTest {
 		Plan plan = new Plan(troncons,noeuds);
 		
 		Tournee tournee = new Tournee();
+		tournee.setPlanTournee(plan);
+		
+		LinkedList<Troncon> resultat = tournee.testCaculDijkstra(noeud1, noeud5);
 		
 		fail("Not yet implemented");
 	}
