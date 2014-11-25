@@ -111,18 +111,25 @@ public class Tournee {
 		
     	ArrayList<Troncon> cheminAPrendre = new ArrayList<Troncon>();
     	
-    	HashMap<Noeud, Integer> graphe = new HashMap<Noeud, Integer>();
+    	HashMap<Noeud, Double> graphe = new HashMap<Noeud, Double>();
     	
     	Set<Noeud> noeudNonVisite = planTournee.getToutNoeuds();
     	Iterator<Noeud> it = noeudNonVisite.iterator();
     	
     	while(it.hasNext()){
-    		graphe.put(it.next(), Integer.MAX_VALUE);
+    		graphe.put(it.next(), Double.MAX_VALUE);
     	}
-    	graphe.put(noeudDepart, 0);
+    	graphe.put(noeudDepart, 0.0);
     	Noeud noeudCourant = noeudDepart;
     	
-    	//noeudCourant.
+    	for(Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants().iterator(); it.hasNext(); ){
+    		Troncon troncon = itTroncon.next();
+    		Noeud noeud = troncon.getNoeudFin();
+    		if(troncon.getTemps() < graphe.get(noeud)){
+    			graphe.put(noeud,troncon.getTemps());
+    		}
+    	}
+    	noeudNonVisite.remove(noeudCourant);
     	
     	return cheminAPrendre;
     }
