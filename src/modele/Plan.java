@@ -38,5 +38,9 @@ public class Plan {
     public Noeud recupererNoeud(int idNoeud) {
         return null;
     }
+    
+    public Set<Noeud> getToutNoeuds(){
+    	return toutNoeuds;
+    }
 
 }

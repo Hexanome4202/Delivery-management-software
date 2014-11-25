@@ -1,5 +1,8 @@
 package modele;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -99,12 +102,29 @@ public class Tournee {
     }
 
     /**
-     * @param noeudPrecedent 
-     * @param noeudCourant 
-     * @param troncons
+     * Méthode calculant le plus court chemin entre deux noeuds
+     * @param noeudDepart
+     * @param noeudDestination
+     * @return la liste ordonnée de troncons à suivre représentant le plus court chemin
      */
-    private void calculerDijkstra(Noeud noeudPrecedent, Noeud noeudCourant, Set<Troncon> troncons) {
-        // TODO implement here
+    private ArrayList<Troncon> calculerDijkstra(Noeud noeudDepart, Noeud noeudDestination) {
+		
+    	ArrayList<Troncon> cheminAPrendre = new ArrayList<Troncon>();
+    	
+    	HashMap<Noeud, Integer> graphe = new HashMap<Noeud, Integer>();
+    	
+    	Set<Noeud> noeudNonVisite = planTournee.getToutNoeuds();
+    	Iterator<Noeud> it = noeudNonVisite.iterator();
+    	
+    	while(it.hasNext()){
+    		graphe.put(it.next(), Integer.MAX_VALUE);
+    	}
+    	graphe.put(noeudDepart, 0);
+    	Noeud noeudCourant = noeudDepart;
+    	
+    	//noeudCourant.
+    	
+    	return cheminAPrendre;
     }
 
     /**
