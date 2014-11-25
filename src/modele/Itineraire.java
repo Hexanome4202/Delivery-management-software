@@ -18,7 +18,7 @@ public class Itineraire {
      * @param liv2 
      * @param troncons
      */
-    public Itineraire(Livraison liv1, Livraison liv2, Set<Troncon> troncons) {
+    public Itineraire(Livraison liv1, Livraison liv2, List<Troncon> troncons) {
         // TODO implement here
     }
 

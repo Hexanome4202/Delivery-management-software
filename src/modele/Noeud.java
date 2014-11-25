@@ -17,7 +17,17 @@ public class Noeud {
      * 
      */
     public Noeud(int x, int y) {
-    	
+    	this.x = x;
+    	this.y = y;
+    }
+    
+    /**
+     * 
+     */
+    public Noeud(int id, int x, int y) {
+    	this.x = x;
+    	this.y = y;
+    	this.id = id;
     }
 
     /**
@@ -45,8 +55,15 @@ public class Noeud {
      */
     private ArrayList<Troncon> sortants;
     
+    /**
+     * 
+     * @return les troncons sortants (<code>Troncon</code>) du noeud
+     */
     public ArrayList<Troncon> getTronconSortants(){
     	return sortants;
     }
 
+    public int getId() {
+    	return this.id;
+    }
 }
