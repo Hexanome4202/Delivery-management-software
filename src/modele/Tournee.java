@@ -3,11 +3,10 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import org.w3c.dom.Document;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -128,33 +127,46 @@ public class Tournee {
      * @param noeudDestination
      * @return la liste ordonnée de troncons à suivre représentant le plus court chemin
      */
-    private ArrayList<Troncon> calculerDijkstra(Noeud noeudDepart, Noeud noeudDestination) {
-		
-    	ArrayList<Troncon> cheminAPrendre = new ArrayList<Troncon>();
+    private LinkedList<Troncon> calculerDijkstra(Noeud noeudDepart, Noeud noeudDestination) {
     	
-    	HashMap<Noeud, Double> graphe = new HashMap<Noeud, Double>();
+    	HashMap<Noeud, Double> graphePonderation = new HashMap<Noeud, Double>();
+    	HashMap<Noeud,Noeud> grapheVoisinPrecedent = new HashMap<Noeud,Noeud>();
     	
     	Set<Noeud> noeuds = planTournee.getToutNoeuds();
-    	Iterator<Noeud> it = noeuds.iterator();
     	
-    	while(it.hasNext()){
-    		graphe.put(it.next(), Double.MAX_VALUE);
+    	for(Iterator<Noeud> itNoeuds = noeuds.iterator(); itNoeuds.hasNext();){
+    		Noeud noeud = itNoeuds.next();
+    		graphePonderation.put(noeud, Double.MAX_VALUE);
+    		grapheVoisinPrecedent.put(noeud, null);
     	}
-    	graphe.put(noeudDepart, 0.0);
+    	
+    	graphePonderation.put(noeudDepart, 0.0);
     	
     	ArrayList<Noeud> noeudsVisite = new ArrayList<Noeud>();
     	ArrayList<Noeud> noeudsNonVisite = new ArrayList<Noeud>();
-    	
     	noeudsNonVisite.add(noeudDepart);
     	
     	while(!noeudsNonVisite.isEmpty()){
-    		Noeud noeudCourant = noeudDePlusPetitePonderation(graphe,noeudsNonVisite);
+    		Noeud noeudCourant = noeudDePlusPetitePonderation(graphePonderation,noeudsNonVisite);
     		noeudsNonVisite.remove(noeudCourant);
     		noeudsVisite.add(noeudCourant);
-    		evaluerVoisins(noeudCourant, graphe, noeudsNonVisite);
+    		evaluerVoisins(noeudCourant, graphePonderation, grapheVoisinPrecedent, noeudsNonVisite);
     	}
     	
-    	return cheminAPrendre;
+    	Noeud noeud = null;
+    	LinkedList<Troncon> chemin = new LinkedList<Troncon>();
+    	while(noeud != noeudDepart){
+    		noeud = grapheVoisinPrecedent.get(noeudDestination);
+    		ArrayList<Troncon> troncons = noeud.getTronconSortants();
+    		for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon.hasNext();){
+    			Troncon troncon = itTroncon.next();
+    			if(troncon.getNoeudFin() == noeud) {
+    				chemin.addFirst(troncon);
+    				break;
+    			}
+    		}
+    	}
+    	return chemin;
     }
 
 	/**
@@ -187,16 +199,18 @@ public class Tournee {
 	 * Si une pondération du graphe est modifiée, le noeud voisin du noeud courant 
 	 * est rajoutée à la liste des noeuds non visités.
 	 * @param noeudCourant
-	 * @param graphe 
+	 * @param graphePonderation : structure contenant chaque noeud ainsi que le temps mis pour arriver à lui (sa pondération)
+	 * @param grapheVoisinPrecedent : structure contenant un noeud et, si il appartient au plus court chemin, le noeud précédent
 	 * @param noeudsNonVisites 
 	 */
-	private void evaluerVoisins(Noeud noeudCourant, HashMap<Noeud, Double> graphe, ArrayList<Noeud> noeudsNonVisites) {
+	private void evaluerVoisins(Noeud noeudCourant, HashMap<Noeud, Double> graphePonderation, HashMap<Noeud, Noeud> grapheVoisinPrecedent, ArrayList<Noeud> noeudsNonVisites) {
 		for(Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants().iterator(); itTroncon.hasNext(); ){
 			Troncon troncon = itTroncon.next();
     		Noeud noeudDestination = troncon.getNoeudFin();
-    		double ponderation = troncon.getTemps() + graphe.get(noeudCourant);
-    		if(ponderation < graphe.get(noeudDestination)){
-    			graphe.put(noeudDestination,ponderation);
+    		double ponderation = troncon.getTemps() + graphePonderation.get(noeudCourant);
+    		if(ponderation < graphePonderation.get(noeudDestination)){
+    			graphePonderation.put(noeudDestination,ponderation);
+    			grapheVoisinPrecedent.put(noeudDestination,noeudCourant);
     			noeudsNonVisites.add(noeudDestination);
     		}
 		}
