@@ -22,6 +22,15 @@ public class Plan {
     public Plan(Document racineXML) {
         // TODO implement here
     }
+    
+    /**
+     * 
+     * @param troncons
+     * @param noeuds
+     */
+    public Plan(Set<Troncon> troncons, Set<Noeud> noeuds) {
+    	
+    }
 
     /**
      * 
