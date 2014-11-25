@@ -37,10 +37,10 @@ public class PlageHoraire {
     private Set<DemandeDeLivraison> demandeLivraisonPlage;
 
     /**
-     * @param noeuds
+     * @return les noeuds correspondants aux demandes de livraisons de la plage horaire
      */
-    public void getNoeuds(List<Noeud> noeuds) {
-        // TODO implement here
+    public List<Noeud> getNoeuds() {
+        return null;
     }
 
 }

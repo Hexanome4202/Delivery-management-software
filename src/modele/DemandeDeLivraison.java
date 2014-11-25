@@ -49,10 +49,10 @@ public class DemandeDeLivraison {
     private PlageHoraire plageHoraire;
 
     /**
-     * @param noeud
+     * @return le noeud rattache a la demande de livraison
      */
-    public void getNoeud(Noeud noeud) {
-        // TODO implement here
+    public Noeud getNoeud() {
+        return null;
     }
 
     /**

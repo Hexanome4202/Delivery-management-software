@@ -60,10 +60,10 @@ public class Tournee {
     }
 
     /**
-     * @param feuille
+     * @return la feuille de route editee
      */
-    public void editerFeuilleRoute(String feuille) {
-        // TODO implement here
+    public String editerFeuilleRoute() {
+        return "";
     }
 
     /**

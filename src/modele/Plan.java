@@ -33,10 +33,10 @@ public class Plan {
 
     /**
      * @param idNoeud 
-     * @param noeud
+     * @return le noeud ayant comme id <code>idNoeud</code> s'il existe, null sinon
      */
-    public void recupererNoeud(int idNoeud, Noeud noeud) {
-        // TODO implement here
+    public Noeud recupererNoeud(int idNoeud) {
+        return null;
     }
 
 }
