@@ -16,10 +16,9 @@ import controleur.Controleur;
  * 
  */
 public class Tournee {
-
 	/**
-     * 
-     */
+	 * Constructeur vide de <code>Tournee</code>
+	 */
 	public Tournee() {
 		this.plagesHoraires = new ArrayList<PlageHoraire>();
 		this.itineraires = new ArrayList<Itineraire>();

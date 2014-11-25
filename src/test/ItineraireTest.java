@@ -20,6 +20,7 @@ public class ItineraireTest {
 	/**
 	 * Teste le fonctionnement de la méthode <code>getTemps()</code>
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetTemps() {
 		Troncon t1 = new Troncon(1,2,"");

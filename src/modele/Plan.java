@@ -10,16 +10,14 @@ import org.w3c.dom.Element;
  * 
  */
 public class Plan {
-
-    /**
-     * 
-     */
+	/**
+	 * Constructeur vide de <code>Plan</code>.
+	 */
     public Plan() {
     }
     
     /**
      * @param racineXML
-     * TODO: Type pas bon
      */
     public Plan(Element racineXML) {
 
