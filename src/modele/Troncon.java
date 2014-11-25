@@ -3,7 +3,7 @@ package modele;
 /**
  * 
  */
-public class Troncon {
+public class Troncon implements Comparable<Troncon>{
 
 	/**
 	 * 
@@ -67,5 +67,19 @@ public class Troncon {
     public double getTemps(){
     	return longueur/vitesse;
     }
+
+	@Override
+	public int compareTo(Troncon troncon) {
+		int result = 0;
+		
+		if(! (this.fin == troncon.fin 
+				&& this.longueur == troncon.longueur 
+				&& this.nomRue == troncon.nomRue 
+				&& this.vitesse == troncon.vitesse)){
+			result = this.fin.compareTo(troncon.fin);
+		}
+		
+		return result;
+	}
 
 }

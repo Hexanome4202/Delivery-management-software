@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * 
  */
-public class Noeud {
+public class Noeud implements Comparable<Noeud> {
     
     /**
      * @param id l'id du noeud
@@ -74,4 +74,15 @@ public class Noeud {
     public int getId() {
     	return this.id;
     }
+
+	@Override
+	public int compareTo(Noeud noeud) {
+		int result = 0;
+		
+		if(this.id != noeud.id){
+			result = this.id - noeud.id;
+		}
+		
+		return result;
+	}
 }
