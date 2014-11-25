@@ -2,7 +2,10 @@ package modele;
 
 import java.util.*;
 
+
+import org.w3c.dom.Element;
 import org.w3c.dom.Document;
+
 
 /**
  * 
@@ -19,7 +22,8 @@ public class Plan {
      * @param racineXML
      * TODO: Type pas bon
      */
-    public Plan(Document racineXML) {
+    public Plan(Element racineXML) {
+
         // TODO implement here
     }
     

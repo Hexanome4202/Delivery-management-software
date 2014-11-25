@@ -1,4 +1,4 @@
-package modele;
+﻿package modele;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,38 +8,48 @@ import java.util.Set;
 
 import org.w3c.dom.Document;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import controleur.Controleur;
+
 /**
  * 
  */
 public class Tournee {
 
-    /**
+	/**
      * 
      */
-    public Tournee() {
-    }
+	public Tournee() {
+	}
 
-    /**
+	/**
      * 
      */
-    private List<PlageHoraire> plagesHoraires;
+	private List<PlageHoraire> plagesHoraires;
 
-    /**
+	/**
      * 
      */
+
     private List<Itineraire> itineraires;
 
-    /**
+
+	/**
      * 
      */
     private Livraison entrepot;
 
-    /**
+
+	/**
      * 
      */
+
     private Plan planTournee;
 
-    /**
+
+	/**
      * 
      */
     public void creerFeuilleRoute() {
@@ -113,32 +123,110 @@ public class Tournee {
     	
     	HashMap<Noeud, Double> graphe = new HashMap<Noeud, Double>();
     	
-    	Set<Noeud> noeudNonVisite = planTournee.getToutNoeuds();
-    	Iterator<Noeud> it = noeudNonVisite.iterator();
+    	Set<Noeud> noeuds = planTournee.getToutNoeuds();
+    	Iterator<Noeud> it = noeuds.iterator();
     	
     	while(it.hasNext()){
     		graphe.put(it.next(), Double.MAX_VALUE);
     	}
     	graphe.put(noeudDepart, 0.0);
-    	Noeud noeudCourant = noeudDepart;
     	
-    	for(Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants().iterator(); it.hasNext(); ){
-    		Troncon troncon = itTroncon.next();
-    		Noeud noeud = troncon.getNoeudFin();
-    		if(troncon.getTemps() < graphe.get(noeud)){
-    			graphe.put(noeud,troncon.getTemps());
-    		}
+    	ArrayList<Noeud> noeudsVisite = new ArrayList<Noeud>();
+    	ArrayList<Noeud> noeudsNonVisite = new ArrayList<Noeud>();
+    	
+    	noeudsNonVisite.add(noeudDepart);
+    	
+    	while(!noeudsNonVisite.isEmpty()){
+    		Noeud noeudCourant = noeudDePlusPetitePonderation(graphe,noeudsNonVisite);
+    		noeudsNonVisite.remove(noeudCourant);
+    		noeudsVisite.add(noeudCourant);
+    		evaluerVoisins(noeudCourant, graphe, noeudsNonVisite);
     	}
-    	noeudNonVisite.remove(noeudCourant);
     	
     	return cheminAPrendre;
     }
 
+	/**
+	 * Méthode retournant le noeud de plus petite pondération contenu dans une liste
+	 * passée en paramètre
+	 * @param graphe : structure contenant chaque noeud et leur pondération
+	 * @param noeuds : la liste de noeuds concernée
+	 * @return : le noeud de plus petite pondération
+	 */
+	private Noeud noeudDePlusPetitePonderation(HashMap<Noeud, Double> graphe, ArrayList<Noeud> noeuds) {
+		
+		Noeud noeudPlusPetitePonderation = null;
+		double plusPetitePonderation = Double.MAX_VALUE;
+		
+		for(Iterator<Noeud> it = noeuds.iterator(); it.hasNext();){
+			Noeud noeudTest = it.next();
+			double ponderationTest = graphe.get(noeudTest);
+			if(ponderationTest < plusPetitePonderation){
+				plusPetitePonderation = ponderationTest;
+				noeudPlusPetitePonderation = noeudTest;
+			}
+		}
+		
+		return noeudPlusPetitePonderation;
+	}
+
+	/**
+	 * Méthode évaluant les voisins d'un noeud courant afin de modifier les pondérations des arcs du graphe. </br>
+	 * 
+	 * Si une pondération du graphe est modifiée, le noeud voisin du noeud courant 
+	 * est rajoutée à la liste des noeuds non visités.
+	 * @param noeudCourant
+	 * @param graphe 
+	 * @param noeudsNonVisites 
+	 */
+	private void evaluerVoisins(Noeud noeudCourant, HashMap<Noeud, Double> graphe, ArrayList<Noeud> noeudsNonVisites) {
+		for(Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants().iterator(); itTroncon.hasNext(); ){
+			Troncon troncon = itTroncon.next();
+    		Noeud noeudDestination = troncon.getNoeudFin();
+    		double ponderation = troncon.getTemps() + graphe.get(noeudCourant);
+    		if(ponderation < graphe.get(noeudDestination)){
+    			graphe.put(noeudDestination,ponderation);
+    			noeudsNonVisites.add(noeudDestination);
+    		}
+		}
+	}
+	
     /**
      * 
      */
-    public void calculerTournee() {
-        // TODO implement here
-    }
+	public void calculerTournee() {
+		// TODO implement here
+	}
+
+	public int construireAPartirDeDOMXML(Element noeudDOMRacine) {
+
+		// todo : gerer les erreurs de syntaxe dans le fichier XML
+		// lecture des attributs
+		// hauteur = noeudDOMRacine.getAttribute("");
+		// largeur = noeudDOMRacine.getAttribute("");
+
+		NodeList liste = noeudDOMRacine.getElementsByTagName("Entrepot");
+		if (liste.getLength() != 1) {
+			return Controleur.PARSE_ERROR;
+		}
+		Element adresseElement = (Element) liste.item(0);
+		int idAdresse = Integer
+				.parseInt(adresseElement.getAttribute("adresse"));
+
+		// creation des Boules;
+		String tag = "Plage";
+		liste = noeudDOMRacine.getElementsByTagName(tag);
+		plagesHoraires.clear();
+		for (int i = 0; i < liste.getLength(); i++) {
+			Element plageElement = (Element) liste.item(i);
+			PlageHoraire nouvellePlage = new PlageHoraire(plageElement.getAttribute("heureDebut"),plageElement.getAttribute("heureFin"));
+			if (nouvellePlage.construireAPartirDeDOMXML(plageElement) != Controleur.PARSE_OK) {
+				return Controleur.PARSE_ERROR;
+			}
+			// ajout des elements crees dans la structure objet
+			plagesHoraires.add(nouvellePlage);
+		}
+		return Controleur.PARSE_OK;
+	}
 
 }

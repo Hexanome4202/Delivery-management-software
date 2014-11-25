@@ -45,6 +45,7 @@ public class Noeud {
     /**
      * 
      */
+
     private ArrayList<Troncon> sortants;
     
     /**
