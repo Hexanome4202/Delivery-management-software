@@ -1,6 +1,6 @@
 package modele;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 
@@ -38,11 +38,11 @@ public class Noeud {
     /**
      * 
      */
-    private ZoneGeographique[] zone;
+    private ZoneGeographique zone;
 
     /**
      * 
      */
-    private Set<Troncon> sortants;
+    private List<Troncon> sortants;
 
 }

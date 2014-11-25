@@ -1,6 +1,9 @@
 package modele;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+
+import org.w3c.dom.Document;
 
 /**
  * 
@@ -21,17 +24,17 @@ public class Tournee {
     /**
      * 
      */
-    private Itineraire itineraires;
+    private List<Itineraire> itineraires;
 
     /**
      * 
      */
-    private Livraison[] entrepot;
+    private Livraison entrepot;
 
     /**
      * 
      */
-    private Plan[] planTournee;
+    private Plan planTournee;
 
     /**
      * 
@@ -67,7 +70,7 @@ public class Tournee {
      * @param tourneeXML
      * TODO: Changer type
      */
-    public void chargerTourneeDOM(DOMXML tourneeXML) {
+    public void chargerTourneeDOM(Document tourneeXML) {
         // TODO implement here
     }
 

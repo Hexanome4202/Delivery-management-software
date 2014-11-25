@@ -1,7 +1,5 @@
 package modele;
 
-import java.util.*;
-
 /**
  * 
  */
@@ -31,6 +29,6 @@ public class Troncon {
     /**
      * 
      */
-    private Noeud[] fin;
+    private Noeud fin;
 
 }
