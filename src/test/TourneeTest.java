@@ -22,12 +22,12 @@ public class TourneeTest {
 	
 	@Test
 	public void testDijkstra() {
-		Noeud noeud1 = new Noeud(0, 0, 1);
-		Noeud noeud2 = new Noeud(0, 0, 2);
-		Noeud noeud3 = new Noeud(0, 0, 3);
-		Noeud noeud4 = new Noeud(0, 0, 4);
-		Noeud noeud5 = new Noeud(0, 0, 5);
-		Noeud noeud6 = new Noeud(0, 0, 6);
+		Noeud noeud1 = new Noeud(1, 0, 0);
+		Noeud noeud2 = new Noeud(2, 0, 0);
+		Noeud noeud3 = new Noeud(3, 0, 0);
+		Noeud noeud4 = new Noeud(4, 0, 0);
+		Noeud noeud5 = new Noeud(5, 0, 0);
+		Noeud noeud6 = new Noeud(6, 0, 0);
 		
 		Set<Noeud> noeuds = new TreeSet<Noeud>();
 		noeuds.add(noeud1);
@@ -80,9 +80,15 @@ public class TourneeTest {
 		Tournee tournee = new Tournee();
 		tournee.setPlanTournee(plan);
 		
+		@SuppressWarnings("deprecation")
 		LinkedList<Troncon> resultat = tournee.testCaculDijkstra(noeud1, noeud5);
 		
-		fail("Not yet implemented");
+		LinkedList<Troncon> expected = new LinkedList<Troncon>();
+		expected.add(troncon13);
+		expected.add(troncon36);
+		expected.add(troncon65);
+		
+		assertEquals("Erreur - le plus court chemin n'est pas le bon",expected, resultat);
 	}
 
 }
