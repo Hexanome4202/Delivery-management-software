@@ -7,12 +7,14 @@ import java.util.Observable;
 import java.util.Observer;
 
 
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
 import modele.Noeud;
 
@@ -20,7 +22,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import bibliothequesTiers.ExampleFileFilter;
 import controleur.Controleur;
 
 /**
