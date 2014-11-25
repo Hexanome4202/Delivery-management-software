@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import b4.advancedgui.menu.AccordionItem;
+import b4.advancedgui.menu.AccordionMenu;
 import libs.ExampleFileFilter;
 
 
@@ -27,6 +29,9 @@ public class MainWindow extends JFrame {
 	private JFileChooser jFileChooserXML;
 	private File fichierPlan;
 	private File fichierHoraires;
+	
+    private AccordionMenu menuHoraires;
+    private javax.swing.JPanel horairesPannel;
 
 	/**
 	 * 
@@ -53,9 +58,11 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
-		setResizable(false);
+		
+		
+		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 600);
+		setBounds(100, 100, 1200, 900);
 		
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -130,9 +137,75 @@ public class MainWindow extends JFrame {
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 16));
 		
 		JLabel lblNewLabel_1 = new JLabel("Horaires");
-		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 24));
+		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 24));		
 		
-		JScrollPane scrollPane = new JScrollPane();
+		horairesPannel = new javax.swing.JPanel();
+		
+		// menu 3. Creates a simple menu, white bacground and dark blue
+		// foreground, a lightGray selection background on mouseover, left
+		// Alignment for leafs
+		// two icon for all Root Items, and two icon for Leaf of second menu
+		// only
+		menuHoraires = new AccordionMenu();
+		createSampleMenuStructure(menuHoraires);
+		menuHoraires.setBackground(Color.white);
+		menuHoraires.setForeground(Color.blue.darker().darker().darker());
+		menuHoraires.setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 15));
+		menuHoraires.setSelectionColor(Color.lightGray);
+		menuHoraires.setLeafHorizontalAlignment(AccordionItem.LEFT);
+		// ImageIcon icon3 = new
+		// ImageIcon(this.getClass().getResource("b4/advancedgui/menu/resources/blu_arrow_right.png"));
+		// ImageIcon icon4 = new
+		// ImageIcon(this.getClass().getResource("b4/advancedgui/menu/resources/blu_arrow_down.png"));
+		// ImageIcon icon5 = new
+		// ImageIcon(this.getClass().getResource("b4/advancedgui/menu/resources/gray_arrow_right.png"));
+		// ImageIcon icon6 = new
+		// ImageIcon(this.getClass().getResource("b4/advancedgui/menu/resources/green_arrow_right.png"));
+		// menuHoraires.setMenuIcons(icon3, icon4);
+		// menuHoraires.setLeafIcons("menu2", icon5, icon6);
+		// setMouseAdapter(menuHoraires);
+		horairesPannel.add(menuHoraires);
+
+		horairesPannel.setBackground(new java.awt.Color(153, 153, 153));
+		horairesPannel.setBorder(javax.swing.BorderFactory
+				.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+		horairesPannel.setLayout(new javax.swing.BoxLayout(horairesPannel,
+				javax.swing.BoxLayout.LINE_AXIS));
+		horairesPannel.add(menuHoraires);
+
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+				getContentPane());
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						javax.swing.GroupLayout.Alignment.TRAILING,
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.TRAILING)
+												.addComponent(
+														horairesPannel,
+														javax.swing.GroupLayout.Alignment.LEADING,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														678, Short.MAX_VALUE))
+								.addContainerGap()));
+		layout.setVerticalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						javax.swing.GroupLayout.Alignment.TRAILING,
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(horairesPannel,
+										javax.swing.GroupLayout.DEFAULT_SIZE,
+										346, Short.MAX_VALUE)
+								.addPreferredGap(
+										javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addContainerGap()));
+
+		pack();
+		
 		
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -152,7 +225,7 @@ public class MainWindow extends JFrame {
 							.addGap(119))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
 							.addContainerGap())))
 				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 					.addGap(246)
@@ -174,7 +247,7 @@ public class MainWindow extends JFrame {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblNewLabel_1)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 414, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(horairesPannel, GroupLayout.PREFERRED_SIZE, 414, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
@@ -183,6 +256,11 @@ public class MainWindow extends JFrame {
 						.addComponent(btnNewButton_1))
 					.addContainerGap())
 		);
+		
+		
+
+
+
 		getContentPane().setLayout(groupLayout);
 
 	}
@@ -205,4 +283,35 @@ public class MainWindow extends JFrame {
                 return new File(jFileChooserXML.getSelectedFile().getAbsolutePath());
         return null;
 	}
+	
+	
+	/**
+     * <code>Second method to create an AccordionMenu: add manually each menu with its leafs to AccordionMenu.</code>
+     * It creates manually a structure like one created before with a description String. First method is better when
+     * menu structure is static. Use this method instead if you want to create structure dinamically.
+     * @param target Target AccordionMenu to modify.
+     */
+    public void createSampleMenuStructure(AccordionMenu target) {
+        target.addNewMenu("menu1", "Menu One");
+        target.addNewLeafTo("menu1", "submenu1.1", "Sub Menu 1");
+        target.addNewLeafTo("menu1", "submenu1.2", "Sub Menu 2");
+        target.addNewLeafTo("menu1", "submenu1.3", "Sub Menu 3");
+
+        target.addNewMenu("menu2", "Menu Two");
+        target.addNewLeafTo("menu2", "submenu2.1", "Sub Menu 1");
+        target.addNewLeafTo("menu2", "submenu2.2", "Sub Menu 2");
+        target.addNewLeafTo("menu2", "submenu2.3", "Sub Menu 3");
+
+        target.addNewMenu("menu3", "Menu Three");
+        target.addNewLeafTo("menu3", "submenu3.1", "Sub Menu 1");
+        target.addNewLeafTo("menu3", "submenu3.2", "Sub Menu 2");
+        target.addNewLeafTo("menu3", "submenu3.3", "Sub Menu 3");
+
+        target.addNewMenu("menu4", "Menu Four");
+        target.addNewLeafTo("menu4", "submenu4.1", "Sub Menu 1");
+        target.addNewLeafTo("menu4", "submenu4.2", "Sub Menu 2");
+        target.addNewLeafTo("menu4", "submenu4.3", "Sub Menu 3");
+        target.calculateAvaiableSpace();
+    }
+
 }
