@@ -75,23 +75,33 @@ public class PlageHoraire {
 		return noeuds;
 	}
 	
+	/**
+	 * 
+	 * @param id du noeud
+	 * @return le Noeud
+	 */
 	private Noeud recupererNoeud(Integer id){
 		Noeud noeud = null;
 		DemandeDeLivraison demande = null;
 		for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
 				it.hasNext(); demande = it.next()) {
-			if(demande.getNoeud().getId() == id) 
+			if(demande.getNoeud().getId() == id) //Pas bon
 				noeud = demande.getNoeud();
 		}
 		return noeud;
 	}
 
+	/**
+	 * 
+	 * @param plageElement
+	 * @return
+	 */
 	public int construireAPartirDeDOMXML(Element plageElement) {
 		// todo : gerer les erreurs de syntaxe dans le fichier XML !
 		// lecture des attributs
 
 
-		// creation des Boules;
+		// creation des Demandes Livraison;
 		String tag = "Livraison";
 		NodeList liste = plageElement.getElementsByTagName(tag);
 		demandesLivraisonPlage.clear();
@@ -104,6 +114,7 @@ public class PlageHoraire {
 			
 			// ajout des elements crees dans la structure objet
 			demandesLivraisonPlage.add(nouvelleDemande);
+			System.out.println( id + "   " + adresse +"   "+ idClient);
 		}
 
 		return Controleur.PARSE_OK;

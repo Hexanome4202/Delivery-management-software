@@ -8,6 +8,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 
+
+
+
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -28,19 +32,20 @@ import libs.ExampleFileFilter;
 import controleur.Controleur;
 
 import java.awt.Color;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
+
+
+
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -114,7 +119,8 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fichierHoraires = ouvrirFichier('o');
+				lireDepuisFichierXML();
+				System.out.println("fait");
 				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			

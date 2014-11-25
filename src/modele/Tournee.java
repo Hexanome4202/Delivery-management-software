@@ -16,11 +16,13 @@ import controleur.Controleur;
  * 
  */
 public class Tournee {
+	private Livraison entrepot;
 
 	/**
      * 
      */
 	public Tournee() {
+		plagesHoraires= new ArrayList<PlageHoraire>();
 	}
 
 	/**
@@ -33,12 +35,6 @@ public class Tournee {
      */
 
     private List<Itineraire> itineraires;
-
-
-	/**
-     * 
-     */
-    private Livraison entrepot;
 
 
 	/**
@@ -238,7 +234,7 @@ public class Tournee {
 		
 		Noeud noeudEntrepot = recupererNoeud(idAdresseEntrepot);
 		
-		Livraison entrepot = new Livraison(noeudEntrepot);
+		this.entrepot = new Livraison(noeudEntrepot);
 
 		// creation des Plages;
 		String tag = "Plage";
@@ -248,6 +244,7 @@ public class Tournee {
 			Element plageElement = (Element) liste.item(i);
 			PlageHoraire nouvellePlage = new PlageHoraire(plageElement.getAttribute("heureDebut"),plageElement.getAttribute("heureFin"));
 			if (nouvellePlage.construireAPartirDeDOMXML(plageElement) != Controleur.PARSE_OK) {
+				System.out.println("error");
 				return Controleur.PARSE_ERROR;
 			}
 			// ajout des elements crees dans la structure objet
