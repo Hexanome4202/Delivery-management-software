@@ -43,7 +43,6 @@ import javax.swing.JMenu;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import b4.advancedgui.menu.AccordionItem;
@@ -152,22 +151,17 @@ public class Fenetre extends JFrame implements Observer {
 			}
 		});
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.RED);
+		JPanel plan = new JPanel();
+		plan.setBackground(Color.RED);
 		
 		JLabel lblNewLabel = new JLabel("Plan");
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 16));
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		
 		JLabel lblNewLabel_1 = new JLabel("Horaires");
 		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 24));		
 		
 		horairesPannel = new javax.swing.JPanel();
 		
-		// menu 3. Creates a simple menu, white bacground and dark blue
-		// foreground, a lightGray selection background on mouseover, left
-		// Alignment for leafs
-		// two icon for all Root Items, and two icon for Leaf of second menu
-		// only
 		menuHoraires = new AccordionMenu();
 		createSampleMenuStructure(menuHoraires);
 		menuHoraires.setBackground(Color.white);
@@ -175,17 +169,7 @@ public class Fenetre extends JFrame implements Observer {
 		menuHoraires.setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 15));
 		menuHoraires.setSelectionColor(Color.lightGray);
 		menuHoraires.setLeafHorizontalAlignment(AccordionItem.LEFT);
-		// ImageIcon icon3 = new
-		// ImageIcon(this.getClass().getResource("b4/advancedgui/menu/resources/blu_arrow_right.png"));
-		// ImageIcon icon4 = new
-		// ImageIcon(this.getClass().getResource("b4/advancedgui/menu/resources/blu_arrow_down.png"));
-		// ImageIcon icon5 = new
-		// ImageIcon(this.getClass().getResource("b4/advancedgui/menu/resources/gray_arrow_right.png"));
-		// ImageIcon icon6 = new
-		// ImageIcon(this.getClass().getResource("b4/advancedgui/menu/resources/green_arrow_right.png"));
-		// menuHoraires.setMenuIcons(icon3, icon4);
-		// menuHoraires.setLeafIcons("menu2", icon5, icon6);
-		// setMouseAdapter(menuHoraires);
+
 		horairesPannel.add(menuHoraires);
 
 		horairesPannel.setBackground(new java.awt.Color(153, 153, 153));
@@ -239,7 +223,7 @@ public class Fenetre extends JFrame implements Observer {
 					.addContainerGap(850, Short.MAX_VALUE))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(20)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 540, GroupLayout.PREFERRED_SIZE)
+					.addComponent(plan, GroupLayout.PREFERRED_SIZE, 540, GroupLayout.PREFERRED_SIZE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(119)
@@ -265,7 +249,7 @@ public class Fenetre extends JFrame implements Observer {
 					.addComponent(lblNewLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 449, GroupLayout.PREFERRED_SIZE)
+						.addComponent(plan, GroupLayout.PREFERRED_SIZE, 449, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblNewLabel_1)
 							.addPreferredGap(ComponentPlacement.RELATED)
