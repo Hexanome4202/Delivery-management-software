@@ -4,7 +4,6 @@ import java.util.*;
 
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Document;
 
 
 /**
@@ -33,7 +32,8 @@ public class Plan {
      * @param noeuds
      */
     public Plan(Set<Troncon> troncons, Set<Noeud> noeuds) {
-    	
+    	this.toutNoeuds = noeuds;
+    	this.toutTroncons = troncons;
     }
 
     /**
@@ -51,11 +51,19 @@ public class Plan {
      * @return le noeud ayant comme id <code>idNoeud</code> s'il existe, null sinon
      */
     public Noeud recupererNoeud(int idNoeud) {
-        return null;
+    	Noeud noeud = null;
+    	Noeud noeudCourant = null;
+        for(Iterator<Noeud> it = this.toutNoeuds.iterator(); it.hasNext(); noeudCourant = it.next()) {
+        	if(noeudCourant.getId() == idNoeud) {
+        		noeud = noeudCourant;
+        		break;
+        	}
+        }
+        return noeud;
     }
     
     public Set<Noeud> getToutNoeuds(){
-    	return toutNoeuds;
+    	return this.toutNoeuds;
     }
 
 }

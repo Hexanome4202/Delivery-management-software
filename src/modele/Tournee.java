@@ -22,6 +22,8 @@ public class Tournee {
      * 
      */
 	public Tournee() {
+		this.plagesHoraires = new ArrayList<PlageHoraire>();
+		this.itineraires = new ArrayList<Itineraire>();
 	}
 
 	/**

@@ -80,8 +80,10 @@ public class PlageHoraire {
 		DemandeDeLivraison demande = null;
 		for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
 				it.hasNext(); demande = it.next()) {
-			if(demande.getNoeud().getId() == id) 
+			if(demande.getNoeud().getId() == id) {
 				noeud = demande.getNoeud();
+				break;
+			}
 		}
 		return noeud;
 	}
