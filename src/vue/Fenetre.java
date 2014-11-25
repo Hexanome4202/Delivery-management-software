@@ -8,9 +8,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-
-
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -18,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
 import modele.Noeud;
 
