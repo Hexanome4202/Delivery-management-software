@@ -51,7 +51,7 @@ public class Troncon {
     }
     
     public double getTemps(){
-    	return vitesse*longueur;
+    	return longueur/vitesse;
     }
 
 }

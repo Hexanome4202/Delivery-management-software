@@ -123,27 +123,74 @@ public class Tournee {
     	
     	HashMap<Noeud, Double> graphe = new HashMap<Noeud, Double>();
     	
-    	Set<Noeud> noeudNonVisite = planTournee.getToutNoeuds();
-    	Iterator<Noeud> it = noeudNonVisite.iterator();
+    	Set<Noeud> noeuds = planTournee.getToutNoeuds();
+    	Iterator<Noeud> it = noeuds.iterator();
     	
     	while(it.hasNext()){
     		graphe.put(it.next(), Double.MAX_VALUE);
     	}
     	graphe.put(noeudDepart, 0.0);
-    	Noeud noeudCourant = noeudDepart;
     	
-    	for(Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants().iterator(); it.hasNext(); ){
-    		Troncon troncon = itTroncon.next();
-    		Noeud noeud = troncon.getNoeudFin();
-    		if(troncon.getTemps() < graphe.get(noeud)){
-    			graphe.put(noeud,troncon.getTemps());
-    		}
+    	ArrayList<Noeud> noeudsVisite = new ArrayList<Noeud>();
+    	ArrayList<Noeud> noeudsNonVisite = new ArrayList<Noeud>();
+    	
+    	noeudsNonVisite.add(noeudDepart);
+    	
+    	while(!noeudsNonVisite.isEmpty()){
+    		Noeud noeudCourant = noeudDePlusPetitePonderation(graphe,noeudsNonVisite);
+    		noeudsNonVisite.remove(noeudCourant);
+    		noeudsVisite.add(noeudCourant);
+    		evaluerVoisins(noeudCourant, graphe, noeudsNonVisite);
     	}
-    	noeudNonVisite.remove(noeudCourant);
     	
     	return cheminAPrendre;
     }
 
+	/**
+	 * Méthode retournant le noeud de plus petite pondération contenu dans une liste
+	 * passée en paramètre
+	 * @param graphe : structure contenant chaque noeud et leur pondération
+	 * @param noeuds : la liste de noeuds concernée
+	 * @return : le noeud de plus petite pondération
+	 */
+	private Noeud noeudDePlusPetitePonderation(HashMap<Noeud, Double> graphe, ArrayList<Noeud> noeuds) {
+		
+		Noeud noeudPlusPetitePonderation = null;
+		double plusPetitePonderation = Double.MAX_VALUE;
+		
+		for(Iterator<Noeud> it = noeuds.iterator(); it.hasNext();){
+			Noeud noeudTest = it.next();
+			double ponderationTest = graphe.get(noeudTest);
+			if(ponderationTest < plusPetitePonderation){
+				plusPetitePonderation = ponderationTest;
+				noeudPlusPetitePonderation = noeudTest;
+			}
+		}
+		
+		return noeudPlusPetitePonderation;
+	}
+
+	/**
+	 * Méthode évaluant les voisins d'un noeud courant afin de modifier les pondérations des arcs du graphe. </br>
+	 * 
+	 * Si une pondération du graphe est modifiée, le noeud voisin du noeud courant 
+	 * est rajoutée à la liste des noeuds non visités.
+	 * @param noeudCourant
+	 * @param graphe 
+	 * @param noeudsNonVisites 
+	 */
+	private void evaluerVoisins(Noeud noeudCourant, HashMap<Noeud, Double> graphe, ArrayList<Noeud> noeudsNonVisites) {
+		for(Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants().iterator(); itTroncon.hasNext(); ){
+			Troncon troncon = itTroncon.next();
+    		Noeud noeudDestination = troncon.getNoeudFin();
+    		double ponderation = troncon.getTemps() + graphe.get(noeudCourant);
+    		if(ponderation < graphe.get(noeudDestination)){
+    			graphe.put(noeudDestination,ponderation);
+    			noeudsNonVisites.add(noeudDestination);
+    		}
+		}
+	}
+	
     /**
      * 
      */
