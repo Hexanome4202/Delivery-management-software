@@ -1,6 +1,5 @@
 package modele;
 
-import java.util.*;
 
 /**
  * 
@@ -17,8 +16,10 @@ public class DemandeDeLivraison {
      * @param noeud 
      * @param client
      */
-    public DemandeDeLivraison(Noeud noeud, int client) {
-        // TODO implement here
+    public DemandeDeLivraison(int id, Noeud noeud, int client) {
+        this.id=id;
+        this.adresseLivraison=noeud;
+        this.idClient=client;
     }
     
     /**

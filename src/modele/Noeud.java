@@ -44,5 +44,6 @@ public class Noeud {
      * 
      */
     private Set<Troncon> sortants;
+    
 
 }

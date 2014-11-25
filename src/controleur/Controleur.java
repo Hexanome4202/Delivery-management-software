@@ -1,16 +1,28 @@
 package controleur;
 
+import org.w3c.dom.Element;
+
+import vue.VueTournee;
 import modele.Livraison;
+import modele.Tournee;
 
 /**
  * 
  */
 public class Controleur {
+	
+    static public int PARSE_ERROR = -1;
+    static public int PARSE_OK = 1;
+    
+    private Tournee tournee;
+    private VueTournee vueTournee;
 
     /**
      * 
      */
     public Controleur() {
+    	tournee = new Tournee();
+    	vueTournee = new VueTournee(null);
     }
 
     /**
@@ -64,5 +76,16 @@ public class Controleur {
     public void planClique(int x, int y) {
         // TODO implement here
     }
+    
+    
+    
+	public int ConstruireToutAPartirDeDOMXML(Element vueCadreDOMElement) {
+//        if (tournee.construireAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
+//            return Controleur.PARSE_ERROR;
+//        }
+//        vueTournee.dessiner();
+		return Controleur.PARSE_OK;
+    }
+
 
 }
