@@ -69,7 +69,7 @@ public class PlageHoraire {
 			Integer id = Integer.parseInt(livraisonElement.getAttribute("id"));
 			Integer adresse = Integer.parseInt(livraisonElement.getAttribute("adresse"));
 			Integer idClient = Integer.parseInt(livraisonElement.getAttribute("client"));
-			DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,recupererNoeud(adresse), idClient);
+			DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,recupererNoeud(adresse), idClient, this);
 			
 			// ajout des elements crees dans la structure objet
 			demandeLivraisonPlage.add(nouvelleDemande);
