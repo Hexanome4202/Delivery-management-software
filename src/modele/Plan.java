@@ -25,7 +25,7 @@ public class Plan {
     }
     
     /**
-     * 
+     * Constructeur de plan à partir de sets de troncons et de noeuds
      * @param troncons
      * @param noeuds
      */
