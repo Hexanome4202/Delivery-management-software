@@ -16,6 +16,11 @@ import org.junit.Test;
 public class TourneeTest {
 
 	@Test
+	public void testConstruireAPartirDeDOMXML() {
+		
+	}
+	
+	@Test
 	public void testDijkstra() {
 		Noeud noeud1 = new Noeud(0, 0, 1);
 		Noeud noeud2 = new Noeud(0, 0, 2);

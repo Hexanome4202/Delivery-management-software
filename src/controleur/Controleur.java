@@ -78,7 +78,11 @@ public class Controleur {
     }
     
     
-    
+    /**
+     * 
+     * @param vueCadreDOMElement
+     * @return
+     */
 	public int construireToutAPartirDeDOMXML(Element vueCadreDOMElement) {
 //        if (tournee.construireAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
 //            return Controleur.PARSE_ERROR;

@@ -355,7 +355,7 @@ public class Fenetre extends JFrame implements Observer {
                 Document document = constructeur.parse(xml);
                 Element racine = document.getDocumentElement();
                 if (racine.getNodeName().equals("JourneeType")) {
-                    int resultatConstruction = controleur.ConstruireToutAPartirDeDOMXML(racine);
+                    int resultatConstruction = controleur.construireToutAPartirDeDOMXML(racine);
                     if (resultatConstruction != Controleur.PARSE_OK) {
                     	System.out.println("PB de lecture de fichier!");
                     } 
