@@ -18,7 +18,7 @@ public class Itineraire {
      * @param liv2 
      * @param troncons
      */
-    public Itineraire(Livraison liv1, Livraison liv2, Set<Troncon> troncons) {
+    public Itineraire(Livraison liv1, Livraison liv2, List<Troncon> troncons) {
         // TODO implement here
     }
 
@@ -38,10 +38,10 @@ public class Itineraire {
     private List<Troncon> tronconsItineraire;
 
     /**
-     * @param temps
+     * @return le temps mis pour parcourir les troncons entre <code>depart</code> et <code>arrivee</code>
      */
-    public void getTemps(int temps) {
-        // TODO implement here
+    public int getTemps() {
+        return -1;
     }
 
 }

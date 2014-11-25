@@ -78,4 +78,11 @@ public class PlageHoraire {
 		return Controleur.PARSE_OK;
 	}
 
+    /**
+     * @return les noeuds correspondants aux demandes de livraisons de la plage horaire
+     */
+    public List<Noeud> getNoeuds() {
+        return null;
+    }
+
 }

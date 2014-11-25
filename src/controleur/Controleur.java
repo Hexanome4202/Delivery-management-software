@@ -63,10 +63,10 @@ public class Controleur {
     }
 
     /**
-     * @param feuille
+     * @return un object de type <code>String</code> contenant la feuille editee
      */
-    public void editerFeuilleRoute(String feuille) {
-        // TODO implement here
+    public String editerFeuilleRoute() {
+        return "";
     }
 
     /**

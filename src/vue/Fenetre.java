@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.xml.parsers.DocumentBuilder;
@@ -79,11 +80,6 @@ public class Fenetre extends JFrame implements Observer {
         // TODO implement here
     }
 
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	
 	public void lireDepuisFichierXML(){
@@ -133,4 +129,10 @@ public class Fenetre extends JFrame implements Observer {
                 return new File(jFileChooserXML.getSelectedFile().getAbsolutePath());
         return null;
 	}
+
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

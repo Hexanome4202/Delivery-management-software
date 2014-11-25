@@ -1,6 +1,6 @@
 package modele;
 
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * 
@@ -17,7 +17,17 @@ public class Noeud {
      * 
      */
     public Noeud(int x, int y) {
-    	
+    	this.x = x;
+    	this.y = y;
+    }
+    
+    /**
+     * 
+     */
+    public Noeud(int id, int x, int y) {
+    	this.x = x;
+    	this.y = y;
+    	this.id = id;
     }
 
     /**
@@ -38,12 +48,23 @@ public class Noeud {
     /**
      * 
      */
-    private ZoneGeographique[] zone;
+    private ZoneGeographique zone;
 
     /**
      * 
      */
-    private Set<Troncon> sortants;
-    
 
+    private ArrayList<Troncon> sortants;
+    
+    /**
+     * 
+     * @return les troncons sortants (<code>Troncon</code>) du noeud
+     */
+    public ArrayList<Troncon> getTronconSortants(){
+    	return sortants;
+    }
+
+    public int getId() {
+    	return this.id;
+    }
 }
