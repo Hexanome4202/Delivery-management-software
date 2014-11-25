@@ -80,7 +80,7 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fichierPlan = ouvrirFichier('o');
-				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
+				//TODO utiliser les mÃ©thodes de Felipe et Justine pour lire le xml
 			}
 			
 		});
@@ -90,7 +90,7 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fichierHoraires = ouvrirFichier('o');
-				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
+				//TODO utiliser les mÃ©thodes de Felipe et Justine pour lire le xml
 			}
 			
 		});
