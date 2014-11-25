@@ -2,6 +2,8 @@ package modele;
 
 import java.util.*;
 
+import org.w3c.dom.Document;
+
 /**
  * 
  */
@@ -17,7 +19,7 @@ public class Plan {
      * @param racineXML
      * TODO: Type pas bon
      */
-    public Plan(DOMXML racineXML) {
+    public Plan(Document racineXML) {
         // TODO implement here
     }
 
@@ -37,6 +39,10 @@ public class Plan {
      */
     public Noeud recupererNoeud(int idNoeud) {
         return null;
+    }
+    
+    public Set<Noeud> getToutNoeuds(){
+    	return toutNoeuds;
     }
 
 }

@@ -1,6 +1,6 @@
 package modele;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 
@@ -43,6 +43,10 @@ public class Noeud {
     /**
      * 
      */
-    private List<Troncon> sortants;
+    private ArrayList<Troncon> sortants;
+    
+    public ArrayList<Troncon> getTronconSortants(){
+    	return sortants;
+    }
 
 }

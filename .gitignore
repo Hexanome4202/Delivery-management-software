@@ -14,3 +14,4 @@ bin
 .project
 .classpath
 .metadata
+*.prefs
