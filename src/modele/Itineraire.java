@@ -38,10 +38,10 @@ public class Itineraire {
     private List<Troncon> tronconsItineraire;
 
     /**
-     * @param temps
+     * @return le temps mis pour parcourir les troncons entre <code>depart</code> et <code>arrivee</code>
      */
-    public void getTemps(int temps) {
-        // TODO implement here
+    public int getTemps() {
+        return -1;
     }
 
 }
