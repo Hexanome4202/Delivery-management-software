@@ -1,7 +1,13 @@
 package modele;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.w3c.dom.Element;
@@ -15,17 +21,30 @@ import controleur.Controleur;
 public class PlageHoraire {
 
 	/**
-     * 
-     */
-	public PlageHoraire() {
-	}
-
-	/**
 	 * @param heureDebut
 	 * @param heureFin
 	 */
 	public PlageHoraire(String heureDebut, String heureFin) {
-		// TODO implement here
+		try {
+			this.heureDebut = new SimpleDateFormat("H:m:s", Locale.ENGLISH).parse(heureDebut);
+			this.heureFin = new SimpleDateFormat("H:m:s", Locale.ENGLISH).parse(heureFin);
+		} catch (ParseException e) {
+			// TODO: do something clever...
+			this.heureDebut = new Date();
+			this.heureFin = new Date();
+		}
+		
+		this.demandesLivraisonPlage = new HashSet<DemandeDeLivraison>();
+	}
+	
+	/**
+	 * @param heureDebut
+	 * @param heureFin
+	 */
+	public PlageHoraire(String heureDebut, String heureFin, Set<DemandeDeLivraison> demandes) {
+		this(heureDebut, heureFin);
+		
+		this.demandesLivraisonPlage = demandes;
 	}
 
 	/**
@@ -41,18 +60,30 @@ public class PlageHoraire {
 	/**
      * 
      */
-	private Set<DemandeDeLivraison> demandeLivraisonPlage;
+	private Set<DemandeDeLivraison> demandesLivraisonPlage;
 
 	/**
-	 * @param noeuds
+	 * @return les noeuds correspondants aux demandes de livraisons de la plage horaire
 	 */
-	public void getNoeuds(List<Noeud> noeuds) {
-		// TODO implement here
+	public List<Noeud> getNoeuds() {
+		List<Noeud> noeuds = new ArrayList<Noeud>();
+		DemandeDeLivraison demande = null;
+		for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
+				it.hasNext(); demande = it.next()) {
+			noeuds.add(demande.getNoeud());
+		}
+		return noeuds;
 	}
 	
 	private Noeud recupererNoeud(Integer id){
-		//TODO implement here
-		return null;
+		Noeud noeud = null;
+		DemandeDeLivraison demande = null;
+		for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
+				it.hasNext(); demande = it.next()) {
+			if(demande.getNoeud().getId() == id) 
+				noeud = demande.getNoeud();
+		}
+		return noeud;
 	}
 
 	public int construireAPartirDeDOMXML(Element plageElement) {
@@ -63,7 +94,7 @@ public class PlageHoraire {
 		// creation des Boules;
 		String tag = "Livraison";
 		NodeList liste = plageElement.getElementsByTagName(tag);
-		demandeLivraisonPlage.clear();
+		demandesLivraisonPlage.clear();
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element livraisonElement = (Element) liste.item(i);
 			Integer id = Integer.parseInt(livraisonElement.getAttribute("id"));
@@ -72,17 +103,10 @@ public class PlageHoraire {
 			DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,recupererNoeud(adresse), idClient, this);
 			
 			// ajout des elements crees dans la structure objet
-			demandeLivraisonPlage.add(nouvelleDemande);
+			demandesLivraisonPlage.add(nouvelleDemande);
 		}
 
 		return Controleur.PARSE_OK;
 	}
-
-    /**
-     * @return les noeuds correspondants aux demandes de livraisons de la plage horaire
-     */
-    public List<Noeud> getNoeuds() {
-        return null;
-    }
 
 }
