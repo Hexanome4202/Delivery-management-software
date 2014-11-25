@@ -52,6 +52,14 @@ public class Noeud {
     private ArrayList<Troncon> sortants;
     
     /**
+     * Méthode pour ajouter un troncon sortant au noeud
+     * @param tronconSortant
+     */
+    public void ajouterTronconSortant(Troncon tronconSortant){
+    	sortants.add(tronconSortant);
+    }
+    
+    /**
      * 
      * @return les troncons sortants (<code>Troncon</code>) du noeud
      */
