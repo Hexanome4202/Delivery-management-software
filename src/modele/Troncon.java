@@ -44,5 +44,14 @@ public class Troncon {
      * 
      */
     private Noeud fin;
+    
+    
+    public Noeud getNoeudFin(){
+    	return fin;
+    }
+    
+    public double getTemps(){
+    	return vitesse*longueur;
+    }
 
 }
