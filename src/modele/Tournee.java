@@ -94,6 +94,15 @@ public class Tournee {
     public void recupererNoeud(int coordX, int coordY) {
         // TODO implement here
     }
+    
+    /**
+     * 
+     * @param noeud
+     */
+    public Noeud recupererNoeud(int idNoeud) {
+        // TODO implement here
+    	return null;
+    }
 
     /**
      * @param noeudPrecedent 
@@ -210,10 +219,14 @@ public class Tournee {
 			return Controleur.PARSE_ERROR;
 		}
 		Element adresseElement = (Element) liste.item(0);
-		int idAdresse = Integer
+		int idAdresseEntrepot = Integer
 				.parseInt(adresseElement.getAttribute("adresse"));
+		
+		Noeud noeudEntrepot = recupererNoeud(idAdresseEntrepot);
+		
+		Livraison entrepot = new Livraison(noeudEntrepot);
 
-		// creation des Boules;
+		// creation des Plages;
 		String tag = "Plage";
 		liste = noeudDOMRacine.getElementsByTagName(tag);
 		plagesHoraires.clear();
