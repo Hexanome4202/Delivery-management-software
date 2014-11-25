@@ -40,11 +40,6 @@ public class Noeud {
     /**
      * 
      */
-    private ZoneGeographique zone;
-
-    /**
-     * 
-     */
 
     private ArrayList<Troncon> sortants;
     
