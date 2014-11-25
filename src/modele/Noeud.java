@@ -49,7 +49,6 @@ public class Noeud {
     /**
      * 
      */
-
     private ArrayList<Troncon> sortants;
     
     /**
@@ -60,6 +59,10 @@ public class Noeud {
     	return sortants;
     }
 
+    /**
+     * Getter de l'attribut <code>id</code>.
+     * @return l'id du noeud courant.
+     */
     public int getId() {
     	return this.id;
     }

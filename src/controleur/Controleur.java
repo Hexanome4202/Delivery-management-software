@@ -79,7 +79,7 @@ public class Controleur {
     
     
     
-	public int ConstruireToutAPartirDeDOMXML(Element vueCadreDOMElement) {
+	public int construireToutAPartirDeDOMXML(Element vueCadreDOMElement) {
 //        if (tournee.construireAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
 //            return Controleur.PARSE_ERROR;
 //        }

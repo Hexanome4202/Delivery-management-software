@@ -21,6 +21,7 @@ import controleur.Controleur;
 public class PlageHoraire {
 
 	/**
+	 * Constructeur de la classe <code>PlageHoraire</code>
 	 * @param heureDebut
 	 * @param heureFin
 	 */
@@ -38,6 +39,7 @@ public class PlageHoraire {
 	}
 	
 	/**
+	 * Constructeur de la classe <code>PlageHoraire</code>
 	 * @param heureDebut
 	 * @param heureFin
 	 */
@@ -75,6 +77,11 @@ public class PlageHoraire {
 		return noeuds;
 	}
 	
+	/**
+	 * 
+	 * @param id Id du noeud que l'on souhaite trouver.
+	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>, null sinon
+	 */
 	private Noeud recupererNoeud(Integer id){
 		Noeud noeud = null;
 		DemandeDeLivraison demande = null;
@@ -88,6 +95,11 @@ public class PlageHoraire {
 		return noeud;
 	}
 
+	/**
+	 * 
+	 * @param plageElement
+	 * @return
+	 */
 	public int construireAPartirDeDOMXML(Element plageElement) {
 		// todo : gerer les erreurs de syntaxe dans le fichier XML !
 		// lecture des attributs

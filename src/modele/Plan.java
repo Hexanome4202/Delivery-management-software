@@ -60,6 +60,10 @@ public class Plan {
         return noeud;
     }
     
+    /**
+     * 
+     * @return Les noeuds du plan
+     */
     public Set<Noeud> getToutNoeuds(){
     	return this.toutNoeuds;
     }
