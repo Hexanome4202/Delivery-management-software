@@ -6,20 +6,6 @@ import java.util.ArrayList;
  * 
  */
 public class Noeud {
-
-    /**
-     * 
-     */
-    public Noeud() {
-    }
-    
-    /**
-     * 
-     */
-    public Noeud(int x, int y) {
-    	this.x = x;
-    	this.y = y;
-    }
     
     /**
      * 
@@ -28,6 +14,12 @@ public class Noeud {
     	this.x = x;
     	this.y = y;
     	this.id = id;
+    	this.sortants = new ArrayList<Troncon>();
+    }
+    
+    public Noeud(int id, int x, int y, ArrayList<Troncon> troncons) {
+    	this(id, x, y);
+    	this.sortants = troncons;
     }
 
     /**

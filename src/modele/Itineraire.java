@@ -38,10 +38,16 @@ public class Itineraire {
     private List<Troncon> tronconsItineraire;
 
     /**
+     * Permet de calculer et de retourner le temps mis pour parcourir un itinéraire.
      * @return le temps mis pour parcourir les troncons entre <code>depart</code> et <code>arrivee</code>
      */
-    public int getTemps() {
-        return -1;
+    public double getTemps() {
+    	double temps = 0;
+    	Troncon t = null;
+        for(Iterator<Troncon> it = this.tronconsItineraire.iterator(); it.hasNext(); t = it.next()) {
+        	temps += t.getTemps();
+        }
+        return temps;
     }
 
 }

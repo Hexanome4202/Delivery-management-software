@@ -6,26 +6,30 @@ import java.util.*;
  * 
  */
 public class Livraison {
-
-    /**
-     * 
-     */
-    public Livraison() {
+	/**
+	 * Constructeur vide de <Livraison>.
+	 */
+    private Livraison() {
+    	this.motifNonLivraison = "";
+    	this.heure = null;
+    	this.etat = Etat.EN_ATTENTE;
     }
-    
+	
     /**
      * @param noeudCourant 
      * @param client
      */
-    public Livraison(Noeud noeudCourant, int client) {
-        // TODO implement here
+    public Livraison(DemandeDeLivraison demande) {
+    	this();
+        this.demandeLivraison = demande;
     }
 
     /**
      * @param entrepot
      */
-    public Livraison(int entrepot) {
-        // TODO implement here
+    public Livraison(Noeud entrepot) {
+    	this();
+        this.demandeLivraison = new DemandeDeLivraison(entrepot);
     }
 
     /**
@@ -52,10 +56,10 @@ public class Livraison {
      * 
      */
     public enum Etat {
-        EnAttente,
-        Livree,
-        Retard,
-        NonLivre
+        EN_ATTENTE,
+        LIVREE,
+        RETARD,
+        NON_LIVREE
     }
 
 }
