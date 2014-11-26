@@ -4,23 +4,20 @@ import java.util.*;
 
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Document;
 
 
 /**
  * 
  */
 public class Plan {
-
-    /**
-     * 
-     */
+	/**
+	 * Constructeur vide de <code>Plan</code>.
+	 */
     public Plan() {
     }
     
     /**
      * @param racineXML
-     * TODO: Type pas bon
      */
     public Plan(Element racineXML) {
 
@@ -28,12 +25,13 @@ public class Plan {
     }
     
     /**
-     * 
+     * Constructeur de plan à partir de sets de troncons et de noeuds
      * @param troncons
      * @param noeuds
      */
     public Plan(Set<Troncon> troncons, Set<Noeud> noeuds) {
-    	
+    	this.toutNoeuds = noeuds;
+    	this.toutTroncons = troncons;
     }
 
     /**
@@ -51,11 +49,23 @@ public class Plan {
      * @return le noeud ayant comme id <code>idNoeud</code> s'il existe, null sinon
      */
     public Noeud recupererNoeud(int idNoeud) {
-        return null;
+    	Noeud noeud = null;
+    	Noeud noeudCourant = null;
+        for(Iterator<Noeud> it = this.toutNoeuds.iterator(); it.hasNext(); noeudCourant = it.next()) {
+        	if(noeudCourant.getId() == idNoeud) {
+        		noeud = noeudCourant;
+        		break;
+        	}
+        }
+        return noeud;
     }
     
+    /**
+     * 
+     * @return Les noeuds du plan
+     */
     public Set<Noeud> getToutNoeuds(){
-    	return toutNoeuds;
+    	return this.toutNoeuds;
     }
 
 }

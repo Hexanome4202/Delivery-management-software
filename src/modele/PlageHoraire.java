@@ -21,6 +21,7 @@ import controleur.Controleur;
 public class PlageHoraire {
 
 	/**
+	 * Constructeur de la classe <code>PlageHoraire</code>
 	 * @param heureDebut
 	 * @param heureFin
 	 */
@@ -38,6 +39,7 @@ public class PlageHoraire {
 	}
 	
 	/**
+	 * Constructeur de la classe <code>PlageHoraire</code>
 	 * @param heureDebut
 	 * @param heureFin
 	 */
@@ -77,16 +79,24 @@ public class PlageHoraire {
 	
 	/**
 	 * 
+<<<<<<< HEAD
 	 * @param id du noeud
 	 * @return le Noeud
+=======
+	 * @param id Id du noeud que l'on souhaite trouver.
+	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>, null sinon
+>>>>>>> origin/master
 	 */
 	private Noeud recupererNoeud(Integer id){
 		Noeud noeud = null;
 		DemandeDeLivraison demande = null;
 		for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
 				it.hasNext(); demande = it.next()) {
-			if(demande.getNoeud().getId() == id) //Pas bon
+			if(demande.getNoeud().getId() == id) {//pas bon
+
 				noeud = demande.getNoeud();
+				break;
+			}
 		}
 		return noeud;
 	}

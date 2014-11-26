@@ -84,7 +84,7 @@ public class Controleur {
             return Controleur.PARSE_ERROR;
         }
         //vueTournee.dessiner();
-		return Controleur.PARSE_OK;
+	return Controleur.PARSE_OK;
     }
 
 

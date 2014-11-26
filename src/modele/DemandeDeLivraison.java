@@ -7,7 +7,7 @@ package modele;
 public class DemandeDeLivraison {
     
     /**
-     * Utilisé pour simplifier les méthodes de tests
+     * Constructeur permettant de simplifier les méthodes de tests.
      * @param noeud 
      * @param client
      * @deprecated Utilisé pour les tests, ne devrait pas être utilisé en production

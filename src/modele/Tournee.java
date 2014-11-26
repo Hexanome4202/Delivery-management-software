@@ -16,13 +16,19 @@ import controleur.Controleur;
  * 
  */
 public class Tournee {
+	
 	private Livraison entrepot;
 
 	/**
-     * 
-     */
+	 * Constructeur vide de <code>Tournee</code>
+	 */
 	public Tournee() {
-		plagesHoraires= new ArrayList<PlageHoraire>();
+
+		this.plagesHoraires = new ArrayList<PlageHoraire>();
+		this.itineraires = new ArrayList<Itineraire>();
+		this.entrepot = null;
+		this.planTournee = null;
+
 	}
 
 	/**
@@ -115,6 +121,11 @@ public class Tournee {
         // TODO implement here
     }
 
+    @Deprecated
+    public LinkedList<Troncon> testCaculDijkstra(Noeud noeudDepart, Noeud noeudDestination) {
+    	return  calculerDijkstra(noeudDepart, noeudDestination);
+    }
+    
     /**
      * Méthode calculant le plus court chemin entre deux noeuds
      * @param noeudDepart
@@ -147,15 +158,18 @@ public class Tournee {
     		evaluerVoisins(noeudCourant, graphePonderation, grapheVoisinPrecedent, noeudsNonVisite);
     	}
     	
-    	Noeud noeud = null;
+    	Noeud noeudDebut = null;
+    	Noeud noeudFin = noeudDestination;
     	LinkedList<Troncon> chemin = new LinkedList<Troncon>();
-    	while(noeud != noeudDepart){
-    		noeud = grapheVoisinPrecedent.get(noeudDestination);
-    		ArrayList<Troncon> troncons = noeud.getTronconSortants();
+    	
+    	while(noeudDebut != noeudDepart) {
+    		noeudDebut = grapheVoisinPrecedent.get(noeudFin);
+    		ArrayList<Troncon> troncons = noeudDebut.getTronconSortants();
     		for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon.hasNext();){
     			Troncon troncon = itTroncon.next();
-    			if(troncon.getNoeudFin() == noeud) {
+    			if(troncon.getNoeudFin() == noeudFin) {
     				chemin.addFirst(troncon);
+    				noeudFin = noeudDebut;
     				break;
     			}
     		}
@@ -251,6 +265,10 @@ public class Tournee {
 			plagesHoraires.add(nouvellePlage);
 		}
 		return Controleur.PARSE_OK;
+	}
+	
+	public void setPlanTournee(Plan planTournee){
+		this.planTournee = planTournee;
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class Livraison {
 	/**
-	 * Constructeur vide de <Livraison>.
+	 * Constructeur vide de <code>Livraison</code>.
 	 */
     private Livraison() {
     	this.motifNonLivraison = "";
@@ -16,8 +16,8 @@ public class Livraison {
     }
 	
     /**
-     * @param noeudCourant 
-     * @param client
+     * Constructeur de <code>Livraison</code>
+     * @param demande La demande de livraison liée à la livraison.
      */
     public Livraison(DemandeDeLivraison demande) {
     	this();
@@ -25,6 +25,7 @@ public class Livraison {
     }
 
     /**
+     * Constructeur de <code>Livraison</code>
      * @param entrepot
      */
     public Livraison(Noeud entrepot) {
