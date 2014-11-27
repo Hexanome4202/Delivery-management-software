@@ -111,10 +111,18 @@ public class Tournee {
 		// TODO implement here
 	}
 
+	/**
+	 * Méthode permettant de tester la méthode privée <code>calculerDijkstra</code>
+	 * @param noeudDepart
+	 * @param noeudDestination
+	 * @param chemin
+	 * @return
+	 */
+	//FIXME deprecated public method to test a private one ? Sooooo dirty...
 	@Deprecated
-	public LinkedList<Troncon> testCaculDijkstra(Noeud noeudDepart,
-			Noeud noeudDestination) {
-		return calculerDijkstra(noeudDepart, noeudDestination);
+	public double testCaculDijkstra(Noeud noeudDepart,
+			Noeud noeudDestination, LinkedList<Troncon> chemin) {
+		return calculerDijkstra(noeudDepart, noeudDestination, chemin);
 	}
 
 	/**
@@ -122,11 +130,12 @@ public class Tournee {
 	 * 
 	 * @param noeudDepart
 	 * @param noeudDestination
-	 * @return La liste ordonnée de troncons à suivre représentant le plus court
-	 *         chemin
+	 * @param chemin : la liste ordonnée de troncons à suivre représentant le plus court
+	 *         chemin -> cette liste est remplie après l'appel de la fonction
+	 * @return la pondération du chemin total (soit le temps total pour ce chemin)
 	 */
-	private LinkedList<Troncon> calculerDijkstra(Noeud noeudDepart,
-			Noeud noeudDestination) {
+	private double calculerDijkstra(Noeud noeudDepart,
+			Noeud noeudDestination, LinkedList<Troncon> chemin) {
 
 		HashMap<Noeud, Double> graphePonderation = new HashMap<Noeud, Double>();
 		HashMap<Noeud, Noeud> grapheVoisinPrecedent = new HashMap<Noeud, Noeud>();
@@ -157,22 +166,28 @@ public class Tournee {
 
 		Noeud noeudDebut = null;
 		Noeud noeudFin = noeudDestination;
-		LinkedList<Troncon> chemin = new LinkedList<Troncon>();
 
+		chemin.retainAll(null);
+		
 		while (noeudDebut != noeudDepart) {
 			noeudDebut = grapheVoisinPrecedent.get(noeudFin);
-			ArrayList<Troncon> troncons = noeudDebut.getTronconSortants();
-			for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon
-					.hasNext();) {
-				Troncon troncon = itTroncon.next();
-				if (troncon.getNoeudFin() == noeudFin) {
-					chemin.addFirst(troncon);
-					noeudFin = noeudDebut;
-					break;
+			if(noeudDebut == null){
+				break;
+			}
+			else{
+				ArrayList<Troncon> troncons = noeudDebut.getTronconSortants();
+				for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon
+						.hasNext();) {
+					Troncon troncon = itTroncon.next();
+					if (troncon.getNoeudFin() == noeudFin) {
+						chemin.addFirst(troncon);
+						noeudFin = noeudDebut;
+						break;
+					}
 				}
 			}
 		}
-		return chemin;
+		return graphePonderation.get(noeudDestination);
 	}
 
 	/**

@@ -20,11 +20,17 @@ import org.junit.Test;
  */
 public class TourneeTest {
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testConstruireAPartirDeDOMXML() {
 		fail("todo");
 	}
 	
+	/**
+	 * Test de la méthode <code>calculerDijkstra</code> sur un cas normal
+	 */
 	@Test
 	public void testDijkstraExempleWiki() {
 		Noeud noeud1 = new Noeud(1, 0, 0);
@@ -112,15 +118,58 @@ public class TourneeTest {
 		Tournee tournee = new Tournee();
 		tournee.setPlanTournee(plan);
 		
+		LinkedList<Troncon> cheminResultat = new LinkedList<Troncon>();
 		@SuppressWarnings("deprecation")
-		LinkedList<Troncon> resultat = tournee.testCaculDijkstra(noeud1, noeud5);
+		double ponderationResultat = tournee.testCaculDijkstra(noeud1, noeud5, cheminResultat);
 		
-		LinkedList<Troncon> expected = new LinkedList<Troncon>();
-		expected.add(troncon13);
-		expected.add(troncon36);
-		expected.add(troncon65);
+		LinkedList<Troncon> cheminExpected = new LinkedList<Troncon>();
+		cheminExpected.add(troncon13);
+		cheminExpected.add(troncon36);
+		cheminExpected.add(troncon65);
 		
-		assertEquals("Erreur - le plus court chemin n'est pas le bon",expected, resultat);
+		double ponderationExpected = 20;
+		
+		assertEquals(cheminExpected, cheminResultat);
+		assertEquals(ponderationExpected, ponderationResultat, 0.0);
+	}
+	
+	/**
+	 * Test de la méthode <code>calculerDijkstra</code> sur un graphe mal formé
+	 */
+	@Test
+	public void testDijkstraNoeudInaccessible(){
+		Noeud noeud1 = new Noeud(1, 0, 0);
+		Noeud noeud2 = new Noeud(2, 0, 0);
+		Noeud noeud3 = new Noeud(3, 0, 0);
+		
+		Set<Noeud> noeuds = new TreeSet<Noeud>();
+		noeuds.add(noeud1);
+		noeuds.add(noeud2);
+		noeuds.add(noeud3);
+		
+		Troncon troncon12 = new Troncon(1, 9, "", noeud2);
+		noeud1.ajouterTronconSortant(troncon12);
+		
+		Troncon troncon32 = new Troncon(1, 9, "", noeud2);
+		noeud3.ajouterTronconSortant(troncon32);
+		
+		Set<Troncon> troncons = new TreeSet<Troncon>();
+		troncons.add(troncon12);
+		troncons.add(troncon32);
+		
+		Plan plan = new Plan(troncons,noeuds);
+		
+		Tournee tournee = new Tournee();
+		tournee.setPlanTournee(plan);
+		
+		LinkedList<Troncon> cheminResultat = new LinkedList<Troncon>();
+		@SuppressWarnings("deprecation")
+		double ponderationResultat = tournee.testCaculDijkstra(noeud1, noeud3, cheminResultat);
+		
+		LinkedList<Troncon> cheminExpected = new LinkedList<Troncon>();
+		
+		assertEquals(cheminExpected, cheminResultat);
+		assertEquals(Double.MAX_VALUE, ponderationResultat, 0.0);
 	}
 
 }
