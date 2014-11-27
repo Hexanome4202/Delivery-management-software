@@ -79,12 +79,20 @@ public class Controleur {
     
     
     
-	public int ConstruireToutAPartirDeDOMXML(Element vueCadreDOMElement) {
-        if (tournee.construireAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
+	public int construireLivraisonsAPartirDeDOMXML(Element vueCadreDOMElement) {
+        if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
             return Controleur.PARSE_ERROR;
         }
         //vueTournee.dessiner();
 	return Controleur.PARSE_OK;
+    }
+	
+	public int construirePlanAPartirDeDOMXML(Element vueCadreDOMElement) {
+//        if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
+//            return Controleur.PARSE_ERROR;
+//        }
+        //vueTournee.dessiner();
+        return Controleur.PARSE_OK;
     }
 
 

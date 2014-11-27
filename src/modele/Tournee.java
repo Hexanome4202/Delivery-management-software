@@ -273,12 +273,10 @@ public class Tournee {
 		// TODO implement here
 	}
 
-	public int construireAPartirDeDOMXML(Element noeudDOMRacine) {
+	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
 
 		// TODO : gerer les erreurs de syntaxe dans le fichier XML
 		// lecture des attributs
-		// hauteur = noeudDOMRacine.getAttribute("");
-		// largeur = noeudDOMRacine.getAttribute("");
 
 		NodeList liste = noeudDOMRacine.getElementsByTagName("Entrepot");
 		if (liste.getLength() != 1) {
@@ -301,7 +299,7 @@ public class Tournee {
 			PlageHoraire nouvellePlage = new PlageHoraire(
 					plageElement.getAttribute("heureDebut"),
 					plageElement.getAttribute("heureFin"));
-			if (nouvellePlage.construireAPartirDeDOMXML(plageElement) != Controleur.PARSE_OK) {
+			if (nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement) != Controleur.PARSE_OK) {
 				System.out.println("error");
 				return Controleur.PARSE_ERROR;
 			}

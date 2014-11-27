@@ -1,20 +1,27 @@
 package vue;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-
-
-
-
-
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,30 +34,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import b4.advancedgui.menu.AccordionMenu;
-import libs.ExampleFileFilter;
-import controleur.Controleur;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-
-
-
-
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-
 import b4.advancedgui.menu.AccordionItem;
+import b4.advancedgui.menu.AccordionMenu;
+import controleur.Controleur;
 
 
 /**
@@ -108,7 +94,7 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fichierPlan = ouvrirFichier('o');
+				lireDepuisFichierXML("plan");
 				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			
@@ -118,8 +104,7 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				lireDepuisFichierXML();
-				System.out.println("fait");
+				lireDepuisFichierXML("horaires");
 				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			
@@ -351,7 +336,7 @@ public class Fenetre extends JFrame implements Observer {
 
 	
 	
-	public void lireDepuisFichierXML(){
+	public void lireDepuisFichierXML(String typeFichier){
         File xml = ouvrirFichier('o');
         if (xml != null) {
              try {
@@ -360,13 +345,24 @@ public class Fenetre extends JFrame implements Observer {
                 // lecture du contenu d'un fichier XML avec DOM
                 Document document = constructeur.parse(xml);
                 Element racine = document.getDocumentElement();
-                if (racine.getNodeName().equals("JourneeType")) {
-                    int resultatConstruction = controleur.ConstruireToutAPartirDeDOMXML(racine);
-                    if (resultatConstruction != Controleur.PARSE_OK) {
-                    	System.out.println("PB de lecture de fichier!");
-                    } 
-                }
-            // todo : traiter les erreurs
+                if (typeFichier.equals("horaires")) {
+					if (racine.getNodeName().equals("JourneeType")) {
+						int resultatConstruction = controleur
+								.construireLivraisonsAPartirDeDOMXML(racine);
+						if (resultatConstruction != Controleur.PARSE_OK) {
+							System.out.println("PB de lecture de fichier!");
+						}
+					}
+					// todo : traiter les erreurs
+				}else if(typeFichier.equals("plan")){
+					if (racine.getNodeName().equals("Reseau")) {
+						int resultatConstruction = controleur
+								.construirePlanAPartirDeDOMXML(racine);
+						if (resultatConstruction != Controleur.PARSE_OK) {
+							System.out.println("PB de lecture de fichier!");
+						}
+					}
+				}
             } catch (ParserConfigurationException pce) {
                 System.out.println("Erreur de configuration du parseur DOM");
                 System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");

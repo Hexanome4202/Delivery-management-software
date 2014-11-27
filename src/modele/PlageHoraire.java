@@ -86,26 +86,31 @@ public class PlageHoraire {
 	private Noeud recupererNoeud(Integer id){
 		Noeud noeud = null;
 		DemandeDeLivraison demande = null;
-		for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
-				it.hasNext(); demande = it.next()) {
-			if(demande.getNoeud().getId() == id) {//pas bon
+		try {
+			for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
+					it.hasNext(); demande = it.next()) {
+				if(demande.getNoeud().getId() == id) {//Il faut traiter le cas ou le plan n'est pas encore charge
 
-				noeud = demande.getNoeud();
-				break;
+					noeud = demande.getNoeud();
+					break;
+				}
 			}
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Il n'y a aucun noeud dans le plan!!");
 		}
 		return noeud;
 	}
 
 	/**
-	 * 
+	 * Cette classe est responsable pour charger les livraisons d'une plage horaire à partir
+	 * d'un Element plageElement, aprés elle additionne la nouvelle demande de livraison à la liste
+	 * demandesLivraisonPlage
 	 * @param plageElement
 	 * @return
 	 */
-	public int construireAPartirDeDOMXML(Element plageElement) {
+	public int construireLivraisonsAPartirDeDOMXML(Element plageElement) {
 		// todo : gerer les erreurs de syntaxe dans le fichier XML !
-		// lecture des attributs
-
 
 		// creation des Demandes Livraison;
 		String tag = "Livraison";
@@ -120,7 +125,6 @@ public class PlageHoraire {
 			
 			// ajout des elements crees dans la structure objet
 			demandesLivraisonPlage.add(nouvelleDemande);
-			System.out.println( id + "   " + adresse +"   "+ idClient);
 		}
 
 		return Controleur.PARSE_OK;
