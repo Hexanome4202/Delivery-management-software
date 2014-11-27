@@ -79,7 +79,7 @@ public class Noeud implements Comparable<Noeud> {
 	public int compareTo(Noeud noeud) {
 		int result = 0;
 		
-		if(this.id != noeud.id){
+		if(noeud != null && this.id != noeud.id){
 			result = this.id - noeud.id;
 		}
 		
