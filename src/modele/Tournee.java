@@ -187,7 +187,6 @@ public class Tournee {
 				}
 			}
 		}
-		System.out.println(chemin.size());
 		return graphePonderation.get(noeudDestination);
 	}
 
