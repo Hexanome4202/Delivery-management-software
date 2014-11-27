@@ -20,15 +20,18 @@ import org.junit.Test;
  */
 public class TourneeTest {
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testConstruireAPartirDeDOMXML() {
 		fail("todo");
 	}
 	
-	@Test
 	/**
 	 * Test de la méthode <code>calculerDijkstra</code> sur un cas normal
 	 */
+	@Test
 	public void testDijkstraExempleWiki() {
 		Noeud noeud1 = new Noeud(1, 0, 0);
 		Noeud noeud2 = new Noeud(2, 0, 0);
@@ -123,13 +126,13 @@ public class TourneeTest {
 		expected.add(troncon36);
 		expected.add(troncon65);
 		
-		assertEquals("Erreur - le plus court chemin n'est pas le bon",expected, resultat);
+		assertEquals(expected, resultat);
 	}
 	
-	@Test
 	/**
 	 * Test de la méthode <code>calculerDijkstra</code> sur un graphe mal formé
 	 */
+	@Test
 	public void testDijkstraNoeudInaccessible(){
 		Noeud noeud1 = new Noeud(1, 0, 0);
 		Noeud noeud2 = new Noeud(2, 0, 0);
@@ -160,7 +163,7 @@ public class TourneeTest {
 		
 		LinkedList<Troncon> expected = new LinkedList<Troncon>();
 		
-		assertEquals("Erreur - le plus court chemin n'est pas le bon",expected, resultat);
+		assertEquals(expected, resultat);
 	}
 
 }

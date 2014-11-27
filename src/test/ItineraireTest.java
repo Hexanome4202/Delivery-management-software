@@ -3,8 +3,6 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import modele.Itineraire;
 import modele.Troncon;
 
@@ -18,10 +16,10 @@ import org.junit.Test;
  */
 public class ItineraireTest {
 
-	@Test
 	/**
 	 * Teste le fonctionnement de la méthode <code>getTemps()</code>
 	 */
+	@Test
 	public void testGetTemps() {
 		Troncon t1 = new Troncon(1, 2, "");
 		Troncon t2 = new Troncon(5, 10, "");
@@ -29,8 +27,7 @@ public class ItineraireTest {
 		troncons.add(t1);
 		troncons.add(t2);
 		Itineraire it = new Itineraire(null, null, troncons);
-		assertEquals("Erreur - Le temps de l'itineraire doit être d'environ 0.77",
-				4.0, it.getTemps(), 0.01);
+		assertEquals(4.0, it.getTemps(), 0.01);
 	}
 
 }

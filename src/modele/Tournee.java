@@ -111,6 +111,13 @@ public class Tournee {
 		// TODO implement here
 	}
 
+	/**
+	 * Méthode permettant de tester la méthode privée <code>calculerDijkstra</code>
+	 * @param noeudDepart
+	 * @param noeudDestination
+	 * @return
+	 */
+	//FIXME deprecated public method to test a private one ? Sooooo dirty...
 	@Deprecated
 	public LinkedList<Troncon> testCaculDijkstra(Noeud noeudDepart,
 			Noeud noeudDestination) {
