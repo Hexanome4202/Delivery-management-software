@@ -51,7 +51,9 @@ public class Plan {
     public Noeud recupererNoeud(int idNoeud) {
     	Noeud noeud = null;
     	Noeud noeudCourant = null;
-        for(Iterator<Noeud> it = this.toutNoeuds.iterator(); it.hasNext(); noeudCourant = it.next()) {
+    	Iterator<Noeud> it = this.toutNoeuds.iterator();
+        while(it.hasNext()) {
+        	noeudCourant = it.next();
         	if(noeudCourant.getId() == idNoeud) {
         		noeud = noeudCourant;
         		break;

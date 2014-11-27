@@ -29,8 +29,7 @@ public class ItineraireTest {
 		troncons.add(t1);
 		troncons.add(t2);
 		Itineraire it = new Itineraire(null, null, troncons);
-		assertEquals(
-				"Erreur - Le temps de l'itineraire doit être d'environ 0.77",
+		assertEquals("Erreur - Le temps de l'itineraire doit être d'environ 0.77",
 				4.0, it.getTemps(), 0.01);
 	}
 

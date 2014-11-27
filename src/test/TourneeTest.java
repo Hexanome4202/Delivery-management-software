@@ -22,7 +22,7 @@ public class TourneeTest {
 
 	@Test
 	public void testConstruireAPartirDeDOMXML() {
-		
+		fail("todo");
 	}
 	
 	@Test
