@@ -56,15 +56,6 @@ public class Tournee {
 	}
 
 	/**
-	 * @param client
-	 * @param noeud
-	 * @param precedent
-	 */
-	public void ajouterLivraison(int client, int noeud, Livraison precedent) {
-		// TODO implement here
-	}
-
-	/**
 	 * @param livraison
 	 */
 	public void supprimerLivraison(Livraison livraison) {

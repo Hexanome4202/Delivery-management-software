@@ -79,13 +79,8 @@ public class PlageHoraire {
 	
 	/**
 	 * 
-<<<<<<< HEAD
-	 * @param id du noeud
-	 * @return le Noeud
-=======
 	 * @param id Id du noeud que l'on souhaite trouver.
 	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>, null sinon
->>>>>>> origin/master
 	 */
 	private Noeud recupererNoeud(Integer id){
 		Noeud noeud = null;
