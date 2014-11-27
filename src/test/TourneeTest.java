@@ -21,7 +21,7 @@ public class TourneeTest {
 	}
 	
 	@Test
-	public void testDijkstra() {
+	public void testDijkstraExempleWiki() {
 		Noeud noeud1 = new Noeud(1, 0, 0);
 		Noeud noeud2 = new Noeud(2, 0, 0);
 		Noeud noeud3 = new Noeud(3, 0, 0);
@@ -39,41 +39,68 @@ public class TourneeTest {
 		
 		Troncon troncon13 = new Troncon(1, 9, "", noeud3);
 		noeud1.ajouterTronconSortant(troncon13);
+		Troncon troncon31 = new Troncon(1, 9, "", noeud1);
+		noeud3.ajouterTronconSortant(troncon31);
 		
 		Troncon troncon12 = new Troncon(1, 7, "", noeud2);
 		noeud1.ajouterTronconSortant(troncon12);
+		Troncon troncon21 = new Troncon(1, 7, "", noeud1);
+		noeud2.ajouterTronconSortant(troncon21);
 		
 		Troncon troncon16 = new Troncon(1, 14, "", noeud6);
 		noeud1.ajouterTronconSortant(troncon16);
+		Troncon troncon61 = new Troncon(1, 14, "", noeud1);
+		noeud6.ajouterTronconSortant(troncon61);
 		
 		Troncon troncon23 = new Troncon(1, 10, "", noeud3);
 		noeud2.ajouterTronconSortant(troncon23);
+		Troncon troncon32 = new Troncon(1, 10, "", noeud2);
+		noeud3.ajouterTronconSortant(troncon32);
 		
 		Troncon troncon24 = new Troncon(1, 15, "", noeud4);
 		noeud2.ajouterTronconSortant(troncon24);
+		Troncon troncon42 = new Troncon(1, 15, "", noeud2);
+		noeud4.ajouterTronconSortant(troncon42);
 		
 		Troncon troncon36 = new Troncon(1, 2, "", noeud6);
 		noeud3.ajouterTronconSortant(troncon36);
+		Troncon troncon63 = new Troncon(1, 2, "", noeud3);
+		noeud6.ajouterTronconSortant(troncon63);
 		
 		Troncon troncon34 = new Troncon(1, 11, "", noeud4);
 		noeud3.ajouterTronconSortant(troncon34);
+		Troncon troncon43 = new Troncon(1, 11, "", noeud3);
+		noeud4.ajouterTronconSortant(troncon43);
 		
 		Troncon troncon45 = new Troncon(1, 6, "", noeud5);
 		noeud4.ajouterTronconSortant(troncon45);
+		Troncon troncon54 = new Troncon(1, 6, "", noeud4);
+		noeud5.ajouterTronconSortant(troncon54);
 		
 		Troncon troncon65 = new Troncon(1, 9, "", noeud5);
 		noeud6.ajouterTronconSortant(troncon65);
+		Troncon troncon56 = new Troncon(1, 9, "", noeud6);
+		noeud5.ajouterTronconSortant(troncon56);
 		
 		Set<Troncon> troncons = new TreeSet<Troncon>();
 		troncons.add(troncon12);
+		troncons.add(troncon21);
 		troncons.add(troncon13);
+		troncons.add(troncon31);
 		troncons.add(troncon16);
+		troncons.add(troncon61);
 		troncons.add(troncon23);
+		troncons.add(troncon32);
 		troncons.add(troncon24);
+		troncons.add(troncon42);
 		troncons.add(troncon36);
+		troncons.add(troncon63);
 		troncons.add(troncon34);
+		troncons.add(troncon43);
 		troncons.add(troncon45);
+		troncons.add(troncon54);
 		troncons.add(troncon65);
+		troncons.add(troncon56);
 		
 		Plan plan = new Plan(troncons,noeuds);
 		
