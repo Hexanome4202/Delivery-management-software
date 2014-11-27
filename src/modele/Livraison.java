@@ -30,7 +30,7 @@ public class Livraison {
      */
     public Livraison(Noeud entrepot) {
     	this();
-        this.demandeLivraison = new DemandeDeLivraison(entrepot);
+        this.demandeLivraison = new DemandeDeLivraison(-1, entrepot);
     }
 
     /**

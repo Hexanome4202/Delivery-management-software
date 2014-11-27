@@ -4,7 +4,7 @@ package modele;
 /**
  * 
  */
-public class DemandeDeLivraison {
+public class DemandeDeLivraison implements Comparable {
     
     /**
      * Constructeur permettant de simplifier les méthodes de tests.
@@ -32,8 +32,9 @@ public class DemandeDeLivraison {
      * Utilisé pour créer le noeud spécial correspondant à l'entrepot
      * @param entrepot
      */
-    public DemandeDeLivraison(Noeud entrepot) {
+    public DemandeDeLivraison(int id, Noeud entrepot) {
         this.adresseLivraison = entrepot;
+        this.id = id;
     }
 
     /**
@@ -62,5 +63,20 @@ public class DemandeDeLivraison {
     public Noeud getNoeud() {
         return this.adresseLivraison;
     }
+    
+    /**
+     * 
+     * @return l'id de la demande de livraison
+     */
+    public int getId() {
+    	return this.id;
+    }
+
+	@Override
+	public int compareTo(Object o) {
+		DemandeDeLivraison demande = (DemandeDeLivraison) o;
+		return (o != null && this.id == ((DemandeDeLivraison) o).getId()) ? 
+				0 : this.id - demande.getId();
+	}
 
 }

@@ -85,4 +85,9 @@ public class Noeud implements Comparable<Noeud> {
 		
 		return result;
 	}
+	
+	@Override
+	public boolean equals(Object noeud) {
+		return this.compareTo((Noeud)noeud) == 0;
+	}
 }

@@ -70,8 +70,9 @@ public class PlageHoraire {
 	public List<Noeud> getNoeuds() {
 		List<Noeud> noeuds = new ArrayList<Noeud>();
 		DemandeDeLivraison demande = null;
-		for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
-				it.hasNext(); demande = it.next()) {
+		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
+		while(it.hasNext()) {
+			demande = it.next();
 			noeuds.add(demande.getNoeud());
 		}
 		return noeuds;
