@@ -161,14 +161,19 @@ public class Tournee {
 
 		while (noeudDebut != noeudDepart) {
 			noeudDebut = grapheVoisinPrecedent.get(noeudFin);
-			ArrayList<Troncon> troncons = noeudDebut.getTronconSortants();
-			for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon
-					.hasNext();) {
-				Troncon troncon = itTroncon.next();
-				if (troncon.getNoeudFin() == noeudFin) {
-					chemin.addFirst(troncon);
-					noeudFin = noeudDebut;
-					break;
+			if(noeudDebut == null){
+				break;
+			}
+			else{
+				ArrayList<Troncon> troncons = noeudDebut.getTronconSortants();
+				for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon
+						.hasNext();) {
+					Troncon troncon = itTroncon.next();
+					if (troncon.getNoeudFin() == noeudFin) {
+						chemin.addFirst(troncon);
+						noeudFin = noeudDebut;
+						break;
+					}
 				}
 			}
 		}

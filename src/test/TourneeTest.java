@@ -26,6 +26,9 @@ public class TourneeTest {
 	}
 	
 	@Test
+	/**
+	 * Test de la méthode <code>calculerDijkstra</code> sur un cas normal
+	 */
 	public void testDijkstraExempleWiki() {
 		Noeud noeud1 = new Noeud(1, 0, 0);
 		Noeud noeud2 = new Noeud(2, 0, 0);
@@ -119,6 +122,43 @@ public class TourneeTest {
 		expected.add(troncon13);
 		expected.add(troncon36);
 		expected.add(troncon65);
+		
+		assertEquals("Erreur - le plus court chemin n'est pas le bon",expected, resultat);
+	}
+	
+	@Test
+	/**
+	 * Test de la méthode <code>calculerDijkstra</code> sur un graphe mal formé
+	 */
+	public void testDijkstraNoeudInaccessible(){
+		Noeud noeud1 = new Noeud(1, 0, 0);
+		Noeud noeud2 = new Noeud(2, 0, 0);
+		Noeud noeud3 = new Noeud(3, 0, 0);
+		
+		Set<Noeud> noeuds = new TreeSet<Noeud>();
+		noeuds.add(noeud1);
+		noeuds.add(noeud2);
+		noeuds.add(noeud3);
+		
+		Troncon troncon12 = new Troncon(1, 9, "", noeud2);
+		noeud1.ajouterTronconSortant(troncon12);
+		
+		Troncon troncon32 = new Troncon(1, 9, "", noeud2);
+		noeud3.ajouterTronconSortant(troncon32);
+		
+		Set<Troncon> troncons = new TreeSet<Troncon>();
+		troncons.add(troncon12);
+		troncons.add(troncon32);
+		
+		Plan plan = new Plan(troncons,noeuds);
+		
+		Tournee tournee = new Tournee();
+		tournee.setPlanTournee(plan);
+		
+		@SuppressWarnings("deprecation")
+		LinkedList<Troncon> resultat = tournee.testCaculDijkstra(noeud1, noeud3);
+		
+		LinkedList<Troncon> expected = new LinkedList<Troncon>();
 		
 		assertEquals("Erreur - le plus court chemin n'est pas le bon",expected, resultat);
 	}
