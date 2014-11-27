@@ -13,6 +13,11 @@ import modele.Troncon;
 
 import org.junit.Test;
 
+/**
+ * Classe de test de la classe <code>Tournee</code>
+ * @author asarazin1
+ *
+ */
 public class TourneeTest {
 
 	@Test
