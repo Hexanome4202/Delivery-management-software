@@ -112,16 +112,18 @@ public class Tournee {
 	}
 
 	/**
-	 * Méthode permettant de tester la méthode privée <code>calculerDijkstra</code>
+	 * Méthode permettant de tester la méthode privée
+	 * <code>calculerDijkstra</code>
+	 * 
 	 * @param noeudDepart
 	 * @param noeudDestination
 	 * @param chemin
 	 * @return
 	 */
-	//FIXME deprecated public method to test a private one ? Sooooo dirty...
+	// FIXME deprecated public method to test a private one ? Sooooo dirty...
 	@Deprecated
-	public double testCaculDijkstra(Noeud noeudDepart,
-			Noeud noeudDestination, LinkedList<Troncon> chemin) {
+	public double testCaculDijkstra(Noeud noeudDepart, Noeud noeudDestination,
+			LinkedList<Troncon> chemin) {
 		return calculerDijkstra(noeudDepart, noeudDestination, chemin);
 	}
 
@@ -130,12 +132,15 @@ public class Tournee {
 	 * 
 	 * @param noeudDepart
 	 * @param noeudDestination
-	 * @param chemin : la liste ordonnée de troncons à suivre représentant le plus court
-	 *         chemin -> cette liste est remplie après l'appel de la fonction
-	 * @return la pondération du chemin total (soit le temps total pour ce chemin)
+	 * @param chemin
+	 *            : la liste ordonnée de troncons à suivre représentant le plus
+	 *            court chemin -> cette liste est remplie après l'appel de la
+	 *            fonction
+	 * @return la pondération du chemin total (soit le temps total pour ce
+	 *         chemin)
 	 */
-	private double calculerDijkstra(Noeud noeudDepart,
-			Noeud noeudDestination, LinkedList<Troncon> chemin) {
+	private double calculerDijkstra(Noeud noeudDepart, Noeud noeudDestination,
+			LinkedList<Troncon> chemin) {
 
 		HashMap<Noeud, Double> graphePonderation = new HashMap<Noeud, Double>();
 		HashMap<Noeud, Noeud> grapheVoisinPrecedent = new HashMap<Noeud, Noeud>();
@@ -143,7 +148,7 @@ public class Tournee {
 		Set<Noeud> noeuds = planTournee.getToutNoeuds();
 
 		Iterator<Noeud> itNoeuds = noeuds.iterator();
-		while( itNoeuds.hasNext()) {
+		while (itNoeuds.hasNext()) {
 			Noeud noeud = itNoeuds.next();
 			graphePonderation.put(noeud, Double.MAX_VALUE);
 			grapheVoisinPrecedent.put(noeud, null);
@@ -168,13 +173,12 @@ public class Tournee {
 		Noeud noeudFin = noeudDestination;
 
 		chemin.retainAll(null);
-		
+
 		while (noeudDebut != noeudDepart) {
 			noeudDebut = grapheVoisinPrecedent.get(noeudFin);
-			if(noeudDebut == null){
+			if (noeudDebut == null) {
 				break;
-			}
-			else{
+			} else {
 				ArrayList<Troncon> troncons = noeudDebut.getTronconSortants();
 				for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon
 						.hasNext();) {
@@ -205,9 +209,9 @@ public class Tournee {
 
 		Noeud noeudPlusPetitePonderation = null;
 		double plusPetitePonderation = Double.MAX_VALUE;
-		
+
 		Iterator<Noeud> it = noeuds.iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			Noeud noeudTest = it.next();
 			double ponderationTest = graphe.get(noeudTest);
 			if (ponderationTest < plusPetitePonderation) {
@@ -240,8 +244,9 @@ public class Tournee {
 			HashMap<Noeud, Double> graphePonderation,
 			HashMap<Noeud, Noeud> grapheVoisinPrecedent,
 			ArrayList<Noeud> noeudsNonVisites, ArrayList<Noeud> noeudsVisite) {
-		Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants().iterator();
-		while( itTroncon.hasNext()){
+		Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants()
+				.iterator();
+		while (itTroncon.hasNext()) {
 			Troncon troncon = itTroncon.next();
 			Noeud noeudDestination = troncon.getNoeudFin();
 			if (!noeudsVisite.contains(noeudDestination)) {
@@ -257,9 +262,14 @@ public class Tournee {
 	}
 
 	/**
-     * 
-     */
+	 * Méthode qui calculera les chemins les plus courts de l'entrepôt aux
+	 * différentes livraisons en essayant de respecter les plages horaires
+	 */
 	public void calculerTournee() {
+		Iterator itPlage = plagesHoraires.iterator();
+		while(itPlage.hasNext()){
+			ArrayList<Noeud> noeuds = ((PlageHoraire)itPlage.next()).getNoeuds();
+		}
 		// TODO implement here
 	}
 

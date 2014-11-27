@@ -67,8 +67,8 @@ public class PlageHoraire {
 	/**
 	 * @return les noeuds correspondants aux demandes de livraisons de la plage horaire
 	 */
-	public List<Noeud> getNoeuds() {
-		List<Noeud> noeuds = new ArrayList<Noeud>();
+	public ArrayList<Noeud> getNoeuds() {
+		ArrayList<Noeud> noeuds = new ArrayList<Noeud>();
 		DemandeDeLivraison demande = null;
 		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
 		while(it.hasNext()) {
