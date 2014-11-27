@@ -118,15 +118,19 @@ public class TourneeTest {
 		Tournee tournee = new Tournee();
 		tournee.setPlanTournee(plan);
 		
+		LinkedList<Troncon> cheminResultat = new LinkedList<Troncon>();
 		@SuppressWarnings("deprecation")
-		LinkedList<Troncon> resultat = tournee.testCaculDijkstra(noeud1, noeud5);
+		double ponderationResultat = tournee.testCaculDijkstra(noeud1, noeud5, cheminResultat);
 		
-		LinkedList<Troncon> expected = new LinkedList<Troncon>();
-		expected.add(troncon13);
-		expected.add(troncon36);
-		expected.add(troncon65);
+		LinkedList<Troncon> cheminExpected = new LinkedList<Troncon>();
+		cheminExpected.add(troncon13);
+		cheminExpected.add(troncon36);
+		cheminExpected.add(troncon65);
 		
-		assertEquals(expected, resultat);
+		double ponderationExpected = 20;
+		
+		assertEquals(cheminExpected, cheminResultat);
+		assertEquals(ponderationExpected, ponderationResultat, 0.0);
 	}
 	
 	/**
@@ -158,12 +162,14 @@ public class TourneeTest {
 		Tournee tournee = new Tournee();
 		tournee.setPlanTournee(plan);
 		
+		LinkedList<Troncon> cheminResultat = new LinkedList<Troncon>();
 		@SuppressWarnings("deprecation")
-		LinkedList<Troncon> resultat = tournee.testCaculDijkstra(noeud1, noeud3);
+		double ponderationResultat = tournee.testCaculDijkstra(noeud1, noeud3, cheminResultat);
 		
-		LinkedList<Troncon> expected = new LinkedList<Troncon>();
+		LinkedList<Troncon> cheminExpected = new LinkedList<Troncon>();
 		
-		assertEquals(expected, resultat);
+		assertEquals(cheminExpected, cheminResultat);
+		assertEquals(Double.MAX_VALUE, ponderationResultat, 0.0);
 	}
 
 }
