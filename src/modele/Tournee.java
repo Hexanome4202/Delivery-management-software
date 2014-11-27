@@ -130,7 +130,7 @@ public class Tournee {
      * Méthode calculant le plus court chemin entre deux noeuds
      * @param noeudDepart
      * @param noeudDestination
-     * @return la liste ordonnée de troncons à suivre représentant le plus court chemin
+     * @return La liste ordonnée de troncons à suivre représentant le plus court chemin
      */
     private LinkedList<Troncon> calculerDijkstra(Noeud noeudDepart, Noeud noeudDestination) {
     	
@@ -155,7 +155,7 @@ public class Tournee {
     		Noeud noeudCourant = noeudDePlusPetitePonderation(graphePonderation,noeudsNonVisite);
     		noeudsNonVisite.remove(noeudCourant);
     		noeudsVisite.add(noeudCourant);
-    		evaluerVoisins(noeudCourant, graphePonderation, grapheVoisinPrecedent, noeudsNonVisite);
+    		evaluerVoisins(noeudCourant, graphePonderation, grapheVoisinPrecedent, noeudsNonVisite,noeudsVisite);
     	}
     	
     	Noeud noeudDebut = null;
@@ -182,7 +182,7 @@ public class Tournee {
 	 * passée en paramètre
 	 * @param graphe : structure contenant chaque noeud et leur pondération
 	 * @param noeuds : la liste de noeuds concernée
-	 * @return : le noeud de plus petite pondération
+	 * @return Le noeud de plus petite pondération
 	 */
 	private Noeud noeudDePlusPetitePonderation(HashMap<Noeud, Double> graphe, ArrayList<Noeud> noeuds) {
 		
@@ -210,16 +210,19 @@ public class Tournee {
 	 * @param graphePonderation : structure contenant chaque noeud ainsi que le temps mis pour arriver à lui (sa pondération)
 	 * @param grapheVoisinPrecedent : structure contenant un noeud et, si il appartient au plus court chemin, le noeud précédent
 	 * @param noeudsNonVisites 
+	 * @param noeudsVisite 
 	 */
-	private void evaluerVoisins(Noeud noeudCourant, HashMap<Noeud, Double> graphePonderation, HashMap<Noeud, Noeud> grapheVoisinPrecedent, ArrayList<Noeud> noeudsNonVisites) {
+	private void evaluerVoisins(Noeud noeudCourant, HashMap<Noeud, Double> graphePonderation, HashMap<Noeud, Noeud> grapheVoisinPrecedent, ArrayList<Noeud> noeudsNonVisites, ArrayList<Noeud> noeudsVisite) {
 		for(Iterator<Troncon> itTroncon = noeudCourant.getTronconSortants().iterator(); itTroncon.hasNext(); ){
 			Troncon troncon = itTroncon.next();
     		Noeud noeudDestination = troncon.getNoeudFin();
-    		double ponderation = troncon.getTemps() + graphePonderation.get(noeudCourant);
-    		if(ponderation < graphePonderation.get(noeudDestination)){
-    			graphePonderation.put(noeudDestination,ponderation);
-    			grapheVoisinPrecedent.put(noeudDestination,noeudCourant);
-    			noeudsNonVisites.add(noeudDestination);
+    		if(!noeudsVisite.contains(noeudDestination)){
+	    		double ponderation = troncon.getTemps() + graphePonderation.get(noeudCourant);
+	    		if(ponderation < graphePonderation.get(noeudDestination)){
+	    			graphePonderation.put(noeudDestination,ponderation);
+	    			grapheVoisinPrecedent.put(noeudDestination,noeudCourant);
+	    			noeudsNonVisites.add(noeudDestination);
+	    		}
     		}
 		}
 	}
