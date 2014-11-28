@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -81,8 +82,19 @@ public class Tournee {
 	 * @param coordX
 	 * @param coordY
 	 */
-	public void recupererNoeud(int coordX, int coordY) {
-		// TODO implement here
+	public Noeud recupererNoeud(int coordX, int coordY) {
+		Set<Noeud> noeuds = this.planTournee.getToutNoeuds();
+		Noeud n;
+		Noeud result = null;
+		Iterator<Noeud> it = noeuds.iterator();
+		while(it.hasNext()) {
+			n = it.next();
+			if(n.getX() == coordX && n.getY() == coordY) {
+				result = n;
+				break;
+			}
+		}
+		return result;
 	}
 
 	/**

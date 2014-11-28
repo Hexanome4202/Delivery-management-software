@@ -74,6 +74,22 @@ public class Noeud implements Comparable<Noeud> {
     public int getId() {
     	return this.id;
     }
+    
+    /**
+     * 
+     * @return la coordonnée en x du noeud
+     */
+    public int getX() {
+    	return this.x;
+    }
+    
+    /**
+     * 
+     * @return la coordonnée en y du noeud
+     */
+    public int getY() {
+    	return this.y;
+    }
 
 	@Override
 	public int compareTo(Noeud noeud) {
