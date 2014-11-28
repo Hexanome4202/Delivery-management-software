@@ -73,7 +73,7 @@ public class PlageHoraire {
 		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
 		while(it.hasNext()) {
 			demande = it.next();
-			if(demande.getNoeud() != null && demande.getNoeud().getId() == id) {//Il faut traiter le cas ou le plan n'est pas encore charge
+			if(demande.getNoeud() != null && demande.getNoeud().getId() == id) {//Marche pas!!
 
 				noeud = demande.getNoeud();
 				break;
@@ -87,9 +87,10 @@ public class PlageHoraire {
 	 * d'un Element plageElement, aprés elle additionne la nouvelle demande de livraison à la liste
 	 * demandesLivraisonPlage
 	 * @param plageElement
+	 * @param planTournee 
 	 * @return
 	 */
-	public int construireLivraisonsAPartirDeDOMXML(Element plageElement) {
+	public int construireLivraisonsAPartirDeDOMXML(Element plageElement, Plan planTournee) {
 		// todo : gerer les erreurs de syntaxe dans le fichier XML !
 
 		// creation des Demandes Livraison;
@@ -101,7 +102,7 @@ public class PlageHoraire {
 			Integer id = Integer.parseInt(livraisonElement.getAttribute("id"));
 			Integer adresse = Integer.parseInt(livraisonElement.getAttribute("adresse"));
 			Integer idClient = Integer.parseInt(livraisonElement.getAttribute("client"));
-			DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,recupererNoeud(adresse), idClient, this);
+			DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,planTournee.recupererNoeud(adresse), idClient, this);
 			
 			// ajout des elements crees dans la structure objet
 			demandesLivraisonPlage.add(nouvelleDemande);

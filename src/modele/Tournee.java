@@ -403,7 +403,7 @@ public class Tournee {
 			PlageHoraire nouvellePlage = new PlageHoraire(
 					plageElement.getAttribute("heureDebut"),
 					plageElement.getAttribute("heureFin"));
-			if (nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement) != Controleur.PARSE_OK) {
+			if (nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee) != Controleur.PARSE_OK) {
 				System.out.println("error");
 				return Controleur.PARSE_ERROR;
 			}
