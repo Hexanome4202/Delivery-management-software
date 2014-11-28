@@ -286,7 +286,7 @@ public class Tournee {
 			ArrayList<Integer> successeur = new ArrayList<Integer>();
 			Set<DemandeDeLivraison> demandes = plagesHoraires.get(i).getDemandeLivraison();
 			if(i==0){
-				succ.add(index, element);
+				//succ.add(index, element);
 			}
 			else if(i == plagesHoraires.size()-1){
 				
