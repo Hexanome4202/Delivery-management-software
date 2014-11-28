@@ -118,8 +118,17 @@ public class Tournee {
 	/**
 	 * @param noeudPrecedent
 	 */
-	public void effacerItineraire(Noeud noeudPrecedent) {
-		// TODO implement here
+	public boolean effacerItineraire(Noeud noeudPrecedent) {
+		Iterator<Itineraire> it = this.itineraires.iterator();
+		Itineraire itineraire;
+		while(it.hasNext()) {
+			itineraire = it.next();
+			if(itineraire.getDepart().getDemandeDeLivraison().getNoeud().compareTo(noeudPrecedent) == 0) {
+				it.remove();
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -324,4 +333,7 @@ public class Tournee {
 		this.planTournee = planTournee;
 	}
 
+	public List<Itineraire> getItineraires() {
+		return this.itineraires;
+	}
 }

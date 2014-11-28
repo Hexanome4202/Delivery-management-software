@@ -233,4 +233,33 @@ public class TourneeTest {
 		assertEquals(1, tournee.recupererNoeud(2).getX());
 		assertEquals(2, tournee.recupererNoeud(2).getY());
 	}
+	
+	@Test
+	public void testEffacerItineraire() {
+		Noeud noeud1 = new Noeud(1, 0, 0);
+		Noeud noeud2 = new Noeud(2, 1, 2);
+		Noeud noeud3 = new Noeud(3, 4, 3);
+		
+		Set<Noeud> noeuds = new TreeSet<Noeud>();
+		noeuds.add(noeud1);
+		noeuds.add(noeud2);
+		noeuds.add(noeud3);
+		
+		Troncon troncon12 = new Troncon(1, 9, "", noeud2);
+		noeud1.ajouterTronconSortant(troncon12);
+		
+		Troncon troncon32 = new Troncon(1, 9, "", noeud2);
+		noeud3.ajouterTronconSortant(troncon32);
+		
+		Set<Troncon> troncons = new TreeSet<Troncon>();
+		troncons.add(troncon12);
+		troncons.add(troncon32);
+		
+		Plan plan = new Plan(troncons,noeuds);
+		
+		Tournee tournee = new Tournee();
+		tournee.setPlanTournee(plan);
+		
+		fail("A faire, attendre que les itinéraires soient affectés");
+	}
 }

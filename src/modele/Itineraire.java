@@ -51,4 +51,12 @@ public class Itineraire {
 		}
 		return temps;
 	}
+	
+	public Livraison getDepart() {
+		return this.depart;
+	}
+	
+	public Livraison getArrivee() {
+		return this.arrivee;
+	}
 }
