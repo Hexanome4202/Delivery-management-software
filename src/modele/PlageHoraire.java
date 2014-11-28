@@ -20,17 +20,17 @@ import controleur.Controleur;
 public class PlageHoraire {
 
 	/**
-     * 
+     * Heure de début de la <code>PlageHoraire</code>
      */
 	private Date heureDebut;
 
 	/**
-     * 
+     * Heure de fin de la <code>PlageHoraire</code>
      */
 	private Date heureFin;
 
 	/**
-     * 
+     * Les <code>DemandeDeLivraison</code> de la <code>PlageHoraire</code>
      */
 	private Set<DemandeDeLivraison> demandesLivraisonPlage;
 	
@@ -124,8 +124,27 @@ public class PlageHoraire {
 		return noeuds;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public Set<DemandeDeLivraison> getDemandeLivraison() {
 		return demandesLivraisonPlage;
 	}
 
+	/**
+	 * 
+	 * @return l'heure de début de la <code>PlageHoraire</code>
+	 */
+	public Date getHeureDebut() {
+		return this.heureDebut;
+	}
+	
+	/**
+	 * l'heure de fin de la <code>PlageHoraire</code>
+	 * @return
+	 */
+	public Date getHeureFin() {
+		return this.heureFin;
+	}
 }
