@@ -15,14 +15,17 @@ public class Plan {
 	 * Constructeur vide de <code>Plan</code>.
 	 */
 	public Plan() {
+		toutTroncons=new HashSet<Troncon>();
+		toutNoeuds= new HashSet<Noeud>();
 	}
 
 	/**
 	 * @param racineXML
 	 */
 	public Plan(Element racineXML) {
-
-		// TODO implement here
+		toutTroncons=new HashSet<Troncon>();
+		toutNoeuds= new HashSet<Noeud>();
+		construireLivraisonsAPartirDeDOMXML(racineXML);
 	}
 
 	/**
@@ -77,14 +80,9 @@ public class Plan {
 		// TODO : gerer les erreurs de syntaxe dans le fichier XML
 		// lecture des attributs
 
-		NodeList liste = noeudDOMRacine.getElementsByTagName("Reseau");
-		if (liste.getLength() != 1) {
-			return Controleur.PARSE_ERROR;
-		}
-
 		// creation des Noeuds;
 		String tag = "Noeud";
-		liste = noeudDOMRacine.getElementsByTagName(tag);
+		NodeList liste = noeudDOMRacine.getElementsByTagName(tag);
 		toutNoeuds.clear();
 		List<Element> listeElements = new ArrayList<Element>();
 		for (int i = 0; i < liste.getLength(); i++) {
@@ -120,7 +118,7 @@ public class Plan {
 
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element noeudElement = (Element) liste.item(i);
-			String tag = "Noeud";
+			String tag = "LeTronconSortant";
 			NodeList listeNoeud = noeudElement.getElementsByTagName(tag);
 			Set<Troncon> setTroncons = new HashSet<Troncon>();
 			Boolean bool = true;
@@ -128,9 +126,9 @@ public class Plan {
 				Element tronconElement = (Element) listeNoeud.item(j);
 				String nomRue = tronconElement.getAttribute("nomRue");
 				Double vitesse = Double.parseDouble(tronconElement
-						.getAttribute("vitesse"));
+						.getAttribute("vitesse").replace(",","."));
 				Double longueur = Double.parseDouble(tronconElement
-						.getAttribute("longueur"));
+						.getAttribute("longueur").replace(",","."));
 				Integer idNoeudFin = Integer.parseInt(tronconElement
 						.getAttribute("idNoeudDestination"));
 				Troncon troncon = new Troncon(vitesse, longueur, nomRue,
