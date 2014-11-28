@@ -1,6 +1,5 @@
 package controleur;
 
-import modele.Livraison;
 import modele.Plan;
 import modele.Tournee;
 
@@ -55,16 +54,17 @@ public class Controleur {
      * @param noeud 
      * @param precedent
      */
-    public void ajouterLivraison(int client, int noeud, Livraison precedent) {
-        // TODO implement here
-    }
-
-    /**
-     * @param livraison
-     */
-    public void supprimerLivraison(Livraison livraison) {
-        // TODO implement here
-    }
+    //TODO il faut le decomenter et le faire
+//    public void ajouterLivraison(int client, int noeud, Livraison precedent) {
+//        // TODO implement here
+//    }
+//
+//    /**
+//     * @param livraison
+//     */
+//    public void supprimerLivraison(Livraison livraison) {
+//        // TODO implement here
+//    }
 
     /**
      * @return un object de type <code>String</code> contenant la feuille editee
@@ -84,6 +84,7 @@ public class Controleur {
     
     
 	public int construireLivraisonsAPartirDeDOMXML(Element vueCadreDOMElement) {
+		tournee.setPlanTournee(plan);
         if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
             return Controleur.PARSE_ERROR;
         }
@@ -91,10 +92,8 @@ public class Controleur {
 	return Controleur.PARSE_OK;
     }
 	
-	public int construirePlanAPartirDeDOMXML(Element vueCadreDOMElement) {
-        if (plan.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
-            return Controleur.PARSE_ERROR;
-        }
+	public int construirePlanAPartirDeDOMXML(Element racineXML) {
+		plan=new Plan(racineXML);
         //vueTournee.dessiner();
         return Controleur.PARSE_OK;
     }
