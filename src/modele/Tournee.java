@@ -372,6 +372,11 @@ public class Tournee {
 		
 	}
 
+	/**
+	 * 
+	 * @param noeudDOMRacine
+	 * @return
+	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
 
 		// TODO : gerer les erreurs de syntaxe dans le fichier XML
@@ -408,10 +413,18 @@ public class Tournee {
 		return Controleur.PARSE_OK;
 	}
 
+	/**
+	 * 
+	 * @param planTournee la <code>Plan</code> de la tournée
+	 */
 	public void setPlanTournee(Plan planTournee) {
 		this.planTournee = planTournee;
 	}
 
+	/**
+	 * 
+	 * @return la liste des <code>Itineraire</code> de la tournée
+	 */
 	public List<Itineraire> getItineraires() {
 		return this.itineraires;
 	}

@@ -13,12 +13,12 @@ import controleur.Controleur;
 public class Plan {
 	
 	/**
-     * 
+     * L'ensemble des <code>Troncon</code> du plan
      */
 	private Set<Troncon> toutTroncons;
 
 	/**
-     * 
+     * L'ensemble des <code>Noeud</code> du plan
      */
 	private Set<Noeud> toutNoeuds;
 	
@@ -78,6 +78,11 @@ public class Plan {
 		return this.toutNoeuds;
 	}
 
+	/**
+	 * 
+	 * @param noeudDOMRacine
+	 * @return
+	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
 		// TODO : gerer les erreurs de syntaxe dans le fichier XML
 		// lecture des attributs
@@ -115,6 +120,11 @@ public class Plan {
 	//
 	// }
 
+	/**
+	 * 
+	 * @param liste
+	 * @return
+	 */
 	public int construireTronconAPartirDeDOMXML(NodeList liste) {
 		// todo : gerer les erreurs de syntaxe dans le fichier XML !
 
@@ -136,7 +146,7 @@ public class Plan {
 				Troncon troncon = new Troncon(vitesse, longueur, nomRue,
 						recupererNoeud(idNoeudFin));
 				bool=setTroncons.add(troncon);
-				//afficher erreur si bool false
+				//TODO: afficher erreur si bool false
 
 			}
 			Noeud noeud = recupererNoeud(Integer.parseInt(noeudElement

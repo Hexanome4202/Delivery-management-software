@@ -33,22 +33,22 @@ public class Troncon implements Comparable<Troncon>{
     }
 
     /**
-     * 
+     * La vitesse de déplacement sur le <code>Troncon</code>
      */
     private double vitesse;
 
     /**
-     * 
+     * La longueur du <code>Troncon</code>
      */
     private double longueur;
 
     /**
-     * 
+     * Le nom de la rue correspondant au <code>Troncon</code>
      */
     private String nomRue;
 
     /**
-     * 
+     * Le <code>Noeud</code> de fin du <code>Troncon</code>
      */
     private Noeud fin;
     
