@@ -55,6 +55,7 @@ public class Controleur {
      * @param noeud 
      * @param precedent
      */
+
     public void ajouterLivraison(int client, int noeud, DemandeDeLivraison precedent) {
     }
 
@@ -83,6 +84,7 @@ public class Controleur {
     
     
 	public int construireLivraisonsAPartirDeDOMXML(Element vueCadreDOMElement) {
+		tournee.setPlanTournee(plan);
         if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
             return Controleur.PARSE_ERROR;
         }
@@ -90,10 +92,8 @@ public class Controleur {
 	return Controleur.PARSE_OK;
     }
 	
-	public int construirePlanAPartirDeDOMXML(Element vueCadreDOMElement) {
-        if (plan.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
-            return Controleur.PARSE_ERROR;
-        }
+	public int construirePlanAPartirDeDOMXML(Element racineXML) {
+		plan=new Plan(racineXML);
         //vueTournee.dessiner();
         return Controleur.PARSE_OK;
     }
