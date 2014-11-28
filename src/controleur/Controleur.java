@@ -1,6 +1,6 @@
 package controleur;
 
-import modele.Livraison;
+import modele.DemandeDeLivraison;
 import modele.Plan;
 import modele.Tournee;
 
@@ -40,7 +40,7 @@ public class Controleur {
      * @param fichierLivraisons
      */
     public void chargerLivraisons(String fichierLivraisons) {
-        // TODO implement here
+        //this.tournee.construireLivraisonsAPartirDeDOMXML(noeudDOMRacine);
     }
 
     /**
@@ -55,14 +55,13 @@ public class Controleur {
      * @param noeud 
      * @param precedent
      */
-    public void ajouterLivraison(int client, int noeud, Livraison precedent) {
-        // TODO implement here
+    public void ajouterLivraison(int client, int noeud, DemandeDeLivraison precedent) {
     }
 
     /**
      * @param livraison
      */
-    public void supprimerLivraison(Livraison livraison) {
+    public void supprimerLivraison(DemandeDeLivraison livraison) {
         // TODO implement here
     }
 
@@ -70,7 +69,7 @@ public class Controleur {
      * @return un object de type <code>String</code> contenant la feuille editee
      */
     public String editerFeuilleRoute() {
-        return "";
+        return this.tournee.editerFeuilleRoute();
     }
 
     /**
