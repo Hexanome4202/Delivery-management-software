@@ -8,31 +8,31 @@ import java.util.*;
 public class Itineraire {
 
 	/**
-	 * @param liv1
-	 * @param liv2
-	 * @param troncons
-	 */
-	public Itineraire(Livraison liv1, Livraison liv2,
-			List<Troncon> troncons) {
-		this.depart = liv1;
-		this.arrivee = liv2;
-		this.tronconsItineraire = troncons;
-	}
+     * 
+     */
+	private DemandeDeLivraison depart;
 
 	/**
      * 
      */
-	private Livraison depart;
-
-	/**
-     * 
-     */
-	private Livraison arrivee;
+	private DemandeDeLivraison arrivee;
 
 	/**
      * 
      */
 	private List<Troncon> tronconsItineraire;
+	
+	/**
+	 * @param liv1
+	 * @param liv2
+	 * @param troncons
+	 */
+	public Itineraire(DemandeDeLivraison liv1, DemandeDeLivraison liv2,
+			List<Troncon> troncons) {
+		this.depart = liv1;
+		this.arrivee = liv2;
+		this.tronconsItineraire = troncons;
+	}
 
 	/**
 	 * Permet de calculer et de retourner le temps mis pour parcourir un
@@ -52,11 +52,11 @@ public class Itineraire {
 		return temps;
 	}
 	
-	public Livraison getDepart() {
+	public DemandeDeLivraison getDepart() {
 		return this.depart;
 	}
 	
-	public Livraison getArrivee() {
+	public DemandeDeLivraison getArrivee() {
 		return this.arrivee;
 	}
 }

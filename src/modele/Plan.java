@@ -11,6 +11,17 @@ import controleur.Controleur;
  * 
  */
 public class Plan {
+	
+	/**
+     * 
+     */
+	private Set<Troncon> toutTroncons;
+
+	/**
+     * 
+     */
+	private Set<Noeud> toutNoeuds;
+	
 	/**
 	 * Constructeur vide de <code>Plan</code>.
 	 */
@@ -26,6 +37,7 @@ public class Plan {
 		toutTroncons=new HashSet<Troncon>();
 		toutNoeuds= new HashSet<Noeud>();
 		construireLivraisonsAPartirDeDOMXML(racineXML);
+
 	}
 
 	/**
@@ -38,16 +50,6 @@ public class Plan {
 		this.toutNoeuds = noeuds;
 		this.toutTroncons = troncons;
 	}
-
-	/**
-     * 
-     */
-	private Set<Troncon> toutTroncons;
-
-	/**
-     * 
-     */
-	private Set<Noeud> toutNoeuds;
 
 	/**
 	 * @param idNoeud
