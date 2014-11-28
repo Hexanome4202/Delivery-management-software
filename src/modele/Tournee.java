@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -81,8 +82,19 @@ public class Tournee {
 	 * @param coordX
 	 * @param coordY
 	 */
-	public void recupererNoeud(int coordX, int coordY) {
-		// TODO implement here
+	public Noeud recupererNoeud(int coordX, int coordY) {
+		Set<Noeud> noeuds = this.planTournee.getToutNoeuds();
+		Noeud n;
+		Noeud result = null;
+		Iterator<Noeud> it = noeuds.iterator();
+		while(it.hasNext()) {
+			n = it.next();
+			if(n.getX() == coordX && n.getY() == coordY) {
+				result = n;
+				break;
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -90,8 +102,7 @@ public class Tournee {
 	 * @param noeud
 	 */
 	public Noeud recupererNoeud(int idNoeud) {
-		// TODO implement here
-		return null;
+		return this.planTournee.recupererNoeud(idNoeud);
 	}
 
 	/**
@@ -266,9 +277,9 @@ public class Tournee {
 	 * différentes livraisons en essayant de respecter les plages horaires
 	 */
 	public void calculerTournee() {
-		Iterator itPlage = plagesHoraires.iterator();
+		Iterator<PlageHoraire> itPlage = plagesHoraires.iterator();
 		while(itPlage.hasNext()){
-			ArrayList<Noeud> noeuds = ((PlageHoraire)itPlage.next()).getNoeuds();
+			ArrayList<Noeud> noeuds = itPlage.next().getNoeuds();
 		}
 		// TODO implement here
 	}

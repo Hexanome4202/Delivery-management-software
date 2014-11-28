@@ -56,6 +56,9 @@ public class Fenetre extends JFrame implements Observer {
 	
     private AccordionMenu menuHoraires;
     private javax.swing.JPanel horairesPannel;
+    
+    JMenuItem actionChargerHoraires;
+    JMenuItem actionChargerPlan;
     /**
      * 
      */
@@ -86,8 +89,9 @@ public class Fenetre extends JFrame implements Observer {
 			}
 		});
 		
-		JMenuItem actionChargerPlan = new JMenuItem("Charger le plan");
-		JMenuItem actionChargerHoraires = new JMenuItem("Charger les horaires");
+		actionChargerPlan = new JMenuItem("Charger le plan");
+		actionChargerHoraires = new JMenuItem("Charger les horaires");
+		actionChargerHoraires.setEnabled(false);
 		
 		
 		actionChargerPlan.addActionListener(new ActionListener(){
@@ -95,6 +99,7 @@ public class Fenetre extends JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				lireDepuisFichierXML("plan");
+				actionChargerHoraires.setEnabled(true);
 				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			
@@ -105,7 +110,6 @@ public class Fenetre extends JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				lireDepuisFichierXML("horaires");
-				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			
 		});

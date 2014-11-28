@@ -83,21 +83,17 @@ public class PlageHoraire {
 	 * @param id Id du noeud que l'on souhaite trouver.
 	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>, null sinon
 	 */
-	private Noeud recupererNoeud(Integer id){
+	public Noeud recupererNoeud(Integer id){
 		Noeud noeud = null;
 		DemandeDeLivraison demande = null;
-		try {
-			for(Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator(); 
-					it.hasNext(); demande = it.next()) {
-				if(demande.getNoeud().getId() == id) {//Il faut traiter le cas ou le plan n'est pas encore charge
+		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
+		while(it.hasNext()) {
+			demande = it.next();
+			if(demande.getNoeud() != null && demande.getNoeud().getId() == id) {//Il faut traiter le cas ou le plan n'est pas encore charge
 
-					noeud = demande.getNoeud();
-					break;
-				}
+				noeud = demande.getNoeud();
+				break;
 			}
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Il n'y a aucun noeud dans le plan!!");
 		}
 		return noeud;
 	}
