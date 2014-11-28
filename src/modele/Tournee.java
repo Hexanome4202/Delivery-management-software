@@ -102,8 +102,7 @@ public class Tournee {
 	 * @param noeud
 	 */
 	public Noeud recupererNoeud(int idNoeud) {
-		// TODO implement here
-		return null;
+		return this.planTournee.recupererNoeud(idNoeud);
 	}
 
 	/**
