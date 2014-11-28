@@ -278,9 +278,9 @@ public class Tournee {
 	 * différentes livraisons en essayant de respecter les plages horaires
 	 */
 	public void calculerTournee() {
-		Iterator itPlage = plagesHoraires.iterator();
+		Iterator<PlageHoraire> itPlage = plagesHoraires.iterator();
 		while(itPlage.hasNext()){
-			ArrayList<Noeud> noeuds = ((PlageHoraire)itPlage.next()).getNoeuds();
+			ArrayList<Noeud> noeuds = itPlage.next().getNoeuds();
 		}
 		// TODO implement here
 	}
