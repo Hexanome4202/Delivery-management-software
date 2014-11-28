@@ -62,5 +62,9 @@ public class Livraison {
         RETARD,
         NON_LIVREE
     }
+    
+    public DemandeDeLivraison getDemandeLivraison(){
+    	return demandeLivraison;
+    }
 
 }

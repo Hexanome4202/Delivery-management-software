@@ -33,20 +33,18 @@ public class Tournee {
 	}
 
 	/**
-     * 
+     * Liste ordonée des <code>PlageHoraire</code>
      */
-	private List<PlageHoraire> plagesHoraires;
+	private ArrayList<PlageHoraire> plagesHoraires;
 
 	/**
-     * 
+     * Liste ordonée des <code>Itineraire</code>s à prendre pour compléter la tournée
      */
-
 	private List<Itineraire> itineraires;
 
 	/**
-     * 
+     * Plan complet dans lequel sont les livraisons
      */
-
 	private Plan planTournee;
 
 	/**
@@ -277,10 +275,44 @@ public class Tournee {
 	 * différentes livraisons en essayant de respecter les plages horaires
 	 */
 	public void calculerTournee() {
-		Iterator<PlageHoraire> itPlage = plagesHoraires.iterator();
-		while(itPlage.hasNext()){
-			ArrayList<Noeud> noeuds = itPlage.next().getNoeuds();
+		int[][] couts;
+		ArrayList<ArrayList<Integer>> succ;
+		int maxCoutArc;
+		int minCoutArc;
+		
+		HashMap<Integer,Livraison> dicoIntNoeud = new HashMap<Integer,Livraison>();
+		dicoIntNoeud.put(0, entrepot);
+		for(int i=0; i<plagesHoraires.size(); i++){
+			ArrayList<Integer> successeur = new ArrayList<Integer>();
+			Set<DemandeDeLivraison> demandes = plagesHoraires.get(i).getDemandeLivraison();
+			if(i==0){
+				succ.add(index, element);
+			}
+			else if(i == plagesHoraires.size()-1){
+				
+			}
+			
 		}
+		
+//		this.nbNoeuds = noeudsGraphe.size();
+//		int maxCoutArcTemp = 0;
+//		int minCoutArcTemp = Integer.MAX_VALUE;
+//		
+//		for(int i=0; i<noeudsGraphe.size(); i++){
+//			ArrayList<int[]> succTemp = noeudsGraphe.get(i);
+//			for(int j=0; j<succTemp.size(); j++){
+//				int[] ponderation = succTemp.get(j);
+//				if(ponderation[1] > maxCoutArcTemp){
+//					maxCoutArcTemp = ponderation[1];
+//				}
+//				else if(ponderation[1] < minCoutArcTemp){
+//					minCoutArcTemp = ponderation[1];
+//				}
+//				couts[i][ponderation[0]] = ponderation[1];
+//				ArrayList<Integer> succTemp = new ArrayList
+//			}
+//		}
+		
 		// TODO implement here
 	}
 

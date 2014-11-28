@@ -126,4 +126,8 @@ public class PlageHoraire {
 		return Controleur.PARSE_OK;
 	}
 
+	public Set<DemandeDeLivraison> getDemandeLivraison() {
+		return demandesLivraisonPlage;
+	}
+
 }
