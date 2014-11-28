@@ -1,22 +1,30 @@
 package modele;
 
 import java.util.ArrayList;
-
 import tsp.Graph;
 
+/**
+ * Classe définissant le <code>Graph</code> d'une <code>Tournee</code>
+ * @author asarazin1
+ *
+ */
 public class GraphTournee implements Graph{
 
 	private int nbNoeuds;
 	private int maxCoutArc;
-	private int minCourtArc;
+	private int minCoutArc;
 	private int[][] couts; 
 	private ArrayList<ArrayList<Integer>> succ;
 	
 	/**
 	 * Constucteur d'un graphe de tournée
 	 */
-	public GraphTournee(){
-		
+	public GraphTournee(int[][] couts, ArrayList<ArrayList<Integer>> succ, int maxCoutArc, int minCoutArc){
+		this.couts = couts;
+		this.succ = succ;
+		this.maxCoutArc = maxCoutArc;
+		this.minCoutArc = minCoutArc;
+		this.nbNoeuds = couts.length;
 	}
 	
 	@Override
@@ -26,7 +34,7 @@ public class GraphTournee implements Graph{
 
 	@Override
 	public int getMinArcCost() {
-		return minCourtArc;
+		return minCoutArc;
 	}
 
 	@Override

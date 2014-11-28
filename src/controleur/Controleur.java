@@ -1,10 +1,12 @@
 package controleur;
 
+import modele.Livraison;
+import modele.Plan;
+import modele.Tournee;
+
 import org.w3c.dom.Element;
 
 import vue.VueTournee;
-import modele.Livraison;
-import modele.Tournee;
 
 /**
  * 
@@ -16,6 +18,7 @@ public class Controleur {
     
     private Tournee tournee;
     private VueTournee vueTournee;
+    private Plan plan;
 
     /**
      * 
@@ -23,6 +26,7 @@ public class Controleur {
     public Controleur() {
     	tournee = new Tournee();
     	vueTournee = new VueTournee(null);
+    	plan=new Plan();
     }
 
     /**
@@ -88,9 +92,9 @@ public class Controleur {
     }
 	
 	public int construirePlanAPartirDeDOMXML(Element vueCadreDOMElement) {
-//        if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
-//            return Controleur.PARSE_ERROR;
-//        }
+        if (plan.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
+            return Controleur.PARSE_ERROR;
+        }
         //vueTournee.dessiner();
         return Controleur.PARSE_OK;
     }

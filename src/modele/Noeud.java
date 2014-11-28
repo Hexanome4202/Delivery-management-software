@@ -2,6 +2,11 @@ package modele;
 
 import java.util.ArrayList;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import controleur.Controleur;
+
 /**
  * 
  */
@@ -105,5 +110,27 @@ public class Noeud implements Comparable<Noeud> {
 	@Override
 	public boolean equals(Object noeud) {
 		return this.compareTo((Noeud)noeud) == 0;
+	}
+
+	public int construireLivraisonsAPartirDeDOMXML(Element planElement) {
+		// todo : gerer les erreurs de syntaxe dans le fichier XML !
+
+				// creation des Tronçons;
+				String tag = "Noeud";
+				NodeList liste = planElement.getElementsByTagName(tag);
+				sortants.clear();
+				for (int i = 0; i < liste.getLength(); i++) {
+					Element NoeudElement = (Element) liste.item(i);
+					String nomRue =NoeudElement.getAttribute("nomRue");
+					Double vitesse = Double.parseDouble(NoeudElement.getAttribute("vitesse"));
+					Double longueur = Double.parseDouble(NoeudElement.getAttribute("longueur"));
+					Troncon troncon=new Troncon(vitesse, longueur, nomRue);
+					//Noeud fin = new Noeud();
+					
+					// ajout des elements crees dans la structure objet
+					sortants.add(troncon);
+				}
+
+				return Controleur.PARSE_OK;
 	}
 }
