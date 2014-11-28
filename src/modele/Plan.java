@@ -11,6 +11,17 @@ import controleur.Controleur;
  * 
  */
 public class Plan {
+	
+	/**
+     * 
+     */
+	private Set<Troncon> toutTroncons;
+
+	/**
+     * 
+     */
+	private Set<Noeud> toutNoeuds;
+	
 	/**
 	 * Constructeur vide de <code>Plan</code>.
 	 */
@@ -21,7 +32,6 @@ public class Plan {
 	 * @param racineXML
 	 */
 	public Plan(Element racineXML) {
-
 		// TODO implement here
 	}
 
@@ -35,16 +45,6 @@ public class Plan {
 		this.toutNoeuds = noeuds;
 		this.toutTroncons = troncons;
 	}
-
-	/**
-     * 
-     */
-	private Set<Troncon> toutTroncons;
-
-	/**
-     * 
-     */
-	private Set<Noeud> toutNoeuds;
 
 	/**
 	 * @param idNoeud

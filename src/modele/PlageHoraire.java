@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -20,6 +19,21 @@ import controleur.Controleur;
  */
 public class PlageHoraire {
 
+	/**
+     * 
+     */
+	private Date heureDebut;
+
+	/**
+     * 
+     */
+	private Date heureFin;
+
+	/**
+     * 
+     */
+	private Set<DemandeDeLivraison> demandesLivraisonPlage;
+	
 	/**
 	 * Constructeur de la classe <code>PlageHoraire</code>
 	 * @param heureDebut
@@ -45,37 +59,7 @@ public class PlageHoraire {
 	 */
 	public PlageHoraire(String heureDebut, String heureFin, Set<DemandeDeLivraison> demandes) {
 		this(heureDebut, heureFin);
-		
 		this.demandesLivraisonPlage = demandes;
-	}
-
-	/**
-     * 
-     */
-	private Date heureDebut;
-
-	/**
-     * 
-     */
-	private Date heureFin;
-
-	/**
-     * 
-     */
-	private Set<DemandeDeLivraison> demandesLivraisonPlage;
-
-	/**
-	 * @return les noeuds correspondants aux demandes de livraisons de la plage horaire
-	 */
-	public ArrayList<Noeud> getNoeuds() {
-		ArrayList<Noeud> noeuds = new ArrayList<Noeud>();
-		DemandeDeLivraison demande = null;
-		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
-		while(it.hasNext()) {
-			demande = it.next();
-			noeuds.add(demande.getNoeud());
-		}
-		return noeuds;
 	}
 	
 	/**
@@ -126,6 +110,20 @@ public class PlageHoraire {
 		return Controleur.PARSE_OK;
 	}
 
+	/**
+	 * @return les noeuds correspondants aux demandes de livraisons de la plage horaire
+	 */
+	public ArrayList<Noeud> getNoeuds() {
+		ArrayList<Noeud> noeuds = new ArrayList<Noeud>();
+		DemandeDeLivraison demande = null;
+		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
+		while(it.hasNext()) {
+			demande = it.next();
+			noeuds.add(demande.getNoeud());
+		}
+		return noeuds;
+	}
+	
 	public Set<DemandeDeLivraison> getDemandeLivraison() {
 		return demandesLivraisonPlage;
 	}

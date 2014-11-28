@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -21,19 +19,7 @@ import controleur.Controleur;
  */
 public class Tournee {
 
-	private Livraison entrepot;
-
-	/**
-	 * Constructeur vide de <code>Tournee</code>
-	 */
-	public Tournee() {
-
-		this.plagesHoraires = new ArrayList<PlageHoraire>();
-		this.itineraires = new ArrayList<Itineraire>();
-		this.entrepot = null;
-		this.planTournee = null;
-
-	}
+	private DemandeDeLivraison entrepot;
 
 	/**
      * Liste ordonée des <code>PlageHoraire</code>
@@ -51,6 +37,16 @@ public class Tournee {
 	private Plan planTournee;
 
 	/**
+	 * Constructeur vide de <code>Tournee</code>
+	 */
+	public Tournee() {
+		this.plagesHoraires = new ArrayList<PlageHoraire>();
+		this.itineraires = new ArrayList<Itineraire>();
+		this.entrepot = null;
+		this.planTournee = null;
+	}
+	
+	/**
      * 
      */
 	public void creerFeuilleRoute() {
@@ -60,7 +56,7 @@ public class Tournee {
 	/**
 	 * @param livraison
 	 */
-	public void supprimerLivraison(Livraison livraison) {
+	public void supprimerLivraison(DemandeDeLivraison livraison) {
 		// TODO implement here
 	}
 
@@ -124,7 +120,7 @@ public class Tournee {
 		Itineraire itineraire;
 		while(it.hasNext()) {
 			itineraire = it.next();
-			if(itineraire.getDepart().getDemandeDeLivraison().getNoeud().compareTo(noeudPrecedent) == 0) {
+			if(itineraire.getDepart().getNoeud().compareTo(noeudPrecedent) == 0) {
 				it.remove();
 				return true;
 			}
@@ -294,15 +290,15 @@ public class Tournee {
 		int minCoutArc = Integer.MAX_VALUE;
 		
 		HashMap<Integer, DemandeDeLivraison> dicoIdDemande = new HashMap<Integer, DemandeDeLivraison>();
-		dicoIdDemande.put(entrepot.getDemandeDeLivraison().getId(), entrepot.getDemandeDeLivraison());
+		dicoIdDemande.put(entrepot.getId(), entrepot);
 		
 		ArrayList<Integer> noeudsActuels = new ArrayList<Integer>();
-		noeudsActuels.add(entrepot.getDemandeDeLivraison().getNoeud().getId());
+		noeudsActuels.add(entrepot.getNoeud().getId());
 		
 		for(int i=0; i<plagesHoraires.size(); i++){
 			ArrayList<DemandeDeLivraison> noeudsSuivants = new ArrayList<DemandeDeLivraison>();
 			if(i == plagesHoraires.size()-1){
-				noeudsSuivants.add(entrepot.getDemandeDeLivraison());
+				noeudsSuivants.add(entrepot);
 			}
 			else{
 				noeudsSuivants = new ArrayList<DemandeDeLivraison>(plagesHoraires.get(i).getDemandeLivraison());
@@ -347,7 +343,7 @@ public class Tournee {
 					minCoutArc = cout;
 				}
 				
-				Itineraire itineraire = new Itineraire(new Livraison(demandeDepart), new Livraison(demandeArrivee), chemin);
+				Itineraire itineraire = new Itineraire(demandeDepart, demandeArrivee, chemin);
 				toutItineraires.add(itineraire);
 			}
 		}
@@ -363,8 +359,8 @@ public class Tournee {
 				Iterator<Itineraire> itItineraire = toutItineraires.iterator();
 				while(itItineraire.hasNext()){
 					Itineraire iti = itItineraire.next();
-					if(iti.getDepart().getDemandeDeLivraison() == dicoIdDemande.get(solution[i]) 
-							&& iti.getArrivee().getDemandeDeLivraison() == dicoIdDemande.get(solution[i+1])){
+					if(iti.getDepart() == dicoIdDemande.get(solution[i]) 
+							&& iti.getArrivee() == dicoIdDemande.get(solution[i+1])){
 						itineraires.add(iti);
 						break;
 					}
@@ -391,7 +387,7 @@ public class Tournee {
 
 		Noeud noeudEntrepot = recupererNoeud(idAdresseEntrepot);
 
-		this.entrepot = new Livraison(noeudEntrepot);
+		this.entrepot = new DemandeDeLivraison(noeudEntrepot);
 
 		// creation des Plages;
 		String tag = "Plage";
