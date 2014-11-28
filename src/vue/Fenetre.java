@@ -1,8 +1,10 @@
 package vue;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -56,9 +58,6 @@ public class Fenetre extends JFrame implements Observer {
 	
     private AccordionMenu menuHoraires;
     private javax.swing.JPanel horairesPannel;
-    
-    JMenuItem actionChargerHoraires;
-    JMenuItem actionChargerPlan;
     /**
      * 
      */
@@ -68,7 +67,10 @@ public class Fenetre extends JFrame implements Observer {
     	
     	setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1200, 900);
+		
+		/*----------------------------------------------------*/
+		/*--------------------- MENU BAR ---------------------*/
+		/*----------------------------------------------------*/
 		
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -89,9 +91,8 @@ public class Fenetre extends JFrame implements Observer {
 			}
 		});
 		
-		actionChargerPlan = new JMenuItem("Charger le plan");
-		actionChargerHoraires = new JMenuItem("Charger les horaires");
-		actionChargerHoraires.setEnabled(false);
+		JMenuItem actionChargerPlan = new JMenuItem("Charger le plan");
+		JMenuItem actionChargerHoraires = new JMenuItem("Charger les horaires");
 		
 		
 		actionChargerPlan.addActionListener(new ActionListener(){
@@ -99,7 +100,6 @@ public class Fenetre extends JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				lireDepuisFichierXML("plan");
-				actionChargerHoraires.setEnabled(true);//mettre des verifications
 				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			
@@ -110,6 +110,7 @@ public class Fenetre extends JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				lireDepuisFichierXML("horaires");
+				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			
 		});
@@ -145,38 +146,51 @@ public class Fenetre extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
+		/*----------------------------------------------------*/
+		/*----------------------------------------------------*/
+		
+		
+		
 		
 		JPanel plan = new JPanel();
 		plan.setBackground(Color.RED);
 		
-		JLabel lblNewLabel = new JLabel("Plan");
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		
-		JLabel lblNewLabel_1 = new JLabel("Horaires");
-		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 24));		
+		JLabel planLabel = new JLabel("Plan");
+		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
+		
+		
+		/*---------------------HORAIRES-----------------------*/
+		JLabel horairesLabel = new JLabel("Horaires");
+		horairesLabel.setFont(new Font("Arial", Font.BOLD, 24));		
 		
 		horairesPannel = new javax.swing.JPanel();
 		
 		menuHoraires = new AccordionMenu();
 		createSampleMenuStructure(menuHoraires);
 		menuHoraires.setBackground(Color.white);
-		menuHoraires.setForeground(Color.blue.darker().darker().darker());
-		menuHoraires.setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 15));
+		//menuHoraires.setForeground(Color.yellow.darker().darker().darker());
+		//menuHoraires.setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 30));
 		menuHoraires.setSelectionColor(Color.lightGray);
 		menuHoraires.setLeafHorizontalAlignment(AccordionItem.LEFT);
 
 		horairesPannel.add(menuHoraires);
 
-		horairesPannel.setBackground(new java.awt.Color(153, 153, 153));
+		horairesPannel.setBackground(new java.awt.Color(186, 186, 186));
 		horairesPannel.setBorder(javax.swing.BorderFactory
-				.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+				.createEtchedBorder(2, Color.black, Color.black));
+				//.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 		horairesPannel.setLayout(new javax.swing.BoxLayout(horairesPannel,
 				javax.swing.BoxLayout.LINE_AXIS));
 		horairesPannel.add(menuHoraires);
+		
 
+		
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
 		getContentPane().setLayout(layout);
+		
+		//ContainerGap ajoute une marge
 		layout.setHorizontalGroup(layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(
@@ -190,8 +204,10 @@ public class Fenetre extends JFrame implements Observer {
 														horairesPannel,
 														javax.swing.GroupLayout.Alignment.LEADING,
 														javax.swing.GroupLayout.DEFAULT_SIZE,
-														678, Short.MAX_VALUE))
+														150, Short.MAX_VALUE))
 								.addContainerGap()));
+		
+		
 		layout.setVerticalGroup(layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(
@@ -200,33 +216,40 @@ public class Fenetre extends JFrame implements Observer {
 								.addContainerGap()
 								.addComponent(horairesPannel,
 										javax.swing.GroupLayout.DEFAULT_SIZE,
-										346, Short.MAX_VALUE)
+										800, Short.MAX_VALUE)
 								.addPreferredGap(
 										javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 								.addContainerGap()));
 
 		pack();
+		/*----------------------------------------------------*/
+		/*----------------------------------------------------*/
 		
-		
-		
+	
+		/*---------------------PLAN------------------------------*/
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblNewLabel)
-					.addContainerGap(850, Short.MAX_VALUE))
+					.addComponent(planLabel)
+					.addContainerGap())//100, Short.MAX_VALUE))
+					
+					// addComponent => changer taille plan au niveau de la largeur(700)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(20)
-					.addComponent(plan, GroupLayout.PREFERRED_SIZE, 540, GroupLayout.PREFERRED_SIZE)
+					.addComponent(plan, GroupLayout.DEFAULT_SIZE, 700, GroupLayout.DEFAULT_SIZE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							//Placement du titre Horaires => 20x20
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(119)
-							.addComponent(lblNewLabel_1)
-							.addGap(119))
+							.addGap(30)//119)
+							.addComponent(horairesLabel)
+							.addGap(30))//119))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+							//addComponent => changer taille horaires au niveau de la largeur (200)
+							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
 							.addContainerGap())))
 				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 					.addGap(246)
@@ -237,18 +260,23 @@ public class Fenetre extends JFrame implements Observer {
 					.addComponent(btnNewButton_3)
 					.addGap(65))
 		);
+		
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap(32, Short.MAX_VALUE)
-					.addComponent(lblNewLabel)
+					.addComponent(planLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(plan, GroupLayout.PREFERRED_SIZE, 449, GroupLayout.PREFERRED_SIZE)
+						//addComponent => CA NE CHANGE PAS la taille du plan au niveau de la longueur (500)
+						.addComponent(plan, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)
+						.addComponent(horairesLabel)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblNewLabel_1)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(horairesPannel, GroupLayout.PREFERRED_SIZE, 414, GroupLayout.PREFERRED_SIZE)))
+							//on peut changer la place du label Horaires
+							.addComponent(horairesLabel)
+							//addComponent => change taille horaires au niveau de la longueur (650) et le plan !!!!
+							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
@@ -259,11 +287,12 @@ public class Fenetre extends JFrame implements Observer {
 		);
 		
 		
-
+		pack();
 
 
 		getContentPane().setLayout(groupLayout);
-
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds (0, 0,screenSize.width,screenSize.height);
 	}
 	
 	
