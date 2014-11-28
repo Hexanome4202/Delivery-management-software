@@ -2,8 +2,10 @@ package modele;
 
 import java.util.*;
 
-
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import controleur.Controleur;
 
 
 /**
@@ -69,5 +71,33 @@ public class Plan {
     public Set<Noeud> getToutNoeuds(){
     	return this.toutNoeuds;
     }
+
+	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
+		// TODO : gerer les erreurs de syntaxe dans le fichier XML
+				// lecture des attributs
+
+				NodeList liste = noeudDOMRacine.getElementsByTagName("Reseau");
+				if (liste.getLength() != 1) {
+					return Controleur.PARSE_ERROR;
+				}
+
+				// creation des Noeuds;
+				String tag = "Noeud";
+				liste = noeudDOMRacine.getElementsByTagName(tag);
+				toutNoeuds.clear();
+				for (int i = 0; i < liste.getLength(); i++) {
+					Element planElement = (Element) liste.item(i);
+					Noeud nouveauNoeud = new Noeud(Integer.parseInt(planElement.getAttribute("id"))
+							, Integer.parseInt(planElement.getAttribute("x")), 
+							Integer.parseInt(planElement.getAttribute("y")));
+					if (nouveauNoeud.construireLivraisonsAPartirDeDOMXML(planElement) != Controleur.PARSE_OK) {
+						System.out.println("error");
+						return Controleur.PARSE_ERROR;
+					}
+					// ajout des elements crees dans la structure objet
+					toutNoeuds.add(nouveauNoeud);
+				}
+				return Controleur.PARSE_OK;
+	}
 
 }
