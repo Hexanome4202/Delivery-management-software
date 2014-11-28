@@ -99,7 +99,7 @@ public class Fenetre extends JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				lireDepuisFichierXML("plan");
-				actionChargerHoraires.setEnabled(true);
+				actionChargerHoraires.setEnabled(true);//mettre des verifications
 				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			

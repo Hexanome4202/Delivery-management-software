@@ -197,7 +197,7 @@ public class Tournee {
 			if (noeudDebut == null) {
 				break;
 			} else {
-				ArrayList<Troncon> troncons = noeudDebut.getTronconSortants();
+				Set<Troncon> troncons = noeudDebut.getTronconSortants();
 				for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon
 						.hasNext();) {
 					Troncon troncon = itTroncon.next();
