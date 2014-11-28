@@ -3,22 +3,22 @@ package modele;
 import java.util.*;
 
 /**
- * 
+ * Classe correspondant à un itinéraire d'une tournée
  */
 public class Itineraire {
 
 	/**
-     * 
+     * Demande de livraison correspondant au départ de l'itinéraire
      */
 	private DemandeDeLivraison depart;
 
 	/**
-     * 
+     * Demande de livraison correspondant à l'arrivée de l'itinéraire
      */
 	private DemandeDeLivraison arrivee;
 
 	/**
-     * 
+     * Troçons empruntés lors de l'itinéraire
      */
 	private List<Troncon> tronconsItineraire;
 	
@@ -52,10 +52,18 @@ public class Itineraire {
 		return temps;
 	}
 	
+	/**
+	 * 
+	 * @return La demande de livraison du départ de l'itinéraire
+	 */
 	public DemandeDeLivraison getDepart() {
 		return this.depart;
 	}
 	
+	/**
+	 * 
+	 * @return La demande de livraison à l'arrivée de l'itinéraire
+	 */
 	public DemandeDeLivraison getArrivee() {
 		return this.arrivee;
 	}

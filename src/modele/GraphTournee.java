@@ -10,10 +10,29 @@ import tsp.Graph;
  */
 public class GraphTournee implements Graph{
 
+	/**
+	 * Nombre de noeuds présents dans le grpahe
+	 */
 	private int nbNoeuds;
+	
+	/**
+	 * Coût maximum parmis les arcs du graphe
+	 */
 	private int maxCoutArc;
+	
+	/**
+	 * Coût minimal parmis les arcs du graphe
+	 */
 	private int minCoutArc;
+	
+	/**
+	 * Matrice représentant les coûts des arcs, c'est-à-dire entre les noeuds du graphe
+	 */
 	private int[][] couts; 
+	
+	/**
+	 * Liste contenant les successeurs de chacun des noeuds du graphe
+	 */
 	private ArrayList<ArrayList<Integer>> succ;
 	
 	/**

@@ -38,22 +38,22 @@ public class Noeud implements Comparable<Noeud> {
     }
 
     /**
-     * 
+     * Coordonnée en abscisse du noeud
      */
     private int x;
 
     /**
-     * 
+     * Coordonnée en ordonnée du noeud
      */
     private int y;
 
     /**
-     * 
+     * Id du noeud
      */
     private int id;
 
     /**
-     * 
+     * Ensemble de <code>Troncon</code> sortants du noeud courrant
      */
     private Set<Troncon> sortants;
     
@@ -124,6 +124,11 @@ public class Noeud implements Comparable<Noeud> {
 		return this.compareTo((Noeud)noeud) == 0;
 	}
 
+	/**
+	 * 
+	 * @param planElement
+	 * @return
+	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element planElement) {
 		// todo : gerer les erreurs de syntaxe dans le fichier XML !
 

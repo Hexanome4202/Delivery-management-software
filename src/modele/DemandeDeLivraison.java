@@ -2,27 +2,27 @@ package modele;
 
 
 /**
- * 
+ * Classe représentant la demande de livraison d'un client
  */
 public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
     
 	/**
-     * 
+     * Id de la demande de livraison
      */
     private int id;
 
     /**
-     * 
+     * Id du client ayant effectué la demande
      */
     private int idClient;
 
     /**
-     * 
+     * Le noeud de livraison correspondant à l'adresse de la livraison
      */
     private Noeud adresseLivraison;
 
     /**
-     * 
+     * La plage horaire de la livraison
      */
     private PlageHoraire plageHoraire;
     
