@@ -32,9 +32,7 @@ public class PlageHoraireTest {
 		noeuds.add(n2);
 		noeuds.add(n3);
 		PlageHoraire plage = new PlageHoraire("18:00:00", "20:00:00", demandes);
-		System.out.println(plage.getNoeuds());
-		System.out.println(noeuds);
-		assertFalse("Erreur - La liste de noeuds n'est pas correcte", !noeuds.containsAll(plage.getNoeuds()));
+		assertFalse("Erreur - La liste de noeuds n'est pas correcte", !plage.getNoeuds().containsAll(noeuds));
 	}
 
 }
