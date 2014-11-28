@@ -13,7 +13,7 @@ public class Itineraire {
 	 * @param troncons
 	 */
 	public Itineraire(Livraison liv1, Livraison liv2,
-			ArrayList<Troncon> troncons) {
+			List<Troncon> troncons) {
 		this.depart = liv1;
 		this.arrivee = liv2;
 		this.tronconsItineraire = troncons;
@@ -51,4 +51,13 @@ public class Itineraire {
 		}
 		return temps;
 	}
+	
+	public Livraison getArrivee(){
+		return arrivee;
+	}
+	
+	public Livraison getDepart(){
+		return depart;
+	}
+	
 }

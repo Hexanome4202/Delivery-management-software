@@ -6,11 +6,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import tsp.SolutionState;
+import tsp.TSP;
 import controleur.Controleur;
 
 /**
@@ -275,45 +278,93 @@ public class Tournee {
 	 * différentes livraisons en essayant de respecter les plages horaires
 	 */
 	public void calculerTournee() {
-		int[][] couts;
-		ArrayList<ArrayList<Integer>> succ;
-		int maxCoutArc;
-		int minCoutArc;
+		//TODO : TEST !!!! and debug...
+		//TODO : clean all this mess like making different methods or a Dijkstra class
+		ArrayList<ArrayList<Integer>> succ = new ArrayList<ArrayList<Integer>>();
+		int maxCoutArc = 0;
+		int minCoutArc = Integer.MAX_VALUE;
 		
-		HashMap<Integer,Livraison> dicoIntNoeud = new HashMap<Integer,Livraison>();
-		dicoIntNoeud.put(0, entrepot);
+		HashMap<Integer, DemandeDeLivraison> dicoIdDemande = new HashMap<Integer, DemandeDeLivraison>();
+		dicoIdDemande.put(entrepot.getDemandeLivraison().getId(), entrepot.getDemandeLivraison());
+		
+		ArrayList<Integer> noeudsActuels = new ArrayList<Integer>();
+		noeudsActuels.add(entrepot.getDemandeLivraison().getNoeud().getId());
+		
 		for(int i=0; i<plagesHoraires.size(); i++){
-			ArrayList<Integer> successeur = new ArrayList<Integer>();
-			Set<DemandeDeLivraison> demandes = plagesHoraires.get(i).getDemandeLivraison();
-			if(i==0){
-				//succ.add(index, element);
+			ArrayList<DemandeDeLivraison> noeudsSuivants = new ArrayList<DemandeDeLivraison>();
+			if(i == plagesHoraires.size()-1){
+				noeudsSuivants.add(entrepot.getDemandeLivraison());
 			}
-			else if(i == plagesHoraires.size()-1){
-				
+			else{
+				noeudsSuivants = new ArrayList<DemandeDeLivraison>(plagesHoraires.get(i).getDemandeLivraison());
 			}
 			
+			ArrayList<Integer> idNoeudsSuivants = new ArrayList<Integer>();
+			Iterator<DemandeDeLivraison> iteratorNoeudSuivant = noeudsSuivants.iterator();
+			while(iteratorNoeudSuivant.hasNext()){
+				DemandeDeLivraison demande = iteratorNoeudSuivant.next();
+				dicoIdDemande.put(demande.getNoeud().getId(), demande);
+				idNoeudsSuivants.add(demande.getNoeud().getId());
+			}
+			
+			Iterator<Integer> itNoeudActuel = noeudsActuels.iterator();
+			int idNoeudActuel = 0;
+			while(itNoeudActuel.hasNext()){
+				idNoeudActuel = itNoeudActuel.next();
+				@SuppressWarnings("unchecked")
+				ArrayList<Integer> noeudsSansActuel = ((ArrayList<Integer>)noeudsActuels.clone());
+				noeudsSansActuel.remove(itNoeudActuel);
+				succ.add(idNoeudActuel, noeudsSansActuel);
+				succ.add(idNoeudActuel, idNoeudsSuivants);
+			}
+			noeudsActuels = idNoeudsSuivants;
 		}
 		
-//		this.nbNoeuds = noeudsGraphe.size();
-//		int maxCoutArcTemp = 0;
-//		int minCoutArcTemp = Integer.MAX_VALUE;
-//		
-//		for(int i=0; i<noeudsGraphe.size(); i++){
-//			ArrayList<int[]> succTemp = noeudsGraphe.get(i);
-//			for(int j=0; j<succTemp.size(); j++){
-//				int[] ponderation = succTemp.get(j);
-//				if(ponderation[1] > maxCoutArcTemp){
-//					maxCoutArcTemp = ponderation[1];
-//				}
-//				else if(ponderation[1] < minCoutArcTemp){
-//					minCoutArcTemp = ponderation[1];
-//				}
-//				couts[i][ponderation[0]] = ponderation[1];
-//				ArrayList<Integer> succTemp = new ArrayList
-//			}
-//		}
+		int[][] couts = new int[succ.size()][succ.size()];
+		ArrayList<Itineraire> toutItineraires = new ArrayList<Itineraire>();
+		for(int i=0; i<succ.size(); i++){
+			for(int j=0; j<succ.get(i).size(); j++){
+				LinkedList<Troncon> chemin = null;
+				DemandeDeLivraison demandeDepart = dicoIdDemande.get(succ.get(i));
+				DemandeDeLivraison demandeArrivee = dicoIdDemande.get(succ.get(i).get(j));
+				Double coutDouble = calculerDijkstra(demandeDepart.getNoeud(), demandeArrivee.getNoeud(), chemin);
+				int cout = coutDouble.intValue();
+				couts[i][j] = cout;
+				
+				if(cout > maxCoutArc){
+					maxCoutArc = cout;
+				}
+				else if(cout < minCoutArc){
+					minCoutArc = cout;
+				}
+				
+				Itineraire itineraire = new Itineraire(new Livraison(demandeDepart), new Livraison(demandeArrivee), chemin);
+				toutItineraires.add(itineraire);
+			}
+		}
+		GraphTournee graphe = new GraphTournee(couts, succ, maxCoutArc, minCoutArc);
 		
-		// TODO implement here
+		TSP tsp = new TSP(graphe);
+		//TODO : changer timeLimit -> peut changer après plusieurs tentatives
+		tsp.solve(200000,graphe.getNbVertices()*graphe.getMaxArcCost()+1);
+		if(tsp.getSolutionState() == SolutionState.SOLUTION_FOUND || tsp.getSolutionState() == SolutionState.OPTIMAL_SOLUTION_FOUND){
+			int[] solution = tsp.getNext();
+			
+			for(int i=0; i<solution.length; i++){
+				Iterator<Itineraire> itItineraire = toutItineraires.iterator();
+				while(itItineraire.hasNext()){
+					Itineraire iti = itItineraire.next();
+					if(iti.getDepart().getDemandeLivraison() == dicoIdDemande.get(solution[i]) 
+							&& iti.getArrivee().getDemandeLivraison() == dicoIdDemande.get(solution[i+1])){
+						itineraires.add(iti);
+						break;
+					}
+				}
+			}
+		}else{
+			//TODO : rappeler avec plus de temps ? peut-être ?
+		}
+		
 	}
 
 	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
@@ -355,5 +406,4 @@ public class Tournee {
 	public void setPlanTournee(Plan planTournee) {
 		this.planTournee = planTournee;
 	}
-
 }
