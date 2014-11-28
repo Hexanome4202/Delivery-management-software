@@ -1,6 +1,7 @@
 package modele;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -21,7 +22,7 @@ public class Noeud implements Comparable<Noeud> {
     	this.x = x;
     	this.y = y;
     	this.id = id;
-    	this.sortants = new ArrayList<Troncon>();
+    	this.sortants = new HashSet<Troncon>();
     }
     
     /**
@@ -31,7 +32,7 @@ public class Noeud implements Comparable<Noeud> {
      * @param y la position géographique en y du noeud
      * @param troncons les troncons sortants du noeud
      */
-    public Noeud(int id, int x, int y, ArrayList<Troncon> troncons) {
+    public Noeud(int id, int x, int y, Set<Troncon> troncons) {
     	this(id, x, y);
     	this.sortants = troncons;
     }
@@ -54,7 +55,9 @@ public class Noeud implements Comparable<Noeud> {
     /**
      * 
      */
-    private ArrayList<Troncon> sortants;
+    private Set<Troncon> sortants;
+    
+    
     
     /**
      * Méthode pour ajouter un troncon sortant au noeud
@@ -68,7 +71,7 @@ public class Noeud implements Comparable<Noeud> {
      * 
      * @return les troncons sortants (<code>Troncon</code>) du noeud
      */
-    public ArrayList<Troncon> getTronconSortants(){
+    public Set<Troncon> getTronconSortants(){
     	return sortants;
     }
 
@@ -95,6 +98,15 @@ public class Noeud implements Comparable<Noeud> {
     public int getY() {
     	return this.y;
     }
+    
+    
+    /**
+     * 
+     * @param setTroncons
+     */
+	public void setSortants(Set<Troncon> setTroncons) {
+		this.sortants = setTroncons;
+	}
 
 	@Override
 	public int compareTo(Noeud noeud) {

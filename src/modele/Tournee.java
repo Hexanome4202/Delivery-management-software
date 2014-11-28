@@ -119,8 +119,17 @@ public class Tournee {
 	/**
 	 * @param noeudPrecedent
 	 */
-	public void effacerItineraire(Noeud noeudPrecedent) {
-		// TODO implement here
+	public boolean effacerItineraire(Noeud noeudPrecedent) {
+		Iterator<Itineraire> it = this.itineraires.iterator();
+		Itineraire itineraire;
+		while(it.hasNext()) {
+			itineraire = it.next();
+			if(itineraire.getDepart().getDemandeDeLivraison().getNoeud().compareTo(noeudPrecedent) == 0) {
+				it.remove();
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -191,7 +200,7 @@ public class Tournee {
 			if (noeudDebut == null) {
 				break;
 			} else {
-				ArrayList<Troncon> troncons = noeudDebut.getTronconSortants();
+				Set<Troncon> troncons = noeudDebut.getTronconSortants();
 				for (Iterator<Troncon> itTroncon = troncons.iterator(); itTroncon
 						.hasNext();) {
 					Troncon troncon = itTroncon.next();
@@ -285,15 +294,15 @@ public class Tournee {
 		int minCoutArc = Integer.MAX_VALUE;
 		
 		HashMap<Integer, DemandeDeLivraison> dicoIdDemande = new HashMap<Integer, DemandeDeLivraison>();
-		dicoIdDemande.put(entrepot.getDemandeLivraison().getId(), entrepot.getDemandeLivraison());
+		dicoIdDemande.put(entrepot.getDemandeDeLivraison().getId(), entrepot.getDemandeDeLivraison());
 		
 		ArrayList<Integer> noeudsActuels = new ArrayList<Integer>();
-		noeudsActuels.add(entrepot.getDemandeLivraison().getNoeud().getId());
+		noeudsActuels.add(entrepot.getDemandeDeLivraison().getNoeud().getId());
 		
 		for(int i=0; i<plagesHoraires.size(); i++){
 			ArrayList<DemandeDeLivraison> noeudsSuivants = new ArrayList<DemandeDeLivraison>();
 			if(i == plagesHoraires.size()-1){
-				noeudsSuivants.add(entrepot.getDemandeLivraison());
+				noeudsSuivants.add(entrepot.getDemandeDeLivraison());
 			}
 			else{
 				noeudsSuivants = new ArrayList<DemandeDeLivraison>(plagesHoraires.get(i).getDemandeLivraison());
@@ -354,8 +363,8 @@ public class Tournee {
 				Iterator<Itineraire> itItineraire = toutItineraires.iterator();
 				while(itItineraire.hasNext()){
 					Itineraire iti = itItineraire.next();
-					if(iti.getDepart().getDemandeLivraison() == dicoIdDemande.get(solution[i]) 
-							&& iti.getArrivee().getDemandeLivraison() == dicoIdDemande.get(solution[i+1])){
+					if(iti.getDepart().getDemandeDeLivraison() == dicoIdDemande.get(solution[i]) 
+							&& iti.getArrivee().getDemandeDeLivraison() == dicoIdDemande.get(solution[i+1])){
 						itineraires.add(iti);
 						break;
 					}
@@ -405,5 +414,9 @@ public class Tournee {
 
 	public void setPlanTournee(Plan planTournee) {
 		this.planTournee = planTournee;
+	}
+
+	public List<Itineraire> getItineraires() {
+		return this.itineraires;
 	}
 }

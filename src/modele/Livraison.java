@@ -63,8 +63,7 @@ public class Livraison {
         NON_LIVREE
     }
     
-    public DemandeDeLivraison getDemandeLivraison(){
-    	return demandeLivraison;
+    public DemandeDeLivraison getDemandeDeLivraison() {
+    	return this.demandeLivraison;
     }
-
 }

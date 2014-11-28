@@ -60,7 +60,16 @@ public class Troncon implements Comparable<Troncon>{
     	return fin;
     }
     
+    
     /**
+     * Modifie le noeud d'arrive d'un tronçon
+     * @return 
+     */
+    public void setNoeudFin(Noeud fin) {
+		this.fin = fin;
+	}
+
+	/**
      * Calcule et retourne le temps estimé pour parcourir le tronçon.
      * @return le temps estimé de parcours.
      */

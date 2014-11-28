@@ -52,12 +52,11 @@ public class Itineraire {
 		return temps;
 	}
 	
-	public Livraison getArrivee(){
-		return arrivee;
+	public Livraison getDepart() {
+		return this.depart;
 	}
 	
-	public Livraison getDepart(){
-		return depart;
+	public Livraison getArrivee() {
+		return this.arrivee;
 	}
-	
 }
