@@ -442,4 +442,20 @@ public class Tournee {
 	public List<Itineraire> getItineraires() {
 		return this.itineraires;
 	}
+	
+	/**
+	 * 
+	 * @return la <code>DemandeDeLivraison</code> correspondant à l'entrepôt
+	 */
+	public DemandeDeLivraison getEntrepot() {
+		return this.entrepot;
+	}
+	
+	/**
+	 * 
+	 * @return une liste de <code>PlageHoraire</code>s appartenant à la <code>Tournee</code>
+	 */
+	public List<PlageHoraire> getPlagesHoraires() {
+		return this.plagesHoraires;
+	}
 }
