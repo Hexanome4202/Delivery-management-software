@@ -6,6 +6,7 @@ import modele.Tournee;
 
 import org.w3c.dom.Element;
 
+import vue.Fenetre;
 import vue.VueTournee;
 
 /**
@@ -19,6 +20,7 @@ public class Controleur {
     private Tournee tournee;
     private VueTournee vueTournee;
     private Plan plan;
+    private Fenetre fen;
 
     /**
      * 
@@ -27,6 +29,8 @@ public class Controleur {
     	tournee = new Tournee();
     	vueTournee = new VueTournee(null);
     	plan=new Plan();
+    	this.fen = new Fenetre(this);
+    	this.fen.setVisible(true);
     }
 
     /**
@@ -98,5 +102,7 @@ public class Controleur {
         return Controleur.PARSE_OK;
     }
 
-
+	public static void main(String[] args) {
+		new Controleur();
+	}
 }

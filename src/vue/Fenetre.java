@@ -61,9 +61,9 @@ public class Fenetre extends JFrame implements Observer {
     /**
      * 
      */
-    public Fenetre() {
+    public Fenetre(Controleur c) {
     	
-    	controleur = new Controleur();
+    	controleur = c;
     	
     	setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -434,16 +434,16 @@ public class Fenetre extends JFrame implements Observer {
 	}
 	
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Fenetre frame = new Fenetre();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Fenetre frame = new Fenetre();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
 
 	

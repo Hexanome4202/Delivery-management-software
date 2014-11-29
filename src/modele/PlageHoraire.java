@@ -73,8 +73,8 @@ public class PlageHoraire {
 		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
 		while(it.hasNext()) {
 			demande = it.next();
-			if(demande.getNoeud() != null && demande.getNoeud().getId() == id) {//Marche pas!!
-
+			if(demande.getNoeud() != null && demande.getNoeud().getId() == id) {
+				// TODO: Marche pas???
 				noeud = demande.getNoeud();
 				break;
 			}
