@@ -2,13 +2,11 @@ package vue;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -24,17 +22,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
 import modele.Noeud;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionMenu;
@@ -47,14 +38,22 @@ import controleur.Controleur;
 public class Fenetre extends JFrame implements Observer {
 
 	/**
+     * Facteur permettant de faire la conversion entre les coordonnées 
+     * réelles et les coordonnées d'affichage
+     */
+    private static int facteurCoordonnees;
+
+    /**
+     * 
+     */
+    private VueTournee vueTournee;
+	
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JFileChooser jFileChooserXML;
 	private Controleur controleur;
-	
-	private File fichierPlan;
-	private File fichierHoraires;
 	
     private AccordionMenu menuHoraires;
     private javax.swing.JPanel horairesPannel;
@@ -326,18 +325,6 @@ public class Fenetre extends JFrame implements Observer {
         target.addNewLeafTo("menu4", "submenu4.3", "Sub Menu 3");
         target.calculateAvaiableSpace();
     }
-
-    
-
-    /**
-     * 
-     */
-    private static int facteurCoordonnees;
-
-    /**
-     * 
-     */
-    private VueTournee vueTournee;
 
     /**
      * @param noeud

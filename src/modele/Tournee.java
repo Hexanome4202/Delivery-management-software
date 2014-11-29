@@ -19,6 +19,9 @@ import controleur.Controleur;
  */
 public class Tournee {
 
+	/**
+	 * <code>DemandeDeLivraison</code> correspondant à l'entrepot
+	 */
 	private DemandeDeLivraison entrepot;
 
 	/**
@@ -45,13 +48,6 @@ public class Tournee {
 		this.entrepot = null;
 		this.planTournee = null;
 	}
-	
-	/**
-     * 
-     */
-	public void creerFeuilleRoute() {
-		// TODO implement here
-	}
 
 	/**
 	 * @param livraison
@@ -61,10 +57,26 @@ public class Tournee {
 	}
 
 	/**
+	 * TODO: Not even sure of what it is doing...
 	 * @return la feuille de route editee
 	 */
 	public String editerFeuilleRoute() {
-		return "";
+		String ret = "";
+		Itineraire itineraire;
+		List<Troncon> troncons;
+		Noeud n = this.entrepot.getNoeud();
+		
+		for(int i = 0; i < this.itineraires.size(); ++i) {
+			itineraire = this.itineraires.get(i);
+			ret += i +  " : " + itineraire.getDepart() + " --> " + itineraire.getArrivee() + " ("+itineraire.getTemps()+"min)\n";
+			troncons = itineraire.getTronconsItineraire();
+			for(Troncon t : troncons) {
+				ret += "\tDe" + n.getId() + " vers " + t.getNoeudFin().getId();
+				n = t.getNoeudFin();
+			}
+		}
+		
+		return ret;
 	}
 
 	/**
@@ -109,7 +121,9 @@ public class Tournee {
 	 */
 	public void ajouterLivraison(Noeud noeudPrecedent, Noeud noeudCourant,
 			int client) {
-		// TODO implement here
+		for(Itineraire iti : this.itineraires) {
+			// TODO: finish...
+		}
 	}
 
 	/**

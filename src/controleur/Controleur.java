@@ -57,13 +57,6 @@ public class Controleur {
     }
 
     /**
-     * 
-     */
-    public void calculerFeuilleRoute() {
-        // TODO implement here
-    }
-
-    /**
      * @param client 
      * @param noeud 
      * @param precedent
