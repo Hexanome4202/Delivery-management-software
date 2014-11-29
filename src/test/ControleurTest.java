@@ -69,12 +69,17 @@ public class ControleurTest {
 		c.gererFichier(new File("XML/testPlan2.xml"), "plan");
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
 		
+		assertNotNull("tournee null", c.getTournee());
+		assertNotNull("entrepot null", c.getTournee().getEntrepot());
+		assertNotNull("noeud de l'entrepot null", c.getTournee().getEntrepot().getNoeud());
 		assertEquals(2, c.getTournee().getEntrepot().getNoeud().getId());
 		
 		List<PlageHoraire> plages = c.getTournee().getPlagesHoraires();
+		assertNotNull(plages);
 		assertEquals(1, plages.size());
 		
 		PlageHoraire plage = plages.get(0);
+		assertNotNull(plage);
 		assertEquals(3, plage.getDemandeLivraison().size());
 		Noeud n;
 		for(DemandeDeLivraison demande : plage.getDemandeLivraison()) {
