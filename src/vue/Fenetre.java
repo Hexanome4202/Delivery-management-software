@@ -372,40 +372,7 @@ public class Fenetre extends JFrame implements Observer {
 	public void lireDepuisFichierXML(String typeFichier){
         File xml = ouvrirFichier('o');
         if (xml != null) {
-             try {
-                 // creation d'un constructeur de documents a l'aide d'une fabrique
-                DocumentBuilder constructeur = DocumentBuilderFactory.newInstance().newDocumentBuilder();	
-                // lecture du contenu d'un fichier XML avec DOM
-                Document document = constructeur.parse(xml);
-                Element racine = document.getDocumentElement();
-                if (typeFichier.equals("horaires")) {
-					if (racine.getNodeName().equals("JourneeType")) {
-						int resultatConstruction = controleur
-								.construireLivraisonsAPartirDeDOMXML(racine);
-						if (resultatConstruction != Controleur.PARSE_OK) {
-							System.out.println("PB de lecture de fichier!");
-						}
-					}
-					// todo : traiter les erreurs
-				}else if(typeFichier.equals("plan")){
-					if (racine.getNodeName().equals("Reseau")) {
-						int resultatConstruction = controleur
-								.construirePlanAPartirDeDOMXML(racine);
-						if (resultatConstruction != Controleur.PARSE_OK) {
-							System.out.println("PB de lecture de fichier!");
-						}
-					}
-				}
-            } catch (ParserConfigurationException pce) {
-                System.out.println("Erreur de configuration du parseur DOM");
-                System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");
-            } catch (SAXException se) {
-                System.out.println("Erreur lors du parsing du document");
-                System.out.println("lors de l'appel a construteur.parse(xml)");
-            } catch (IOException ioe) {
-                System.out.println("Erreur d'entree/sortie");
-                System.out.println("lors de l'appel a construteur.parse(xml)");
-            }
+             this.controleur.gererFichier(xml, typeFichier);
         }  
 	}
 
