@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,7 +28,7 @@ public class Tournee {
 	/**
      * Liste ordonée des <code>Itineraire</code>s à prendre pour compléter la tournée
      */
-	private List<Itineraire> itineraires;
+	private ArrayList<Itineraire> itineraires;
 
 	/**
      * Plan complet dans lequel sont les livraisons
@@ -190,7 +189,7 @@ public class Tournee {
 		Noeud noeudFin = noeudDestination;
 
 		chemin.retainAll(null);
-
+		
 		while (noeudDebut != noeudDepart) {
 			noeudDebut = grapheVoisinPrecedent.get(noeudFin);
 			if (noeudDebut == null) {
@@ -289,52 +288,65 @@ public class Tournee {
 		int maxCoutArc = 0;
 		int minCoutArc = Integer.MAX_VALUE;
 		
-		HashMap<Integer, DemandeDeLivraison> dicoIdDemande = new HashMap<Integer, DemandeDeLivraison>();
-		dicoIdDemande.put(entrepot.getId(), entrepot);
+		HashMap<Integer,DemandeDeLivraison> dicoIndexDemande = new HashMap<Integer, DemandeDeLivraison>();
+		HashMap<DemandeDeLivraison, Integer> dicoDemandeIndex = new HashMap<DemandeDeLivraison, Integer>();
+		int index = 0;
 		
-		ArrayList<Integer> noeudsActuels = new ArrayList<Integer>();
-		noeudsActuels.add(entrepot.getNoeud().getId());
+		dicoIndexDemande.put(index,entrepot);
+		dicoDemandeIndex.put(entrepot,index);
+		index++;
 		
-		for(int i=0; i<plagesHoraires.size(); i++){
+		ArrayList<DemandeDeLivraison> noeudsActuels = new ArrayList<DemandeDeLivraison>();
+		noeudsActuels.add(entrepot);
+		
+		for(int i=0; i<plagesHoraires.size()+1; i++){
 			ArrayList<DemandeDeLivraison> noeudsSuivants = new ArrayList<DemandeDeLivraison>();
-			if(i == plagesHoraires.size()-1){
+			if(i == plagesHoraires.size()){
 				noeudsSuivants.add(entrepot);
 			}
 			else{
 				noeudsSuivants = new ArrayList<DemandeDeLivraison>(plagesHoraires.get(i).getDemandeLivraison());
 			}
 			
-			ArrayList<Integer> idNoeudsSuivants = new ArrayList<Integer>();
 			Iterator<DemandeDeLivraison> iteratorNoeudSuivant = noeudsSuivants.iterator();
 			while(iteratorNoeudSuivant.hasNext()){
 				DemandeDeLivraison demande = iteratorNoeudSuivant.next();
-				dicoIdDemande.put(demande.getNoeud().getId(), demande);
-				idNoeudsSuivants.add(demande.getNoeud().getId());
+				if(demande != entrepot){
+					dicoIndexDemande.put(index,demande);
+					dicoDemandeIndex.put(demande,index);
+					index++;
+				}
 			}
 			
-			Iterator<Integer> itNoeudActuel = noeudsActuels.iterator();
-			int idNoeudActuel = 0;
+			Iterator<DemandeDeLivraison> itNoeudActuel = noeudsActuels.iterator();
 			while(itNoeudActuel.hasNext()){
-				idNoeudActuel = itNoeudActuel.next();
-				@SuppressWarnings("unchecked")
-				ArrayList<Integer> noeudsSansActuel = ((ArrayList<Integer>)noeudsActuels.clone());
-				noeudsSansActuel.remove(itNoeudActuel);
-				succ.add(idNoeudActuel, noeudsSansActuel);
-				succ.add(idNoeudActuel, idNoeudsSuivants);
+				DemandeDeLivraison noeudActuel = itNoeudActuel.next();
+				ArrayList<Integer> indexNoeudsSuccesseur = new ArrayList<Integer>();
+				for(int k=0; k<noeudsActuels.size(); k++){
+					if(noeudsActuels.get(k) != noeudActuel){
+						indexNoeudsSuccesseur.add(dicoDemandeIndex.get(noeudsActuels.get(k)));
+					}
+				}
+
+				for(int k=0; k<noeudsSuivants.size(); k++){
+					DemandeDeLivraison demande = noeudsSuivants.get(k);
+					indexNoeudsSuccesseur.add(dicoDemandeIndex.get(demande));
+				}
+				succ.add(dicoDemandeIndex.get(noeudActuel), indexNoeudsSuccesseur);
 			}
-			noeudsActuels = idNoeudsSuivants;
+			noeudsActuels = noeudsSuivants;
 		}
 		
 		int[][] couts = new int[succ.size()][succ.size()];
 		ArrayList<Itineraire> toutItineraires = new ArrayList<Itineraire>();
 		for(int i=0; i<succ.size(); i++){
 			for(int j=0; j<succ.get(i).size(); j++){
-				LinkedList<Troncon> chemin = null;
-				DemandeDeLivraison demandeDepart = dicoIdDemande.get(succ.get(i));
-				DemandeDeLivraison demandeArrivee = dicoIdDemande.get(succ.get(i).get(j));
+				LinkedList<Troncon> chemin = new LinkedList<Troncon>();
+				DemandeDeLivraison demandeDepart = dicoIndexDemande.get(i);
+				DemandeDeLivraison demandeArrivee = dicoIndexDemande.get(succ.get(i).get(j));
 				Double coutDouble = calculerDijkstra(demandeDepart.getNoeud(), demandeArrivee.getNoeud(), chemin);
 				int cout = coutDouble.intValue();
-				couts[i][j] = cout;
+				couts[i][succ.get(i).get(j)] = cout;
 				
 				if(cout > maxCoutArc){
 					maxCoutArc = cout;
@@ -359,8 +371,12 @@ public class Tournee {
 				Iterator<Itineraire> itItineraire = toutItineraires.iterator();
 				while(itItineraire.hasNext()){
 					Itineraire iti = itItineraire.next();
-					if(iti.getDepart() == dicoIdDemande.get(solution[i]) 
-							&& iti.getArrivee() == dicoIdDemande.get(solution[i+1])){
+					int j = i-1;
+					if(i == 0){
+						 j = solution.length-1;
+					}
+					if(iti.getDepart() == dicoIndexDemande.get(solution[j]) 
+							&& iti.getArrivee() == dicoIndexDemande.get(solution[i])){
 						itineraires.add(iti);
 						break;
 					}
@@ -415,17 +431,33 @@ public class Tournee {
 
 	/**
 	 * 
-	 * @param planTournee la <code>Plan</code> de la tournée
+	 * @param planTournee : la <code>Plan</code> de la tournée
 	 */
 	public void setPlanTournee(Plan planTournee) {
 		this.planTournee = planTournee;
+	}
+	
+	/**
+	 * 
+	 * @param entrepot : la <code>DemandeDeLivraison</code> représentant l'entrepot
+	 */
+	public void setEntrepot(DemandeDeLivraison entrepot){
+		this.entrepot = entrepot;
 	}
 
 	/**
 	 * 
 	 * @return la liste des <code>Itineraire</code> de la tournée
 	 */
-	public List<Itineraire> getItineraires() {
+	public ArrayList<Itineraire> getItineraires() {
 		return this.itineraires;
+	}
+	
+	/**
+	 * 
+	 * @param plagesHoraires : liste <b>ordonnée</b> de plages horaires
+	 */
+	public void setPlagesHoraires(ArrayList<PlageHoraire> plagesHoraires){
+		this.plagesHoraires = plagesHoraires;
 	}
 }

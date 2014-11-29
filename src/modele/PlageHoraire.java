@@ -132,6 +132,14 @@ public class PlageHoraire {
 	public Set<DemandeDeLivraison> getDemandeLivraison() {
 		return demandesLivraisonPlage;
 	}
+	
+	/**
+	 * 
+	 * @param demandes
+	 */
+	public void setDemandesDeLivraison(Set<DemandeDeLivraison> demandes){
+		this.demandesLivraisonPlage = demandes;
+	}
 
 	/**
 	 * 
