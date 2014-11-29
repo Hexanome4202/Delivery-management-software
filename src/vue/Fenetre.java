@@ -8,7 +8,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -24,17 +23,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.swing.border.BevelBorder;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.view.mxGraph;
 
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
 import modele.Noeud;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionMenu;
@@ -47,17 +42,27 @@ import controleur.Controleur;
 public class Fenetre extends JFrame implements Observer {
 
 	/**
+     * Facteur permettant de faire la conversion entre les coordonnées 
+     * réelles et les coordonnées d'affichage
+     */
+    private static int facteurCoordonnees;
+
+    /**
+     * 
+     */
+    private VueTournee vueTournee;
+	
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JFileChooser jFileChooserXML;
 	private Controleur controleur;
 	
-	private File fichierPlan;
-	private File fichierHoraires;
-	
     private AccordionMenu menuHoraires;
     private javax.swing.JPanel horairesPannel;
+    private mxGraph plan;
+    
     /**
      * 
      */
@@ -151,11 +156,6 @@ public class Fenetre extends JFrame implements Observer {
 		
 		
 		
-		
-		JPanel plan = new JPanel();
-		plan.setBackground(Color.RED);
-		
-		
 		JLabel planLabel = new JLabel("Plan");
 		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		
@@ -169,8 +169,9 @@ public class Fenetre extends JFrame implements Observer {
 		menuHoraires = new AccordionMenu();
 		createSampleMenuStructure(menuHoraires);
 		menuHoraires.setBackground(Color.white);
-		//menuHoraires.setForeground(Color.yellow.darker().darker().darker());
-		//menuHoraires.setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 30));
+		menuHoraires.setFont(new Font("Arial", Font.PLAIN, 16));
+		menuHoraires.setMenusSize(30);
+		menuHoraires.setMenuBorders(new BevelBorder(BevelBorder.RAISED));
 		menuHoraires.setSelectionColor(Color.lightGray);
 		menuHoraires.setLeafHorizontalAlignment(AccordionItem.LEFT);
 
@@ -227,6 +228,40 @@ public class Fenetre extends JFrame implements Observer {
 		
 	
 		/*---------------------PLAN------------------------------*/
+		plan = new mxGraph();
+		Object parent = plan.getDefaultParent();
+		
+		plan.getModel().beginUpdate();
+		try{
+			Object v1 = plan.insertVertex(parent, null, "", 20, 20, 10,10);
+			Object v2 = plan.insertVertex(parent, null, "", 200, 150,10, 10);
+			Object v3 = plan.insertVertex(parent, null, "", 200, 20,10,10);
+			Object e1 = plan
+					.insertEdge(
+							parent,
+							null,
+							"",
+							v1,
+							v2,
+							"edgeStyle=elbowEdgeStyle;elbow=horizontal;"
+									+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;");
+			Object e2 = plan.insertEdge(parent, null, "", v3, v2,
+					"edgeStyle=elbowEdgeStyle;elbow=horizontal;orthogonal=0;"
+							+ "entryX=0;entryY=0;entryPerimeter=1;");
+		}finally
+		{
+			plan.getModel().endUpdate();
+		}
+		
+		mxGraphComponent planComponent = new mxGraphComponent(plan);	
+		plan.setAllowDanglingEdges(false);
+		plan.setCellsBendable(false);
+		plan.setCellsDisconnectable(false);
+		plan.setCellsMovable(false);
+		plan.setCellsResizable(false);
+		plan.setCellsEditable(false);
+		planComponent.setConnectable(false);
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		
 		groupLayout.setHorizontalGroup(
@@ -239,7 +274,7 @@ public class Fenetre extends JFrame implements Observer {
 					// addComponent => changer taille plan au niveau de la largeur(700)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(20)
-					.addComponent(plan, GroupLayout.DEFAULT_SIZE, 700, GroupLayout.DEFAULT_SIZE)
+					.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 700, GroupLayout.DEFAULT_SIZE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							//Placement du titre Horaires => 20x20
 						.addGroup(groupLayout.createSequentialGroup()
@@ -252,39 +287,43 @@ public class Fenetre extends JFrame implements Observer {
 							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
 							.addContainerGap())))
 				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addGap(246)
+					.addGap(90)
 					.addComponent(btnNewButton_1)
 					.addPreferredGap(ComponentPlacement.RELATED, 313, Short.MAX_VALUE)
 					.addComponent(btnNewButton_2)
-					.addGap(53)
+					.addGap(5)
 					.addComponent(btnNewButton_3)
-					.addGap(65))
+					.addGap(80))
 		);
 		
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap(32, Short.MAX_VALUE)
-					.addComponent(planLabel)
+					
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(planLabel)
+						.addComponent(btnNewButton_1)
+						.addComponent(horairesLabel))
+					
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						//addComponent => CA NE CHANGE PAS la taille du plan au niveau de la longueur (500)
-						.addComponent(plan, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)
-						.addComponent(horairesLabel)
+						.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							//on peut changer la place du label Horaires
-							.addComponent(horairesLabel)
 							//addComponent => change taille horaires au niveau de la longueur (650) et le plan !!!!
-							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)))
+							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 650, GroupLayout.DEFAULT_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(btnNewButton_3)
 							.addComponent(btnNewButton_2))
-						.addComponent(btnNewButton_1))
+						)
 					.addContainerGap())
 		);
+		
 		
 		
 		pack();
@@ -305,39 +344,27 @@ public class Fenetre extends JFrame implements Observer {
      * @param target Target AccordionMenu to modify.
      */
     public void createSampleMenuStructure(AccordionMenu target) {
-        target.addNewMenu("menu1", "Menu One");
-        target.addNewLeafTo("menu1", "submenu1.1", "Sub Menu 1");
-        target.addNewLeafTo("menu1", "submenu1.2", "Sub Menu 2");
-        target.addNewLeafTo("menu1", "submenu1.3", "Sub Menu 3");
+        target.addNewMenu("menu1", "8h - 9h30");
+        target.addNewLeafTo("menu1", "submenu1.1", "Madame Fitzgerald ...");
+        target.addNewLeafTo("menu1", "submenu1.2", "Monsieur Omard ...");
+        target.addNewLeafTo("menu1", "submenu1.3", "Mademoiselle Martine : 11 rue de ....");
 
-        target.addNewMenu("menu2", "Menu Two");
-        target.addNewLeafTo("menu2", "submenu2.1", "Sub Menu 1");
-        target.addNewLeafTo("menu2", "submenu2.2", "Sub Menu 2");
-        target.addNewLeafTo("menu2", "submenu2.3", "Sub Menu 3");
+        target.addNewMenu("menu2", "9h30 - 11h");
+        target.addNewLeafTo("menu2", "submenu2.1", "Madame Fitzgerald ...");
+        target.addNewLeafTo("menu2", "submenu2.2", "Monsieur Omard ...");
+        target.addNewLeafTo("menu2", "submenu2.3", "Mademoiselle Martine : 11 rue de ....");
 
-        target.addNewMenu("menu3", "Menu Three");
-        target.addNewLeafTo("menu3", "submenu3.1", "Sub Menu 1");
-        target.addNewLeafTo("menu3", "submenu3.2", "Sub Menu 2");
-        target.addNewLeafTo("menu3", "submenu3.3", "Sub Menu 3");
+        target.addNewMenu("menu3", "11h - 12h30");
+        target.addNewLeafTo("menu3", "submenu3.1", "Madame Fitzgerald ...");
+        target.addNewLeafTo("menu3", "submenu3.2", "Monsieur Omard ...");
+        target.addNewLeafTo("menu3", "submenu3.3", "Mademoiselle Martine : 11 rue de ....");
 
-        target.addNewMenu("menu4", "Menu Four");
-        target.addNewLeafTo("menu4", "submenu4.1", "Sub Menu 1");
-        target.addNewLeafTo("menu4", "submenu4.2", "Sub Menu 2");
-        target.addNewLeafTo("menu4", "submenu4.3", "Sub Menu 3");
+        target.addNewMenu("menu4", "14h - 15h30");
+        target.addNewLeafTo("menu4", "submenu4.1", "Madame Fitzgerald ...");
+        target.addNewLeafTo("menu4", "submenu4.2", "Monsieur Omard ...");
+        target.addNewLeafTo("menu4", "submenu4.3", "Mademoiselle Martine : 11 rue de ....");
         target.calculateAvaiableSpace();
     }
-
-    
-
-    /**
-     * 
-     */
-    private static int facteurCoordonnees;
-
-    /**
-     * 
-     */
-    private VueTournee vueTournee;
 
     /**
      * @param noeud
@@ -401,16 +428,16 @@ public class Fenetre extends JFrame implements Observer {
 	}
 	
 	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Fenetre frame = new Fenetre();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Fenetre frame = new Fenetre(null);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	

@@ -57,13 +57,6 @@ public class Controleur {
     }
 
     /**
-     * 
-     */
-    public void calculerFeuilleRoute() {
-        // TODO implement here
-    }
-
-    /**
      * @param client 
      * @param noeud 
      * @param precedent
@@ -156,10 +149,18 @@ public class Controleur {
 	
 	/**
 	 * 
-	 * @return le plan
+	 * @return le <code>Plan</code>
 	 */
 	public Plan getPlan() {
 		return this.plan;
+	}
+	
+	/**
+	 * 
+	 * @return la <code>Tournee</code>
+	 */
+	public Tournee getTournee() {
+		return this.tournee;
 	}
 
 	public static void main(String[] args) {

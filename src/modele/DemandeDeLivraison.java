@@ -67,4 +67,11 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
 				0 : this.id - demande.getId();
 	}
 
+	/**
+	 * 
+	 * @return l'id du client
+	 */
+	public int getIdClient() {
+		return this.idClient;
+	}
 }

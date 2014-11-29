@@ -67,4 +67,12 @@ public class Itineraire {
 	public DemandeDeLivraison getArrivee() {
 		return this.arrivee;
 	}
+	
+	/**
+	 * 
+	 * @return Les <code>Troncon</code>s correspondant à l'<code>Itineraire</code>
+	 */
+	public List<Troncon> getTronconsItineraire() {
+		return this.tronconsItineraire;
+	}
 }
