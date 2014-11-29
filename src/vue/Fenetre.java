@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -23,10 +24,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.view.mxGraph;
+
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
 import modele.Noeud;
-
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionMenu;
 import controleur.Controleur;
@@ -57,6 +60,8 @@ public class Fenetre extends JFrame implements Observer {
 	
     private AccordionMenu menuHoraires;
     private javax.swing.JPanel horairesPannel;
+    private mxGraph plan;
+    
     /**
      * 
      */
@@ -151,10 +156,6 @@ public class Fenetre extends JFrame implements Observer {
 		
 		
 		
-		JPanel plan = new JPanel();
-		plan.setBackground(Color.RED);
-		
-		
 		JLabel planLabel = new JLabel("Plan");
 		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		
@@ -226,6 +227,40 @@ public class Fenetre extends JFrame implements Observer {
 		
 	
 		/*---------------------PLAN------------------------------*/
+		plan = new mxGraph();
+		Object parent = plan.getDefaultParent();
+		
+		plan.getModel().beginUpdate();
+		try{
+			Object v1 = plan.insertVertex(parent, null, "", 20, 20, 10,10);
+			Object v2 = plan.insertVertex(parent, null, "", 200, 150,10, 10);
+			Object v3 = plan.insertVertex(parent, null, "", 200, 20,10,10);
+			Object e1 = plan
+					.insertEdge(
+							parent,
+							null,
+							"",
+							v1,
+							v2,
+							"edgeStyle=elbowEdgeStyle;elbow=horizontal;"
+									+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;");
+			Object e2 = plan.insertEdge(parent, null, "", v3, v2,
+					"edgeStyle=elbowEdgeStyle;elbow=horizontal;orthogonal=0;"
+							+ "entryX=0;entryY=0;entryPerimeter=1;");
+		}finally
+		{
+			plan.getModel().endUpdate();
+		}
+		
+		mxGraphComponent planComponent = new mxGraphComponent(plan);	
+		plan.setAllowDanglingEdges(false);
+		plan.setCellsBendable(false);
+		plan.setCellsDisconnectable(false);
+		plan.setCellsMovable(false);
+		plan.setCellsResizable(false);
+		plan.setCellsEditable(false);
+		planComponent.setConnectable(false);
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		
 		groupLayout.setHorizontalGroup(
@@ -238,7 +273,7 @@ public class Fenetre extends JFrame implements Observer {
 					// addComponent => changer taille plan au niveau de la largeur(700)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(20)
-					.addComponent(plan, GroupLayout.DEFAULT_SIZE, 700, GroupLayout.DEFAULT_SIZE)
+					.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 700, GroupLayout.DEFAULT_SIZE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							//Placement du titre Horaires => 20x20
 						.addGroup(groupLayout.createSequentialGroup()
@@ -268,7 +303,7 @@ public class Fenetre extends JFrame implements Observer {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						//addComponent => CA NE CHANGE PAS la taille du plan au niveau de la longueur (500)
-						.addComponent(plan, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)
+						.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)
 						.addComponent(horairesLabel)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -388,16 +423,16 @@ public class Fenetre extends JFrame implements Observer {
 	}
 	
 	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Fenetre frame = new Fenetre();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Fenetre frame = new Fenetre(null);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	
