@@ -3,6 +3,7 @@ package controleur;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -99,6 +100,7 @@ public class Controleur {
 					int resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
 					if (resultatConstruction != Controleur.PARSE_OK) {
 						System.out.println("PB de lecture de fichier!");
+						JOptionPane.showMessageDialog(null,"PB de lecture de fichier!","Erreur",JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				// todo : traiter les erreurs
@@ -106,18 +108,21 @@ public class Controleur {
 				if (racine.getNodeName().equals("Reseau")) {
 					int resultatConstruction = construirePlanAPartirDeDOMXML(racine);
 					if (resultatConstruction != Controleur.PARSE_OK) {
-						System.out.println("PB de lecture de fichier!");
+						JOptionPane.showMessageDialog(null,"PB de lecture de fichier!","Erreur",JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
        } catch (ParserConfigurationException pce) {
            System.out.println("Erreur de configuration du parseur DOM");
+           JOptionPane.showMessageDialog(null,"Erreur de configuration du parseur DOM!","Erreur",JOptionPane.ERROR_MESSAGE);
            System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");
        } catch (SAXException se) {
            System.out.println("Erreur lors du parsing du document");
            System.out.println("lors de l'appel a construteur.parse(xml)");
+           JOptionPane.showMessageDialog(null,"PB de parsing du document xml!","Erreur",JOptionPane.ERROR_MESSAGE);
        } catch (IOException ioe) {
            System.out.println("Erreur d'entree/sortie");
+           JOptionPane.showMessageDialog(null,"Erreur d'entree/sortie!","Erreur",JOptionPane.ERROR_MESSAGE);
            System.out.println("lors de l'appel a construteur.parse(xml)");
        }
     }

@@ -102,10 +102,17 @@ public class PlageHoraire {
 			Integer id = Integer.parseInt(livraisonElement.getAttribute("id"));
 			Integer adresse = Integer.parseInt(livraisonElement.getAttribute("adresse"));
 			Integer idClient = Integer.parseInt(livraisonElement.getAttribute("client"));
-			DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,planTournee.recupererNoeud(adresse), idClient, this);
+			Noeud noeud = planTournee.recupererNoeud(adresse);
+
+			if (noeud!=null) {
+				DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id, noeud, idClient, this);
+				demandesLivraisonPlage.add(nouvelleDemande);
+			}else{
+				demandesLivraisonPlage.clear();
+				return Controleur.PARSE_ERROR;
+			}
 			
 			// ajout des elements crees dans la structure objet
-			demandesLivraisonPlage.add(nouvelleDemande);
 		}
 
 		return Controleur.PARSE_OK;
