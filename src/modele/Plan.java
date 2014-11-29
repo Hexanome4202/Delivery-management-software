@@ -72,10 +72,18 @@ public class Plan {
 
 	/**
 	 * 
-	 * @return Les noeuds du plan
+	 * @return Les noeuds du <code>Plan</code>
 	 */
 	public Set<Noeud> getToutNoeuds() {
 		return this.toutNoeuds;
+	}
+	
+	/**
+	 * 
+	 * @return Les troncons du <code>Plan</code>
+	 */
+	public Set<Troncon> getToutTroncons() {
+		return this.toutTroncons;
 	}
 
 	/**

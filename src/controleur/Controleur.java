@@ -153,6 +153,14 @@ public class Controleur {
         //vueTournee.dessiner();
         return Controleur.PARSE_OK;
     }
+	
+	/**
+	 * 
+	 * @return le plan
+	 */
+	public Plan getPlan() {
+		return this.plan;
+	}
 
 	public static void main(String[] args) {
 		new Controleur();

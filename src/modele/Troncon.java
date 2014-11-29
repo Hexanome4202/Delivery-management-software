@@ -76,6 +76,30 @@ public class Troncon implements Comparable<Troncon>{
     public double getTemps(){
     	return longueur/vitesse;
     }
+    
+    /**
+     * 
+     * @return Le nom de la rue correspondant au <code>Troncon</code>
+     */
+    public String getNomRue() {
+    	return this.nomRue;
+    }
+    
+    /**
+     * 
+     * @return La longueur du <code>Troncon</code>
+     */
+    public Double getLongueur() {
+    	return this.longueur;
+    }
+    
+    /**
+     * 
+     * @return La vitesse maximale sur le <code>Troncon</code>
+     */
+    public Double getVitesse() {
+    	return this.vitesse;
+    }
 
 	@Override
 	public int compareTo(Troncon troncon) {
