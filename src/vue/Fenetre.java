@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -124,6 +126,7 @@ public class Fenetre extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				lireDepuisFichierXML("horaires");
 				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
+				createSampleMenuStructure(menuHoraires, true);
 			}
 			
 		});
@@ -349,27 +352,62 @@ public class Fenetre extends JFrame implements Observer {
      * menu structure is static. Use this method instead if you want to create structure dinamically.
      * @param target Target AccordionMenu to modify.
      */
-    public void createSampleMenuStructure(AccordionMenu target) {
-        target.addNewMenu("menu1", "8h - 9h30");
-        target.addNewLeafTo("menu1", "submenu1.1", "Madame Fitzgerald ...");
-        target.addNewLeafTo("menu1", "submenu1.2", "Monsieur Omard ...");
-        target.addNewLeafTo("menu1", "submenu1.3", "Mademoiselle Martine : 11 rue de ....");
+public void createSampleMenuStructure(AccordionMenu target, boolean changement) {
+    	/// changer pour afficher les horaires !!!!!!
 
-        target.addNewMenu("menu2", "9h30 - 11h");
-        target.addNewLeafTo("menu2", "submenu2.1", "Madame Fitzgerald ...");
-        target.addNewLeafTo("menu2", "submenu2.2", "Monsieur Omard ...");
-        target.addNewLeafTo("menu2", "submenu2.3", "Mademoiselle Martine : 11 rue de ....");
-
-        target.addNewMenu("menu3", "11h - 12h30");
-        target.addNewLeafTo("menu3", "submenu3.1", "Madame Fitzgerald ...");
-        target.addNewLeafTo("menu3", "submenu3.2", "Monsieur Omard ...");
-        target.addNewLeafTo("menu3", "submenu3.3", "Mademoiselle Martine : 11 rue de ....");
-
-        target.addNewMenu("menu4", "14h - 15h30");
-        target.addNewLeafTo("menu4", "submenu4.1", "Madame Fitzgerald ...");
-        target.addNewLeafTo("menu4", "submenu4.2", "Monsieur Omard ...");
-        target.addNewLeafTo("menu4", "submenu4.3", "Mademoiselle Martine : 11 rue de ....");
-        target.calculateAvaiableSpace();
+//    	if (changement == true)
+//    	{
+	    	int iteratorPlage=1;
+			for(PlageHoraire plage: controleur.getTournee().getPlagesHoraires())
+		       {
+				
+				SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm");
+				System.out.println(timeFormat.format(plage.getHeureDebut()));
+				
+				SimpleDateFormat timeFormatFin = new SimpleDateFormat("H:mm");
+				System.out.println(timeFormatFin.format(plage.getHeureFin()));
+				
+				target.addNewMenu("menu1", timeFormat.format(plage.getHeureDebut()) + "-" + timeFormatFin.format(plage.getHeureFin()));
+		       	System.out.println ("______________________");
+		       	int iteratorLiv=1;
+		       	for(DemandeDeLivraison livraison: plage.getDemandeLivraison())
+			       {
+		       		System.out.println ("Id Client :" + livraison.getIdClient());
+		       		System.out.println ("Id :" + livraison.getId());
+		       		System.out.println ("X :" + livraison.getNoeud().getX());
+		       		System.out.println ("Y :" + livraison.getNoeud().getY());
+		       		System.out.println ("___");
+		       		target.addNewLeafTo("menu1", "submenu1."+String.valueOf(iteratorLiv), String.valueOf(livraison.getIdClient()));
+		       		iteratorLiv++;
+			       }
+		       	iteratorPlage++;
+		       }
+		
+			target.calculateAvaiableSpace();
+//    	}
+//    	else
+//    	{
+//    	  target.addNewMenu("menu1", "8h - 9h30");
+//          target.addNewLeafTo("menu1", "submenu1.1", "Madame Fitzgerald ...");
+//          target.addNewLeafTo("menu1", "submenu1.2", "Monsieur Omard ...");
+//          target.addNewLeafTo("menu1", "submenu1.3", "Mademoiselle Martine : 11 rue de ....");
+//  
+//          target.addNewMenu("menu2", "9h30 - 11h");
+//          target.addNewLeafTo("menu2", "submenu2.1", "Madame Fitzgerald ...");
+//          target.addNewLeafTo("menu2", "submenu2.2", "Monsieur Omard ...");
+//          target.addNewLeafTo("menu2", "submenu2.3", "Mademoiselle Martine : 11 rue de ....");
+//  
+//          target.addNewMenu("menu3", "11h - 12h30");
+//          target.addNewLeafTo("menu3", "submenu3.1", "Madame Fitzgerald ...");
+//          target.addNewLeafTo("menu3", "submenu3.2", "Monsieur Omard ...");
+//          target.addNewLeafTo("menu3", "submenu3.3", "Mademoiselle Martine : 11 rue de ....");
+//  
+//          target.addNewMenu("menu4", "14h - 15h30");
+//          target.addNewLeafTo("menu4", "submenu4.1", "Madame Fitzgerald ...");
+//          target.addNewLeafTo("menu4", "submenu4.2", "Monsieur Omard ...");
+//          target.addNewLeafTo("menu4", "submenu4.3", "Mademoiselle Martine : 11 rue de ....");
+//          target.calculateAvaiableSpace();
+//    	}
     }
 
     /**
