@@ -191,7 +191,7 @@ public class TourneeTest {
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
 		
 		c.getTournee().calculerTournee();
-		System.out.println(c.editerFeuilleRoute());
-		fail("TODO...");
+		assertEquals("0 : DDL-1 --> DDL1 (154.3846153846154min)\n\tDe 2 vers 1\n1 : DDL1 --> DDL2 (154.3846153846154min)\n\tDe 1 vers 3\n2 : DDL2 --> DDL3 (154.3846153846154min)\n\tDe 3 vers 2\n3 : DDL3 --> DDL-1 (0.0min)"
+				, c.editerFeuilleRoute());
 	}
 }

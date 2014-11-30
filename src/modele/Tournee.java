@@ -83,10 +83,10 @@ public class Tournee {
 		
 		for(int i = 0; i < this.itineraires.size(); ++i) {
 			itineraire = this.itineraires.get(i);
-			ret += i +  " : " + itineraire.getDepart() + " --> " + itineraire.getArrivee() + " ("+itineraire.getTemps()+"min)\n";
+			ret += i +  " : DDL" + itineraire.getDepart().getId() + " --> DDL" + itineraire.getArrivee().getId() + " ("+itineraire.getTemps()+"min)\n";
 			troncons = itineraire.getTronconsItineraire();
 			for(Troncon t : troncons) {
-				ret += "\tDe" + n.getId() + " vers " + t.getNoeudFin().getId();
+				ret += "\tDe " + n.getId() + " vers " + t.getNoeudFin().getId() + "\n";
 				n = t.getNoeudFin();
 			}
 		}
