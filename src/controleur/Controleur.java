@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 
@@ -95,21 +96,22 @@ public class Controleur {
 			}else if(typeFichier.equals("plan")){
 				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
+					fen.afficherPlan();
 				}
 			}
            
            switch (resultatConstruction) {
 			case Codes.ERREUR_301:
-				JOptionPane.showMessageDialog(null,"Noeud destination du tronçon n’existe pas ou vide!","Erreur 301",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Noeud destination du tronÃ§on n'existe pas ou vide!","Erreur 301",JOptionPane.ERROR_MESSAGE);
 				break;
 			case Codes.ERREUR_302:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d’un tronçon (vitesse, longueur..)!","Erreur 302",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un tronÃ§on (vitesse, longueur..)!","Erreur 302",JOptionPane.ERROR_MESSAGE);
 				break;
 			case Codes.ERREUR_303:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d’un noeud!","Erreur 303",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un noeud!","Erreur 303",JOptionPane.ERROR_MESSAGE);
 				break;
 			case Codes.ERREUR_304:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d’une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications dÂ’une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
 				break;
 			case Codes.ERREUR_305:
 				JOptionPane.showMessageDialog(null,"Noued correspondant a l'adresse de livraison specifié inexistant!","Erreur 305",JOptionPane.ERROR_MESSAGE);
