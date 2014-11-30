@@ -113,59 +113,59 @@ public class TourneeTest {
 			plage2 = new PlageHoraire("9h", "10h");
 		
 		
-		DemandeDeLivraison entrepot = new DemandeDeLivraison(noeud1);
-		DemandeDeLivraison demande1 = new DemandeDeLivraison(0, noeud2, 1, plage1);
-		DemandeDeLivraison demande2 = new DemandeDeLivraison(1, noeud3, 3, plage2);
-		
-		Set<DemandeDeLivraison> demandes1 = new TreeSet<DemandeDeLivraison>();
-		demandes1.add(demande1);
-		
-		Set<DemandeDeLivraison> demandes2 = new TreeSet<DemandeDeLivraison>();
-		demandes2.add(demande2);
-		
-		plage1.setDemandesDeLivraison(demandes1);
-		plage2.setDemandesDeLivraison(demandes2);
-		ArrayList<PlageHoraire> plages = new ArrayList<PlageHoraire>();
-		plages.add(plage1);
-		plages.add(plage2);
-
-		
-		tournee.setPlagesHoraires(plages);
-		tournee.setEntrepot(entrepot);
-		tournee.calculerTournee();
-		
-		ArrayList<Troncon> tr12 = new ArrayList<Troncon>();
-		tr12.add(troncon12);
-		Itineraire it12 = new Itineraire(entrepot, demande1, tr12);
-		
-		ArrayList<Troncon> tr23 = new ArrayList<Troncon>();
-		tr23.add(troncon23);
-		Itineraire it23 = new Itineraire(demande1, demande2, tr23);
-		
-		ArrayList<Troncon> tr31 = new ArrayList<Troncon>();
-		tr31.add(troncon31);
-		Itineraire it31 = new Itineraire(demande2, entrepot, tr31);
-		
-		ArrayList<Itineraire> itinerairesExpected = new ArrayList<Itineraire>();
-		itinerairesExpected.add(it12);
-		itinerairesExpected.add(it23);
-		itinerairesExpected.add(it31);
-
-		Controleur c = new Controleur();
-		c.gererFichier(new File("XML/testDijkstraExempleWiki.xml"), "plan");
-		c.gererFichier(new File("XML/testTourneeLivraisons.xml"), "horaires");
-		
-		plan = c.getPlan();
-		c.getTournee().setPlanTournee(plan);
-		
-		c.getTournee().calculerTournee();
-		tournee = c.getTournee();
-		
-		assertEquals("La tournée n'a pas la bonne taille",4,tournee.getItineraires().size());
-		assertEquals(20,tournee.getItineraires().get(0).getTemps(),0);
-		assertEquals(15,tournee.getItineraires().get(1).getTemps(),0);
-		assertEquals(20,tournee.getItineraires().get(2).getTemps(),0);
-		assertEquals(14,tournee.getItineraires().get(3).getTemps(),0);
+			DemandeDeLivraison entrepot = new DemandeDeLivraison(noeud1);
+			DemandeDeLivraison demande1 = new DemandeDeLivraison(0, noeud2, 1, plage1);
+			DemandeDeLivraison demande2 = new DemandeDeLivraison(1, noeud3, 3, plage2);
+			
+			Set<DemandeDeLivraison> demandes1 = new TreeSet<DemandeDeLivraison>();
+			demandes1.add(demande1);
+			
+			Set<DemandeDeLivraison> demandes2 = new TreeSet<DemandeDeLivraison>();
+			demandes2.add(demande2);
+			
+			plage1.setDemandesDeLivraison(demandes1);
+			plage2.setDemandesDeLivraison(demandes2);
+			ArrayList<PlageHoraire> plages = new ArrayList<PlageHoraire>();
+			plages.add(plage1);
+			plages.add(plage2);
+	
+			
+			tournee.setPlagesHoraires(plages);
+			tournee.setEntrepot(entrepot);
+			tournee.calculerTournee();
+			
+			ArrayList<Troncon> tr12 = new ArrayList<Troncon>();
+			tr12.add(troncon12);
+			Itineraire it12 = new Itineraire(entrepot, demande1, tr12);
+			
+			ArrayList<Troncon> tr23 = new ArrayList<Troncon>();
+			tr23.add(troncon23);
+			Itineraire it23 = new Itineraire(demande1, demande2, tr23);
+			
+			ArrayList<Troncon> tr31 = new ArrayList<Troncon>();
+			tr31.add(troncon31);
+			Itineraire it31 = new Itineraire(demande2, entrepot, tr31);
+			
+			ArrayList<Itineraire> itinerairesExpected = new ArrayList<Itineraire>();
+			itinerairesExpected.add(it12);
+			itinerairesExpected.add(it23);
+			itinerairesExpected.add(it31);
+	
+			Controleur c = new Controleur();
+			c.gererFichier(new File("XML/testDijkstraExempleWiki.xml"), "plan");
+			c.gererFichier(new File("XML/testTourneeLivraisons.xml"), "horaires");
+			
+			plan = c.getPlan();
+			c.getTournee().setPlanTournee(plan);
+			
+			c.getTournee().calculerTournee();
+			tournee = c.getTournee();
+			
+			assertEquals("La tournée n'a pas la bonne taille",4,tournee.getItineraires().size());
+			assertEquals(20,tournee.getItineraires().get(0).getTemps(),0);
+			assertEquals(15,tournee.getItineraires().get(1).getTemps(),0);
+			assertEquals(20,tournee.getItineraires().get(2).getTemps(),0);
+			assertEquals(14,tournee.getItineraires().get(3).getTemps(),0);
 		
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
