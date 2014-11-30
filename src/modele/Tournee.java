@@ -52,8 +52,23 @@ public class Tournee {
 	/**
 	 * @param livraison
 	 */
-	public void supprimerLivraison(DemandeDeLivraison livraison) {
-		// TODO implement here
+	public boolean supprimerLivraison(DemandeDeLivraison livraison) {
+		//TODO : tester
+		Iterator<Itineraire> it = this.itineraires.iterator();
+		Itineraire itineraire;
+		Itineraire avant = null;
+		while(it.hasNext()) {
+			itineraire = it.next();
+			if(itineraire.getDepart().compareTo(livraison) == 0) {
+				if(avant != null) {
+					avant.setArrivee(itineraire.getArrivee());
+				}
+				it.remove();
+				return true;
+			}
+			avant = itineraire;
+		}
+		return false;
 	}
 
 	/**
@@ -121,31 +136,43 @@ public class Tournee {
 	 */
 	public void ajouterLivraison(Noeud noeudPrecedent, Noeud noeudCourant,
 			int client) {
-		for(Itineraire iti : this.itineraires) {
-			// TODO: finish...
-		}
+		// TODO: faire quelque chose pour la plage horaire
+		// TODO: tester
+		int pos;
+		if((pos = effacerItineraire(noeudPrecedent)) == -1) return;
+		DemandeDeLivraison livraison = new DemandeDeLivraison(noeudCourant, client, null);
+		Dijkstra.calculerDijkstra(noeudPrecedent, noeudCourant, this.planTournee.getToutNoeuds());
+		List<Troncon> troncons = Dijkstra.chemin;
+		Itineraire it1 = new Itineraire(this.itineraires.get(pos-1).getArrivee(), 
+				livraison, troncons);
+		Dijkstra.calculerDijkstra(noeudCourant, 
+				this.itineraires.get(pos).getDepart().getNoeud(), 
+				this.planTournee.getToutNoeuds());
+		troncons = Dijkstra.chemin;
+		Itineraire it2 = new Itineraire(livraison,
+				this.itineraires.get(pos).getDepart(),
+				troncons);
+		this.itineraires.add(pos, it1);
+		this.itineraires.add(pos+1, it2);
 	}
 
 	/**
 	 * @param noeudPrecedent
 	 */
-	public boolean effacerItineraire(Noeud noeudPrecedent) {
-		//TODO : tester
+	public int effacerItineraire(Noeud noeudPrecedent) {
+		// TODO: tester
+		int cpt = 0;
 		Iterator<Itineraire> it = this.itineraires.iterator();
 		Itineraire itineraire;
-		Itineraire avant = null;
 		while(it.hasNext()) {
 			itineraire = it.next();
 			if(itineraire.getDepart().getNoeud().compareTo(noeudPrecedent) == 0) {
-				if(avant != null) {
-					avant.setArrivee(itineraire.getArrivee());
-				}
 				it.remove();
-				return true;
+				return cpt;
 			}
-			avant = itineraire;
+			cpt++;
 		}
-		return false;
+		return -1;
 	}
 
 	/**
