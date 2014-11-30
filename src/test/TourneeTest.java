@@ -109,13 +109,7 @@ public class TourneeTest {
 
 		c.getTournee().calculerTournee();
 		Tournee tournee = c.getTournee();
-		for(int i=0; i<tournee.getItineraires().size(); i++){
-			Itineraire it = tournee.getItineraires().get(i);
-			System.out.println(it.getDepart().getNoeud().getId());
-			System.out.println(it.getArrivee().getNoeud().getId());
-			System.out.println(it.getTemps());
-			
-		}
+
 		assertEquals("La tournée n'a pas la bonne taille",4,tournee.getItineraires().size());
 		assertEquals(25,tournee.getItineraires().get(0).getTemps(),0);
 		assertEquals(15,tournee.getItineraires().get(1).getTemps(),0);
