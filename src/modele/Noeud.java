@@ -121,30 +121,4 @@ public class Noeud implements Comparable<Noeud> {
 		return this.compareTo((Noeud)noeud) == 0;
 	}
 
-	/**
-	 * 
-	 * @param planElement
-	 * @return
-	 */
-	public int construireLivraisonsAPartirDeDOMXML(Element planElement) {
-		// TODO: gerer les erreurs de syntaxe dans le fichier XML !
-
-		// creation des Tronçons;
-		String tag = "Noeud";
-		NodeList liste = planElement.getElementsByTagName(tag);
-		sortants.clear();
-		for (int i = 0; i < liste.getLength(); i++) {
-			Element NoeudElement = (Element) liste.item(i);
-			String nomRue =NoeudElement.getAttribute("nomRue");
-			Double vitesse = Double.parseDouble(NoeudElement.getAttribute("vitesse"));
-			Double longueur = Double.parseDouble(NoeudElement.getAttribute("longueur"));
-			Troncon troncon=new Troncon(vitesse, longueur, nomRue);
-			//Noeud fin = new Noeud();
-			
-			// ajout des elements crees dans la structure objet
-			sortants.add(troncon);
-		}
-	
-		return Controleur.PARSE_OK;
-	}
 }

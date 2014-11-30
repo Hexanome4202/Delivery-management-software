@@ -118,15 +118,6 @@ public class Plan {
 		return Controleur.PARSE_OK;
 	}
 
-	// private void actualiserTroncons(){
-	//
-	// for(Noeud n:toutNoeuds){
-	// for(Troncon t : n.getTronconSortants()){
-	// t.setNoeudFin(recupererNoeud(idNoeud));
-	// }
-	// }
-	//
-	// }
 
 	/**
 	 * 
@@ -151,15 +142,24 @@ public class Plan {
 						.getAttribute("longueur").replace(",","."));
 				Integer idNoeudFin = Integer.parseInt(tronconElement
 						.getAttribute("idNoeudDestination"));
-				Troncon troncon = new Troncon(vitesse, longueur, nomRue,
-						recupererNoeud(idNoeudFin));
-				bool=setTroncons.add(troncon);
-				//TODO: afficher erreur si bool false
+				
+				if (vitesse>0 && longueur>0 && !nomRue.equals("") && nomRue!=null) {
+					Troncon troncon = new Troncon(vitesse, longueur, nomRue,
+							recupererNoeud(idNoeudFin));
+					bool = setTroncons.add(troncon);
+					//TODO: afficher erreur si bool false
+				}else {
+					return Controleur.PARSE_ERROR;
+				}
 
 			}
 			Noeud noeud = recupererNoeud(Integer.parseInt(noeudElement
 					.getAttribute("id")));
-			noeud.setSortants(setTroncons);
+			if (noeud!=null) {
+				noeud.setSortants(setTroncons);
+			}else {
+				return Controleur.PARSE_ERROR;
+			}
 		}
 
 		return Controleur.PARSE_OK;
