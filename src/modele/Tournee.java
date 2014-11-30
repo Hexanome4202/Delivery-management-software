@@ -264,17 +264,15 @@ public class Tournee {
 		if(tsp.getSolutionState() == SolutionState.SOLUTION_FOUND || tsp.getSolutionState() == SolutionState.OPTIMAL_SOLUTION_FOUND){
 			int[] solution = tsp.getNext();
 			itineraires = new ArrayList<Itineraire>();
+			int noeud = 0;
 			for(int i=0; i<solution.length; i++){
 				Iterator<Itineraire> itItineraire = toutItineraires.iterator();
 				while(itItineraire.hasNext()){
 					Itineraire iti = itItineraire.next();
-					int j = i-1;
-					if(i == 0){
-						 j = solution.length-1;
-					}
-					if(iti.getDepart() == dicoIndexDemande.get(solution[j]) 
-							&& iti.getArrivee() == dicoIndexDemande.get(solution[i])){
+					if(iti.getDepart() == dicoIndexDemande.get(noeud) 
+							&& iti.getArrivee() == dicoIndexDemande.get(solution[noeud])){
 						itineraires.add(iti);
+						noeud=solution[noeud];
 						break;
 					}
 				}
