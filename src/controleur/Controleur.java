@@ -157,6 +157,7 @@ public class Controleur {
 			return code;
 		}
 		this.tournee.setPlanTournee(this.plan);
+		this.tournee.getPlagesHoraires().clear();
 		return Codes.PARSE_OK;
 	}
 
