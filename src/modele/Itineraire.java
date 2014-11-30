@@ -75,4 +75,12 @@ public class Itineraire {
 	public List<Troncon> getTronconsItineraire() {
 		return this.tronconsItineraire;
 	}
+	
+	/**
+	 * 
+	 * @param arrivee la <code>DemandeDeLivraison</code> correspondant à la nouvelle arrivée de l'<code>Itineraire</code>
+	 */
+	public void setArrivee(DemandeDeLivraison arrivee) {
+		this.arrivee = arrivee;
+	}
 }

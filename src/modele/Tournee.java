@@ -130,14 +130,20 @@ public class Tournee {
 	 * @param noeudPrecedent
 	 */
 	public boolean effacerItineraire(Noeud noeudPrecedent) {
+		//TODO : tester
 		Iterator<Itineraire> it = this.itineraires.iterator();
 		Itineraire itineraire;
+		Itineraire avant = null;
 		while(it.hasNext()) {
 			itineraire = it.next();
 			if(itineraire.getDepart().getNoeud().compareTo(noeudPrecedent) == 0) {
+				if(avant != null) {
+					avant.setArrivee(itineraire.getArrivee());
+				}
 				it.remove();
 				return true;
 			}
+			avant = itineraire;
 		}
 		return false;
 	}

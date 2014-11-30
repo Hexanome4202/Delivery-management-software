@@ -48,6 +48,7 @@ public class ControleurTest {
 			assertEquals(1, n.getTronconSortants().size());
 			troncons = new ArrayList<Troncon>(n.getTronconSortants());
 			t = troncons.get(0);
+			assertNotNull(t.getNoeudFin());
 			if(n.getId() == 0) {
 				assertEquals("v0", t.getNomRue());
 				assertEquals(3.9, t.getVitesse(), 0.01);

@@ -44,26 +44,13 @@ public class Controleur {
     }
 
     /**
-     * @param fichierPlan
-     */
-    public void chargerPlanZone(String fichierPlan) {
-        // TODO implement here
-    }
-
-    /**
-     * @param fichierLivraisons
-     */
-    public void chargerLivraisons(String fichierLivraisons) {
-        //this.tournee.construireLivraisonsAPartirDeDOMXML(noeudDOMRacine);
-    }
-
-    /**
      * @param client 
      * @param noeud 
      * @param precedent
      */
 
     public void ajouterLivraison(int client, int noeud, DemandeDeLivraison precedent) {
+    	// TODO: Could be cool to write something here
     }
 
     /**
