@@ -81,6 +81,8 @@ public class Fenetre extends JFrame implements Observer {
     private static final double RAYON_NOEUD = 10;
     private static final int TOLERANCE = 10;
     
+    private Set<Integer> idNoeudsALivrer;
+    
     /**
      * Facteurs de mise à l'échelle pour l'affichage sur le plan
      */
@@ -545,16 +547,36 @@ public class Fenetre extends JFrame implements Observer {
 	 * et sélectionne le nouveau
 	 * @param nouvelleSelection
 	 */
-	private void changerPointSelectionne(Noeud nouvelleSelection){
-		
+	private void changerPointSelectionne(Noeud nouvelleSelection){		
+		//TODO Changer la couleur des demandes de livraison en fonction de leur plage horaire
 		if(pointSelectionne != null){
+			String styleEventuel = idNoeudsALivrer.contains(pointSelectionne.getId()) ? "fillColor=green;" : "";
 			Object[] cells = {points.get(pointSelectionne.getId())};
-			plan.setCellStyle("", cells);
+			plan.setCellStyle(""+styleEventuel, cells);
 		}
 		
+		String styleEventuel = idNoeudsALivrer.contains(nouvelleSelection.getId()) ? "fillColor=green;" : "";
 		pointSelectionne = nouvelleSelection;
 		Object[] cells = {points.get(pointSelectionne.getId())};
-		plan.setCellStyle("strokeColor=red;strokeWidth=3", cells);
+		plan.setCellStyle("strokeColor=red;strokeWidth=3;"+styleEventuel, cells);
+	}
+	
+	/**
+	 * Méthode permettant d'afficher d'une couleur différente les demandes de livraison sur le plan
+	 */
+	public void afficherDemandesLivraisonsSurPlan(){
+		idNoeudsALivrer = new HashSet<Integer>();
+		
+		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
+
+			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
+				int noeud = livraison.getNoeud().getId();
+				idNoeudsALivrer.add(noeud);
+				Object[] cells = {points.get(noeud)};
+				plan.setCellStyle("fillColor=green", cells);
+			}
+		}		
+		
 	}
 	
 

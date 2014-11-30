@@ -100,6 +100,7 @@ public class Controleur {
 					// TODO: display
 					System.out.println("fini");
 					fen.creerMenuHoraires();
+					fen.afficherDemandesLivraisonsSurPlan();
 				}
 				// todo : traiter les erreurs
 			}else if(typeFichier.equals("plan")){
