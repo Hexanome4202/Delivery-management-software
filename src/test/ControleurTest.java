@@ -93,7 +93,7 @@ public class ControleurTest {
 				assertEquals(3, n.getId());
 			} else if(demande.getId() == 3) {
 				assertEquals(611, demande.getIdClient());
-				assertEquals(1, n.getId());
+				assertEquals(2, n.getId());
 			} else {
 				fail("Cette demande ne devrait pas exister...");
 			}
