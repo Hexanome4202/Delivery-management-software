@@ -140,9 +140,8 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Coucou");
 				lireDepuisFichierXML("horaires");
-				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
-				createSampleMenuStructure(menuHoraires, true);
 			}
 			
 		});
@@ -194,7 +193,7 @@ public class Fenetre extends JFrame implements Observer {
 		horairesPannel = new javax.swing.JPanel();
 		
 		menuHoraires = new AccordionMenu();
-		createSampleMenuStructure(menuHoraires,true);
+		createSampleMenuStructure(true);
 		menuHoraires.setBackground(Color.white);
 		menuHoraires.setFont(new Font("Arial", Font.PLAIN, 16));
 		menuHoraires.setMenusSize(30);
@@ -362,11 +361,14 @@ public class Fenetre extends JFrame implements Observer {
      * menu structure is static. Use this method instead if you want to create structure dinamically.
      * @param target Target AccordionMenu to modify.
      */
-public void createSampleMenuStructure(AccordionMenu target, boolean changement) {
+public void createSampleMenuStructure(boolean changement) {
+		System.out.println("Tentative de création de menu");
+	
     	/// changer pour afficher les horaires !!!!!!
 
 //    	if (changement == true)
 //    	{
+			
 	    	int iteratorPlage=1;
 			for(PlageHoraire plage: controleur.getTournee().getPlagesHoraires())
 		       {
@@ -377,7 +379,7 @@ public void createSampleMenuStructure(AccordionMenu target, boolean changement) 
 				SimpleDateFormat timeFormatFin = new SimpleDateFormat("H:mm");
 				System.out.println(timeFormatFin.format(plage.getHeureFin()));
 				
-				target.addNewMenu("menu1", timeFormat.format(plage.getHeureDebut()) + "-" + timeFormatFin.format(plage.getHeureFin()));
+				menuHoraires.addNewMenu("menu"+iteratorPlage, timeFormat.format(plage.getHeureDebut()) + "-" + timeFormatFin.format(plage.getHeureFin()));
 		       	System.out.println ("______________________");
 		       	int iteratorLiv=1;
 		       	for(DemandeDeLivraison livraison: plage.getDemandeLivraison())
@@ -387,13 +389,14 @@ public void createSampleMenuStructure(AccordionMenu target, boolean changement) 
 		       		System.out.println ("X :" + livraison.getNoeud().getX());
 		       		System.out.println ("Y :" + livraison.getNoeud().getY());
 		       		System.out.println ("___");
-		       		target.addNewLeafTo("menu1", "submenu1."+String.valueOf(iteratorLiv), String.valueOf(livraison.getIdClient()));
+		       		menuHoraires.addNewLeafTo("menu"+iteratorPlage, "submenu1."+String.valueOf(iteratorLiv), String.valueOf(livraison.getIdClient()));
 		       		iteratorLiv++;
 			       }
 		       	iteratorPlage++;
 		       }
 		
-			target.calculateAvaiableSpace();
+			menuHoraires.calculateAvaiableSpace();
+			menuHoraires.repaint();
 //    	}
 //    	else
 //    	{
@@ -485,9 +488,7 @@ public void createSampleMenuStructure(AccordionMenu target, boolean changement) 
 	
 	//TODO Javadoc
 	public void afficherPlan(){
-		
-		System.out.println("Plan : "
-				+ planComponent.getSize());
+
 		
 		Set<Noeud> noeuds = controleur.getPlan().getToutNoeuds();
 		points= new HashMap<Integer, Object>();
@@ -497,19 +498,15 @@ public void createSampleMenuStructure(AccordionMenu target, boolean changement) 
 		plan.getModel().beginUpdate();
 		plan.removeCells(plan.getChildCells(parent));
 		
-		System.out.println("Réel : max "+ controleur.getPlan().getMaxX()+" ; " + controleur.getPlan().getMaxY());
-		
 		//facteur de mise à l'échelle
 		hY = (planComponent.getSize().getHeight()-20)/controleur.getPlan().getMaxY();
 		hX = (planComponent.getSize().getWidth()-20)/controleur.getPlan().getMaxX();
 		
 		//On commence par placer les points
 		while (it.hasNext()) {
-			//TODO : adapter les coordonnées à la taille de la fenêtre
 			Noeud noeudCourant = it.next();
 			double x = noeudCourant.getX();
 			double y = noeudCourant.getY();
-			System.out.println("Point " + noeudCourant.getId() +" : "+ x+ " ; "+ y+" ("+hX*x+" ; "+hY*y+")");
 			points.put(noeudCourant.getId(), plan.insertVertex(parent, "", "", hX*x, hY*y, RAYON_NOEUD, RAYON_NOEUD));
 		}
 		
@@ -532,6 +529,12 @@ public void createSampleMenuStructure(AccordionMenu target, boolean changement) 
 
 	}
 	
+	/**
+	 * Méthode renvoyant le noeud aux coordonnées passées en paramètre
+	 * @param x abscisse du point à tester
+	 * @param y ordonnée du point à tester
+	 * @return le noeud à ces coordonnées s'il existe
+	 */
 	private Noeud getNoeudA(int x, int y){
 		if(points == null)
 			return null;
