@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -74,6 +77,18 @@ public class Fenetre extends JFrame implements Observer {
     mxGraphComponent planComponent;
     
     private static final double RAYON_NOEUD = 10;
+    private static final int TOLERANCE = 10;
+    
+    /**
+     * Facteurs de mise à l'échelle pour l'affichage sur le plan
+     */
+    private double hY;
+    private double hX;
+    
+    /**
+     * La liste des points affichés sur le plan
+     */
+    private HashMap<Integer, Object> points;
     
     /**
      * 
@@ -241,26 +256,6 @@ public class Fenetre extends JFrame implements Observer {
 	
 		/*---------------------PLAN------------------------------*/
 		plan = new mxGraph();
-		Object parent = plan.getDefaultParent();
-		
-		plan.getModel().beginUpdate();
-		try{
-			Object v1 = plan.insertVertex(parent, "Ploup", "", 20, 20, 10,10);
-			Object v2 = plan.insertVertex(parent, null, "", 200, 150,10, 10);
-			Object v3 = plan.insertVertex(parent, null, "", 200, 20,10,10);
-			Object e1 = plan
-					.insertEdge(
-							parent,
-							null,
-							"",
-							v1,
-							v2);
-			Object e2 = plan.insertEdge(parent, null, "", v3, v2);
-		}finally
-		{
-			plan.getModel().endUpdate();
-		}
-		
 		planComponent = new mxGraphComponent(plan);	
 
 		plan.setAllowDanglingEdges(false);
@@ -270,6 +265,20 @@ public class Fenetre extends JFrame implements Observer {
 		plan.setCellsResizable(false);
 		plan.setCellsEditable(false);
 		planComponent.setConnectable(false);
+		
+		planComponent.getGraphControl().addMouseListener(new MouseAdapter()
+		{
+		
+			public void mouseReleased(MouseEvent e)
+			{
+				Noeud n = getNoeudA(e.getX(), e.getY());
+				if(n != null){
+					System.out.println(n.getId());
+				}else{
+					System.out.println("Pas trouvé");
+				}
+			}
+		});
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		
@@ -481,7 +490,7 @@ public void createSampleMenuStructure(AccordionMenu target, boolean changement) 
 				+ planComponent.getSize());
 		
 		Set<Noeud> noeuds = controleur.getPlan().getToutNoeuds();
-		HashMap<Integer, Object> points= new HashMap<Integer, Object>();
+		points= new HashMap<Integer, Object>();
 		Iterator<Noeud> it = noeuds.iterator();
 		
 		Object parent = plan.getDefaultParent();
@@ -491,8 +500,8 @@ public void createSampleMenuStructure(AccordionMenu target, boolean changement) 
 		System.out.println("Réel : max "+ controleur.getPlan().getMaxX()+" ; " + controleur.getPlan().getMaxY());
 		
 		//facteur de mise à l'échelle
-		double hY = (planComponent.getSize().getHeight()-20)/controleur.getPlan().getMaxY();
-		double hX = (planComponent.getSize().getWidth()-20)/controleur.getPlan().getMaxX();
+		hY = (planComponent.getSize().getHeight()-20)/controleur.getPlan().getMaxY();
+		hX = (planComponent.getSize().getWidth()-20)/controleur.getPlan().getMaxX();
 		
 		//On commence par placer les points
 		while (it.hasNext()) {
@@ -521,29 +530,24 @@ public void createSampleMenuStructure(AccordionMenu target, boolean changement) 
 		plan.getModel().endUpdate();
 		
 
+	}
+	
+	private Noeud getNoeudA(int x, int y){
+		if(points == null)
+			return null;
+		else{
+			Iterator<Noeud> it = controleur.getPlan().getToutNoeuds().iterator();
+			while(it.hasNext()){
+				Noeud n = it.next();
+				double nX = n.getX()*hX;
+				double nY = n.getY()*hY;
+				if( (x > nX-TOLERANCE && x < nX+TOLERANCE) && (y > nY-TOLERANCE && y < nY+TOLERANCE)){
+					return n;
+				}
+			}
+		}
+		return null;
 		
-		/*plan.getModel().beginUpdate();
-		try{
-			Object v1 = plan.insertVertex(parent, null, "", 20, 20, 10,10);
-			Object v2 = plan.insertVertex(parent, null, "", 200, 150,10, 10);
-			Object v3 = plan.insertVertex(parent, null, "", 200, 20,10,10);
-			Object e1 = plan
-					.insertEdge(
-							parent,
-							null,
-							"",
-							v1,
-							v2,
-							"edgeStyle=elbowEdgeStyle;elbow=horizontal;"
-									+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;");
-			Object e2 = plan.insertEdge(parent, null, "", v3, v2,
-					"edgeStyle=elbowEdgeStyle;elbow=horizontal;orthogonal=0;"
-							+ "entryX=0;entryY=0;entryPerimeter=1;");
-		}finally
-		{
-			plan.getModel().endUpdate();
-		}*/
-
 	}
 
 	
