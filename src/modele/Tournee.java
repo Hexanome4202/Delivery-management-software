@@ -1,11 +1,13 @@
 ﻿package modele;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -270,15 +272,19 @@ public class Tournee {
 
 		NodeList liste = noeudDOMRacine.getElementsByTagName("Entrepot");
 		if (liste.getLength() != 1) {
-			return Controleur.PARSE_ERROR;
+			return Controleur.ERREUR_306;
 		}
 		Element adresseElement = (Element) liste.item(0);
 		int idAdresseEntrepot = Integer.parseInt(adresseElement
 				.getAttribute("adresse"));
 
 		Noeud noeudEntrepot = recupererNoeud(idAdresseEntrepot);
-
-		this.entrepot = new DemandeDeLivraison(noeudEntrepot);
+		
+		if(noeudEntrepot!=null){
+			this.entrepot = new DemandeDeLivraison(noeudEntrepot);
+		}else{
+			return Controleur.ERREUR_306;
+		}
 
 		// creation des Plages;
 		String tag = "Plage";
@@ -286,15 +292,22 @@ public class Tournee {
 		plagesHoraires.clear();
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element plageElement = (Element) liste.item(i);
-			PlageHoraire nouvellePlage = new PlageHoraire(
-					plageElement.getAttribute("heureDebut"),
-					plageElement.getAttribute("heureFin"));
-			if (nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee) != Controleur.PARSE_OK) {
-				System.out.println("error");
-				return Controleur.PARSE_ERROR;
+			PlageHoraire nouvellePlage;
+			try {
+				nouvellePlage = new PlageHoraire(
+						plageElement.getAttribute("heureDebut"),
+						plageElement.getAttribute("heureFin"));
+				int code=nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee);
+				if (code != Controleur.PARSE_OK) {
+					System.out.println("error");
+					return code;
+				}
+				// ajout des elements crees dans la structure objet
+				plagesHoraires.add(nouvellePlage);
+			} catch (ParseException e) {
+				return Controleur.ERREUR_304;
 			}
-			// ajout des elements crees dans la structure objet
-			plagesHoraires.add(nouvellePlage);
+			
 		}
 		return Controleur.PARSE_OK;
 	}

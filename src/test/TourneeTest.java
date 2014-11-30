@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Set;
@@ -105,8 +106,12 @@ public class TourneeTest {
 		Tournee tournee = new Tournee();
 		tournee.setPlanTournee(plan);
 		
-		PlageHoraire plage1 = new PlageHoraire("8h", "9h");
-		PlageHoraire plage2 = new PlageHoraire("9h", "10h");
+		PlageHoraire plage1;
+		PlageHoraire plage2;
+		try {
+			plage1 = new PlageHoraire("8h", "9h");
+			plage2 = new PlageHoraire("9h", "10h");
+		
 		
 		DemandeDeLivraison entrepot = new DemandeDeLivraison(noeud1);
 		DemandeDeLivraison demande1 = new DemandeDeLivraison(0, noeud2, 1, plage1);
@@ -123,6 +128,7 @@ public class TourneeTest {
 		ArrayList<PlageHoraire> plages = new ArrayList<PlageHoraire>();
 		plages.add(plage1);
 		plages.add(plage2);
+
 		
 		tournee.setPlagesHoraires(plages);
 		tournee.setEntrepot(entrepot);
@@ -155,6 +161,11 @@ public class TourneeTest {
 			assertEquals("Mauvaise arrivée",expected.getArrivee(),resultat.getArrivee());
 			assertEquals("Mauvais départ", expected.getArrivee(),resultat.getArrivee());
 			assertEquals("Mauvais temps total", expected.getTemps(), resultat.getTemps(), 0);
+		}
+		
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
