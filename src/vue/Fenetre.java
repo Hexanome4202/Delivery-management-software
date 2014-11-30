@@ -67,8 +67,7 @@ public class Fenetre extends JFrame implements Observer {
      * 
      */
     public Fenetre(Controleur c) {
-    	
-    	controleur = c;
+    	this.controleur = c;
     	
     	setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
