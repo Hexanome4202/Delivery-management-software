@@ -163,7 +163,7 @@ public class Plan {
 					bool = setTroncons.add(troncon);
 					//TODO: afficher erreur si bool false
 				}else {
-					return Codes.PARSE_ERROR;
+					return Codes.ERREUR_302;
 				}
 
 			}
@@ -172,7 +172,7 @@ public class Plan {
 			if (noeud!=null) {
 				noeud.setSortants(setTroncons);
 			}else {
-				return Codes.PARSE_ERROR;
+				return Codes.ERREUR_303;
 			}
 		}
 

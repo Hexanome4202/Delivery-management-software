@@ -162,7 +162,11 @@ public class Controleur {
 	 * @return
 	 */
 	public int construirePlanAPartirDeDOMXML(Element racineXML) {
-		plan = new Plan(racineXML);
+		plan = new Plan();
+		int code=plan.construireLivraisonsAPartirDeDOMXML(racineXML);
+		if(code!=Codes.PARSE_OK){
+			return code;
+		}
 		// vueTournee.dessiner();
 		this.tournee.setPlanTournee(this.plan);
 		return Codes.PARSE_OK;
