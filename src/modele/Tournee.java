@@ -236,7 +236,7 @@ public class Tournee {
 		tsp.solve(200000,graphe.getNbVertices()*graphe.getMaxArcCost()+1);
 		if(tsp.getSolutionState() == SolutionState.SOLUTION_FOUND || tsp.getSolutionState() == SolutionState.OPTIMAL_SOLUTION_FOUND){
 			int[] solution = tsp.getNext();
-			
+			itineraires = new ArrayList<Itineraire>();
 			for(int i=0; i<solution.length; i++){
 				Iterator<Itineraire> itItineraire = toutItineraires.iterator();
 				while(itItineraire.hasNext()){
