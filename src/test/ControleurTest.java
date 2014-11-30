@@ -67,7 +67,7 @@ public class ControleurTest {
 		// TODO: test heures de la plage horaire
 		// TODO: Créer le fichier de plan
 		Controleur c = new Controleur();
-		c.gererFichier(new File("XML/testPlan2.xml"), "plan");
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
 		
 		assertNotNull("tournee null", c.getTournee());
