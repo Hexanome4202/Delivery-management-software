@@ -26,14 +26,32 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
      */
     private PlageHoraire plageHoraire;
     
+    private static int maxId = 0;
+    
     /**
-     * @param noeud 
+     * 
+     * @param id
+     * @param noeud
      * @param client
+     * @param plage
      */
     public DemandeDeLivraison(int id, Noeud noeud, int client, PlageHoraire plage) {
         this.adresseLivraison = noeud;
         this.idClient = client;
         this.id = id;
+        if(id > DemandeDeLivraison.maxId) DemandeDeLivraison.maxId = id;
+        this.plageHoraire = plage;
+    }
+     /**
+      * 
+      * @param noeud
+      * @param client
+      * @param plage
+      */
+    public DemandeDeLivraison(Noeud noeud, int client, PlageHoraire plage) {
+        this.adresseLivraison = noeud;
+        this.idClient = client;
+        this.id = DemandeDeLivraison.maxId++;
         this.plageHoraire = plage;
     }
     

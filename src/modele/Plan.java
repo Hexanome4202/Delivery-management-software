@@ -1,11 +1,15 @@
 package modele;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import controleur.Controleur;
+import errors.Codes;
 
 /**
  * 
@@ -117,7 +121,7 @@ public class Plan {
 		
 		remplirTousTroncons();
 
-		return Controleur.PARSE_OK;
+		return Codes.PARSE_OK;
 	}
 
 
@@ -159,7 +163,7 @@ public class Plan {
 					bool = setTroncons.add(troncon);
 					//TODO: afficher erreur si bool false
 				}else {
-					return Controleur.PARSE_ERROR;
+					return Codes.PARSE_ERROR;
 				}
 
 			}
@@ -168,11 +172,11 @@ public class Plan {
 			if (noeud!=null) {
 				noeud.setSortants(setTroncons);
 			}else {
-				return Controleur.PARSE_ERROR;
+				return Codes.PARSE_ERROR;
 			}
 		}
 
-		return Controleur.PARSE_OK;
+		return Codes.PARSE_OK;
 	}
 
 }

@@ -1,11 +1,13 @@
 ﻿package modele;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -13,6 +15,7 @@ import org.w3c.dom.NodeList;
 import tsp.SolutionState;
 import tsp.TSP;
 import controleur.Controleur;
+import errors.Codes;
 
 /**
  * 
@@ -52,8 +55,23 @@ public class Tournee {
 	/**
 	 * @param livraison
 	 */
-	public void supprimerLivraison(DemandeDeLivraison livraison) {
-		// TODO implement here
+	public boolean supprimerLivraison(DemandeDeLivraison livraison) {
+		//TODO : tester
+		Iterator<Itineraire> it = this.itineraires.iterator();
+		Itineraire itineraire;
+		Itineraire avant = null;
+		while(it.hasNext()) {
+			itineraire = it.next();
+			if(itineraire.getDepart().compareTo(livraison) == 0) {
+				if(avant != null) {
+					avant.setArrivee(itineraire.getArrivee());
+				}
+				it.remove();
+				return true;
+			}
+			avant = itineraire;
+		}
+		return false;
 	}
 
 	/**
@@ -68,10 +86,10 @@ public class Tournee {
 		
 		for(int i = 0; i < this.itineraires.size(); ++i) {
 			itineraire = this.itineraires.get(i);
-			ret += i +  " : " + itineraire.getDepart() + " --> " + itineraire.getArrivee() + " ("+itineraire.getTemps()+"min)\n";
+			ret += i +  " : DDL" + itineraire.getDepart().getId() + " --> DDL" + itineraire.getArrivee().getId() + " ("+itineraire.getTemps()+"min)\n";
 			troncons = itineraire.getTronconsItineraire();
 			for(Troncon t : troncons) {
-				ret += "\tDe" + n.getId() + " vers " + t.getNoeudFin().getId();
+				ret += "\tDe " + n.getId() + " vers " + t.getNoeudFin().getId() + "\n";
 				n = t.getNoeudFin();
 			}
 		}
@@ -121,31 +139,43 @@ public class Tournee {
 	 */
 	public void ajouterLivraison(Noeud noeudPrecedent, Noeud noeudCourant,
 			int client) {
-		for(Itineraire iti : this.itineraires) {
-			// TODO: finish...
-		}
+		// TODO: faire quelque chose pour la plage horaire
+		// TODO: tester
+		int pos;
+		if((pos = effacerItineraire(noeudPrecedent)) == -1) return;
+		DemandeDeLivraison livraison = new DemandeDeLivraison(noeudCourant, client, null);
+		Dijkstra.calculerDijkstra(noeudPrecedent, noeudCourant, this.planTournee.getToutNoeuds());
+		List<Troncon> troncons = Dijkstra.chemin;
+		Itineraire it1 = new Itineraire(this.itineraires.get(pos-1).getArrivee(), 
+				livraison, troncons);
+		Dijkstra.calculerDijkstra(noeudCourant, 
+				this.itineraires.get(pos).getDepart().getNoeud(), 
+				this.planTournee.getToutNoeuds());
+		troncons = Dijkstra.chemin;
+		Itineraire it2 = new Itineraire(livraison,
+				this.itineraires.get(pos).getDepart(),
+				troncons);
+		this.itineraires.add(pos, it1);
+		this.itineraires.add(pos+1, it2);
 	}
 
 	/**
 	 * @param noeudPrecedent
 	 */
-	public boolean effacerItineraire(Noeud noeudPrecedent) {
-		//TODO : tester
+	public int effacerItineraire(Noeud noeudPrecedent) {
+		// TODO: tester
+		int cpt = 0;
 		Iterator<Itineraire> it = this.itineraires.iterator();
 		Itineraire itineraire;
-		Itineraire avant = null;
 		while(it.hasNext()) {
 			itineraire = it.next();
 			if(itineraire.getDepart().getNoeud().compareTo(noeudPrecedent) == 0) {
-				if(avant != null) {
-					avant.setArrivee(itineraire.getArrivee());
-				}
 				it.remove();
-				return true;
+				return cpt;
 			}
-			avant = itineraire;
+			cpt++;
 		}
-		return false;
+		return -1;
 	}
 
 	/**
@@ -237,17 +267,15 @@ public class Tournee {
 		if(tsp.getSolutionState() == SolutionState.SOLUTION_FOUND || tsp.getSolutionState() == SolutionState.OPTIMAL_SOLUTION_FOUND){
 			int[] solution = tsp.getNext();
 			itineraires = new ArrayList<Itineraire>();
+			int noeud = 0;
 			for(int i=0; i<solution.length; i++){
 				Iterator<Itineraire> itItineraire = toutItineraires.iterator();
 				while(itItineraire.hasNext()){
 					Itineraire iti = itItineraire.next();
-					int j = i-1;
-					if(i == 0){
-						 j = solution.length-1;
-					}
-					if(iti.getDepart() == dicoIndexDemande.get(solution[j]) 
-							&& iti.getArrivee() == dicoIndexDemande.get(solution[i])){
+					if(iti.getDepart() == dicoIndexDemande.get(noeud) 
+							&& iti.getArrivee() == dicoIndexDemande.get(solution[noeud])){
 						itineraires.add(iti);
+						noeud=solution[noeud];
 						break;
 					}
 				}
@@ -270,15 +298,19 @@ public class Tournee {
 
 		NodeList liste = noeudDOMRacine.getElementsByTagName("Entrepot");
 		if (liste.getLength() != 1) {
-			return Controleur.PARSE_ERROR;
+			return Codes.ERREUR_306;
 		}
 		Element adresseElement = (Element) liste.item(0);
 		int idAdresseEntrepot = Integer.parseInt(adresseElement
 				.getAttribute("adresse"));
 
 		Noeud noeudEntrepot = recupererNoeud(idAdresseEntrepot);
-
-		this.entrepot = new DemandeDeLivraison(noeudEntrepot);
+		
+		if(noeudEntrepot!=null){
+			this.entrepot = new DemandeDeLivraison(noeudEntrepot);
+		}else{
+			return Codes.ERREUR_306;
+		}
 
 		// creation des Plages;
 		String tag = "Plage";
@@ -286,17 +318,22 @@ public class Tournee {
 		plagesHoraires.clear();
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element plageElement = (Element) liste.item(i);
-			PlageHoraire nouvellePlage = new PlageHoraire(
-					plageElement.getAttribute("heureDebut"),
-					plageElement.getAttribute("heureFin"));
-			if (nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee) != Controleur.PARSE_OK) {
-				System.out.println("error");
-				return Controleur.PARSE_ERROR;
+			PlageHoraire nouvellePlage;
+			try {
+				nouvellePlage = new PlageHoraire(
+						plageElement.getAttribute("heureDebut"),
+						plageElement.getAttribute("heureFin"));
+				int code=nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee);
+				if (code != Codes.PARSE_OK) {
+					return code;
+				}
+				plagesHoraires.add(nouvellePlage);
+			} catch (ParseException e) {
+				return Codes.ERREUR_304;
 			}
-			// ajout des elements crees dans la structure objet
-			plagesHoraires.add(nouvellePlage);
+			
 		}
-		return Controleur.PARSE_OK;
+		return Codes.PARSE_OK;
 	}
 
 	/**

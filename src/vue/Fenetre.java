@@ -76,7 +76,6 @@ public class Fenetre extends JFrame implements Observer {
      */
     public Fenetre(Controleur c) {
     	this.controleur = c;
-    	this.controleur.setFen(this);
     	
     	setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -431,18 +430,7 @@ public class Fenetre extends JFrame implements Observer {
 		
 	}
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Fenetre frame = new Fenetre(new Controleur());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 	
 	//TODO Javadoc
 	public void afficherPlan(){

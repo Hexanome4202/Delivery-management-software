@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import controleur.Controleur;
+import errors.Codes;
 
 /**
  * 
@@ -20,60 +21,64 @@ import controleur.Controleur;
 public class PlageHoraire {
 
 	/**
-     * Heure de début de la <code>PlageHoraire</code>
-     */
+	 * Heure de début de la <code>PlageHoraire</code>
+	 */
 	private Date heureDebut;
 
 	/**
-     * Heure de fin de la <code>PlageHoraire</code>
-     */
+	 * Heure de fin de la <code>PlageHoraire</code>
+	 */
 	private Date heureFin;
 
 	/**
-     * Les <code>DemandeDeLivraison</code> de la <code>PlageHoraire</code>
-     */
+	 * Les <code>DemandeDeLivraison</code> de la <code>PlageHoraire</code>
+	 */
 	private Set<DemandeDeLivraison> demandesLivraisonPlage;
-	
+
 	/**
 	 * Constructeur de la classe <code>PlageHoraire</code>
+	 * 
 	 * @param heureDebut
 	 * @param heureFin
+	 * @throws ParseException 
 	 */
-	public PlageHoraire(String heureDebut, String heureFin) {
-		try {
-			this.heureDebut = new SimpleDateFormat("H:m:s", Locale.ENGLISH).parse(heureDebut);
-			this.heureFin = new SimpleDateFormat("H:m:s", Locale.ENGLISH).parse(heureFin);
-		} catch (ParseException e) {
-			// TODO: do something clever...
-			this.heureDebut = new Date();
-			this.heureFin = new Date();
-		}
-		
+	public PlageHoraire(String heureDebut, String heureFin) throws ParseException {
+		this.heureDebut = new SimpleDateFormat("H:m:s", Locale.ENGLISH)
+				.parse(heureDebut);
+		this.heureFin = new SimpleDateFormat("H:m:s", Locale.ENGLISH)
+				.parse(heureFin);
+
 		this.demandesLivraisonPlage = new HashSet<DemandeDeLivraison>();
 	}
-	
+
 	/**
 	 * Constructeur de la classe <code>PlageHoraire</code>
+	 * 
 	 * @param heureDebut
 	 * @param heureFin
+	 * @throws ParseException 
 	 */
-	public PlageHoraire(String heureDebut, String heureFin, Set<DemandeDeLivraison> demandes) {
+	public PlageHoraire(String heureDebut, String heureFin,
+			Set<DemandeDeLivraison> demandes) throws ParseException {
 		this(heureDebut, heureFin);
 		this.demandesLivraisonPlage = demandes;
 	}
-	
+
 	/**
 	 * 
-	 * @param id Id du noeud que l'on souhaite trouver.
-	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>, null sinon
+	 * @param id
+	 *            Id du noeud que l'on souhaite trouver.
+	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>,
+	 *         null sinon
 	 */
-	public Noeud recupererNoeud(Integer id){
+	public Noeud recupererNoeud(Integer id) {
 		Noeud noeud = null;
 		DemandeDeLivraison demande = null;
-		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
-		while(it.hasNext()) {
+		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage
+				.iterator();
+		while (it.hasNext()) {
 			demande = it.next();
-			if(demande.getNoeud() != null && demande.getNoeud().getId() == id) {
+			if (demande.getNoeud() != null && demande.getNoeud().getId() == id) {
 				noeud = demande.getNoeud();
 				break;
 			}
@@ -82,14 +87,16 @@ public class PlageHoraire {
 	}
 
 	/**
-	 * Cette classe est responsable pour charger les livraisons d'une plage horaire à partir
-	 * d'un Element plageElement, aprés elle additionne la nouvelle demande de livraison à la liste
-	 * demandesLivraisonPlage
+	 * Cette classe est responsable pour charger les livraisons d'une plage
+	 * horaire à partir d'un Element plageElement, aprés elle additionne la
+	 * nouvelle demande de livraison à la liste demandesLivraisonPlage
+	 * 
 	 * @param plageElement
-	 * @param planTournee 
+	 * @param planTournee
 	 * @return
 	 */
-	public int construireLivraisonsAPartirDeDOMXML(Element plageElement, Plan planTournee) {
+	public int construireLivraisonsAPartirDeDOMXML(Element plageElement,
+			Plan planTournee) {
 		// todo : gerer les erreurs de syntaxe dans le fichier XML !
 
 		// creation des Demandes Livraison;
@@ -99,38 +106,43 @@ public class PlageHoraire {
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element livraisonElement = (Element) liste.item(i);
 			Integer id = Integer.parseInt(livraisonElement.getAttribute("id"));
-			Integer adresse = Integer.parseInt(livraisonElement.getAttribute("adresse"));
-			Integer idClient = Integer.parseInt(livraisonElement.getAttribute("client"));
+			Integer adresse = Integer.parseInt(livraisonElement
+					.getAttribute("adresse"));
+			Integer idClient = Integer.parseInt(livraisonElement
+					.getAttribute("client"));
 			Noeud noeud = planTournee.recupererNoeud(adresse);
 
-			if (noeud!=null) {
-				DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id, noeud, idClient, this);
+			if (noeud != null) {
+				DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,
+						noeud, idClient, this);
 				demandesLivraisonPlage.add(nouvelleDemande);
-			}else{
+			} else {
 				demandesLivraisonPlage.clear();
-				return Controleur.PARSE_ERROR;
+				return Codes.ERREUR_305;
 			}
-			
+
 			// ajout des elements crees dans la structure objet
 		}
 
-		return Controleur.PARSE_OK;
+		return Codes.PARSE_OK;
 	}
 
 	/**
-	 * @return les noeuds correspondants aux demandes de livraisons de la plage horaire
+	 * @return les noeuds correspondants aux demandes de livraisons de la plage
+	 *         horaire
 	 */
 	public ArrayList<Noeud> getNoeuds() {
 		ArrayList<Noeud> noeuds = new ArrayList<Noeud>();
 		DemandeDeLivraison demande = null;
-		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage.iterator();
-		while(it.hasNext()) {
+		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage
+				.iterator();
+		while (it.hasNext()) {
 			demande = it.next();
 			noeuds.add(demande.getNoeud());
 		}
 		return noeuds;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -138,12 +150,12 @@ public class PlageHoraire {
 	public Set<DemandeDeLivraison> getDemandeLivraison() {
 		return demandesLivraisonPlage;
 	}
-	
+
 	/**
 	 * 
 	 * @param demandes
 	 */
-	public void setDemandesDeLivraison(Set<DemandeDeLivraison> demandes){
+	public void setDemandesDeLivraison(Set<DemandeDeLivraison> demandes) {
 		this.demandesLivraisonPlage = demandes;
 	}
 
@@ -154,9 +166,10 @@ public class PlageHoraire {
 	public Date getHeureDebut() {
 		return this.heureDebut;
 	}
-	
+
 	/**
 	 * l'heure de fin de la <code>PlageHoraire</code>
+	 * 
 	 * @return
 	 */
 	public Date getHeureFin() {
