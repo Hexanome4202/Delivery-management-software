@@ -68,6 +68,7 @@ public class Fenetre extends JFrame implements Observer {
     private AccordionMenu menuHoraires;
     private javax.swing.JPanel horairesPannel;
     private mxGraph plan;
+    mxGraphComponent planComponent;
     
     private static final double RAYON_NOEUD = 10;
     
@@ -256,7 +257,8 @@ public class Fenetre extends JFrame implements Observer {
 			plan.getModel().endUpdate();
 		}
 		
-		mxGraphComponent planComponent = new mxGraphComponent(plan);	
+		planComponent = new mxGraphComponent(plan);	
+
 		plan.setAllowDanglingEdges(false);
 		plan.setCellsBendable(false);
 		plan.setCellsDisconnectable(false);
@@ -335,6 +337,7 @@ public class Fenetre extends JFrame implements Observer {
 		getContentPane().setLayout(groupLayout);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds (0, 0,screenSize.width,screenSize.height);
+
 	}
 	
 	
@@ -434,7 +437,10 @@ public class Fenetre extends JFrame implements Observer {
 	
 	//TODO Javadoc
 	public void afficherPlan(){
-		System.out.println("ça marche");
+		
+		System.out.println("Plan : "
+				+ planComponent.getSize());
+		
 		Set<Noeud> noeuds = controleur.getPlan().getToutNoeuds();
 		HashMap<Integer, Object> points= new HashMap<Integer, Object>();
 		Iterator<Noeud> it = noeuds.iterator();
@@ -443,14 +449,20 @@ public class Fenetre extends JFrame implements Observer {
 		plan.getModel().beginUpdate();
 		plan.removeCells(plan.getChildCells(parent));
 		
+		System.out.println("Réel : max "+ controleur.getPlan().getMaxX()+" ; " + controleur.getPlan().getMaxY());
+		
+		//facteur de mise à l'échelle
+		double hY = (planComponent.getSize().getHeight()-20)/controleur.getPlan().getMaxY();
+		double hX = (planComponent.getSize().getWidth()-20)/controleur.getPlan().getMaxX();
+		
 		//On commence par placer les points
 		while (it.hasNext()) {
 			//TODO : adapter les coordonnées à la taille de la fenêtre
 			Noeud noeudCourant = it.next();
 			double x = noeudCourant.getX();
 			double y = noeudCourant.getY();
-			System.out.println("Point " + noeudCourant.getId() +" : "+x+" ; "+y);
-			points.put(noeudCourant.getId(), plan.insertVertex(parent, "", "", x, y, RAYON_NOEUD, RAYON_NOEUD));
+			System.out.println("Point " + noeudCourant.getId() +" : "+ x+ " ; "+ y+" ("+hX*x+" ; "+hY*y+")");
+			points.put(noeudCourant.getId(), plan.insertVertex(parent, "", "", hX*x, hY*y, RAYON_NOEUD, RAYON_NOEUD));
 		}
 		
 		//Puis on trace les tronçons

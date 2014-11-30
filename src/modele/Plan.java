@@ -27,6 +27,16 @@ public class Plan {
 	private Set<Noeud> toutNoeuds;
 	
 	/**
+	 * L'abscisse maximale atteinte par un point du plan chargé
+	 */
+	private int maxX;
+	
+	/**
+	 * L'ordonnée maximale atteinte par un point du plan chargé
+	 */
+	private int maxY;
+	
+	/**
 	 * Constructeur vide de <code>Plan</code>.
 	 */
 	public Plan() {
@@ -106,10 +116,15 @@ public class Plan {
 		List<Element> listeElements = new ArrayList<Element>();
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element planElement = (Element) liste.item(i);
-			Noeud nouveauNoeud = new Noeud(Integer.parseInt(planElement
-					.getAttribute("id")), Integer.parseInt(planElement
-					.getAttribute("x")), Integer.parseInt(planElement
-					.getAttribute("y")));
+			
+			int x = Integer.parseInt(planElement.getAttribute("x"));
+			int y = Integer.parseInt(planElement.getAttribute("y"));
+			Noeud nouveauNoeud = new Noeud(
+					Integer.parseInt(planElement.getAttribute("id")), 
+					x, y);
+			
+			majCoordonneesMax(x, y);
+			
 			// ajout des elements crees dans la structure objet
 			toutNoeuds.add(nouveauNoeud);
 			listeElements.add(planElement);
@@ -122,6 +137,21 @@ public class Plan {
 		remplirTousTroncons();
 
 		return Codes.PARSE_OK;
+	}
+	
+	/**
+	 * Méthode mettant à jour les coordonnées maximales si celles
+	 *  passées en paramètres sont plus grandes que les actuelles.
+	 * @param x abcisse du noeud candidat
+	 * @param y ordonnée du noeud candidat
+	 */
+	private void majCoordonneesMax(int x, int y){
+		if(x > maxX) {
+			maxX = x;
+		}
+		if(y > maxY){
+			maxY = y;
+		}
 	}
 
 
@@ -178,5 +208,15 @@ public class Plan {
 
 		return Codes.PARSE_OK;
 	}
+
+	public int getMaxX() {
+		return maxX;
+	}
+
+	public int getMaxY() {
+		return maxY;
+	}
+	
+	
 
 }
