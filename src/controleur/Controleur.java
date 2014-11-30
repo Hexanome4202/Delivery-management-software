@@ -91,6 +91,9 @@ public class Controleur {
            if (typeFichier.equals("horaires")) {
 				if (racine.getNodeName().equals("JourneeType")) {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
+					this.tournee.calculerTournee();
+					// TODO: display
+					System.out.println("fini");
 				}
 				// todo : traiter les erreurs
 			}else if(typeFichier.equals("plan")){
@@ -112,6 +115,12 @@ public class Controleur {
 				break;
 			case Codes.ERREUR_304:
 				JOptionPane.showMessageDialog(null,"Probleme dans les specifications dÂ’une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_305:
+				JOptionPane.showMessageDialog(null,"Noued correspondant a l'adresse de livraison specifié inexistant!","Erreur 305",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_306:
+				JOptionPane.showMessageDialog(null,"Noued correspondant a l'entrepot n'existe pas!","Erreur 306",JOptionPane.ERROR_MESSAGE);
 				break;
 			default:
 				break;
@@ -139,8 +148,9 @@ public class Controleur {
 	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element vueCadreDOMElement) {
 		tournee.setPlanTournee(plan);
-		if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Codes.PARSE_OK) {
-			return Codes.PARSE_ERROR;
+		int code=tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement);
+		if (code != Codes.PARSE_OK) {
+			return code;
 		}
 		// vueTournee.dessiner();
 		return Codes.PARSE_OK;
@@ -152,7 +162,11 @@ public class Controleur {
 	 * @return
 	 */
 	public int construirePlanAPartirDeDOMXML(Element racineXML) {
-		plan = new Plan(racineXML);
+		plan = new Plan();
+		int code=plan.construireLivraisonsAPartirDeDOMXML(racineXML);
+		if(code!=Codes.PARSE_OK){
+			return code;
+		}
 		// vueTournee.dessiner();
 		this.tournee.setPlanTournee(this.plan);
 		return Codes.PARSE_OK;

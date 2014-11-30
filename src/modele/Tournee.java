@@ -98,14 +98,6 @@ public class Tournee {
 	}
 
 	/**
-	 * @param tourneeXML
-	 *            TODO: Changer type
-	 */
-	public void chargerTourneeDOM(Document tourneeXML) {
-		// TODO implement here
-	}
-
-	/**
 	 * @param coordX
 	 * @param coordY
 	 */
