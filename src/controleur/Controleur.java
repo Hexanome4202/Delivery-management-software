@@ -111,6 +111,12 @@ public class Controleur {
 			case Codes.ERREUR_304:
 				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d’une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
 				break;
+			case Codes.ERREUR_305:
+				JOptionPane.showMessageDialog(null,"Noued correspondant a l'adresse de livraison specifié inexistant!","Erreur 305",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_306:
+				JOptionPane.showMessageDialog(null,"Noued correspondant a l'entrepot n'existe pas!","Erreur 306",JOptionPane.ERROR_MESSAGE);
+				break;
 			default:
 				break;
 			}
@@ -137,8 +143,9 @@ public class Controleur {
 	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element vueCadreDOMElement) {
 		tournee.setPlanTournee(plan);
-		if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Codes.PARSE_OK) {
-			return Codes.PARSE_ERROR;
+		int code=tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement);
+		if (code != Codes.PARSE_OK) {
+			return code;
 		}
 		// vueTournee.dessiner();
 		return Codes.PARSE_OK;
