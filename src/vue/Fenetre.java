@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import modele.PlageHoraire;
 import modele.Plan;
 import modele.Troncon;
 import b4.advancedgui.menu.AccordionItem;
+import b4.advancedgui.menu.AccordionLeafItem;
 import b4.advancedgui.menu.AccordionMenu;
 import controleur.Controleur;
 
@@ -91,6 +93,11 @@ public class Fenetre extends JFrame implements Observer {
     private HashMap<Integer, Object> points;
     
     /**
+     * Le point actuellement selectionné
+     */
+    private Noeud pointSelectionne;
+    
+    /**
      * 
      */
     public Fenetre(Controleur c) {
@@ -131,7 +138,6 @@ public class Fenetre extends JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				lireDepuisFichierXML("plan");
-				//TODO utiliser les méthodes de Felipe et Justine pour lire le xml
 			}
 			
 		});
@@ -160,20 +166,21 @@ public class Fenetre extends JFrame implements Observer {
 		
 		this.setJMenuBar(menuBar);
 		
-		JButton btnNewButton_1 = new JButton("Calculer");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnCalculer = new JButton("Calculer");
+		btnCalculer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		
+		JButton btnModifier = new JButton("Modifier");
+		btnModifier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		
-		JButton btnNewButton_2 = new JButton("Modifier");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		
-		JButton btnNewButton_3 = new JButton("Imprimer");
-		btnNewButton_3.addActionListener(new ActionListener() {
+		JButton btnImprimer = new JButton("Imprimer");
+		btnImprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
@@ -193,7 +200,7 @@ public class Fenetre extends JFrame implements Observer {
 		horairesPannel = new javax.swing.JPanel();
 		
 		menuHoraires = new AccordionMenu();
-		createSampleMenuStructure(true);
+		creerMenuHoraires();
 		menuHoraires.setBackground(Color.white);
 		menuHoraires.setFont(new Font("Arial", Font.PLAIN, 16));
 		menuHoraires.setMenusSize(30);
@@ -273,6 +280,7 @@ public class Fenetre extends JFrame implements Observer {
 				Noeud n = getNoeudA(e.getX(), e.getY());
 				if(n != null){
 					System.out.println(n.getId());
+					changerPointSelectionne(n);
 				}else{
 					System.out.println("Pas trouvé");
 				}
@@ -305,11 +313,11 @@ public class Fenetre extends JFrame implements Observer {
 							.addContainerGap())))
 				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 					.addGap(90)
-					.addComponent(btnNewButton_1)
+					.addComponent(btnCalculer)
 					.addPreferredGap(ComponentPlacement.RELATED, 313, Short.MAX_VALUE)
-					.addComponent(btnNewButton_2)
+					.addComponent(btnModifier)
 					.addGap(5)
-					.addComponent(btnNewButton_3)
+					.addComponent(btnImprimer)
 					.addGap(80))
 		);
 		
@@ -320,7 +328,7 @@ public class Fenetre extends JFrame implements Observer {
 					
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(planLabel)
-						.addComponent(btnNewButton_1)
+						.addComponent(btnCalculer)
 						.addComponent(horairesLabel))
 					
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -335,8 +343,8 @@ public class Fenetre extends JFrame implements Observer {
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnNewButton_3)
-							.addComponent(btnNewButton_2))
+							.addComponent(btnImprimer)
+							.addComponent(btnModifier))
 						)
 					.addContainerGap())
 		);
@@ -355,73 +363,49 @@ public class Fenetre extends JFrame implements Observer {
 	
 	
 	
-	/**
-     * <code>Second method to create an AccordionMenu: add manually each menu with its leafs to AccordionMenu.</code>
-     * It creates manually a structure like one created before with a description String. First method is better when
-     * menu structure is static. Use this method instead if you want to create structure dinamically.
-     * @param target Target AccordionMenu to modify.
+    /**
+     * Crée le menu contenant les demandes de livraisons classées par Plage Horaire
      */
-public void createSampleMenuStructure(boolean changement) {
-		System.out.println("Tentative de création de menu");
-	
-    	/// changer pour afficher les horaires !!!!!!
+	public void creerMenuHoraires() {
 
-//    	if (changement == true)
-//    	{
-			
-	    	int iteratorPlage=1;
-			for(PlageHoraire plage: controleur.getTournee().getPlagesHoraires())
-		       {
-				
-				SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm");
-				System.out.println(timeFormat.format(plage.getHeureDebut()));
-				
-				SimpleDateFormat timeFormatFin = new SimpleDateFormat("H:mm");
-				System.out.println(timeFormatFin.format(plage.getHeureFin()));
-				
-				menuHoraires.addNewMenu("menu"+iteratorPlage, timeFormat.format(plage.getHeureDebut()) + "-" + timeFormatFin.format(plage.getHeureFin()));
-		       	System.out.println ("______________________");
-		       	int iteratorLiv=1;
-		       	for(DemandeDeLivraison livraison: plage.getDemandeLivraison())
-			       {
-		       		System.out.println ("Id Client :" + livraison.getIdClient());
-		       		System.out.println ("Id :" + livraison.getId());
-		       		System.out.println ("X :" + livraison.getNoeud().getX());
-		       		System.out.println ("Y :" + livraison.getNoeud().getY());
-		       		System.out.println ("___");
-		       		menuHoraires.addNewLeafTo("menu"+iteratorPlage, "submenu1."+String.valueOf(iteratorLiv), String.valueOf(livraison.getIdClient()));
-		       		iteratorLiv++;
-			       }
-		       	iteratorPlage++;
-		       }
-		
-			menuHoraires.calculateAvaiableSpace();
-			menuHoraires.repaint();
-//    	}
-//    	else
-//    	{
-//    	  target.addNewMenu("menu1", "8h - 9h30");
-//          target.addNewLeafTo("menu1", "submenu1.1", "Madame Fitzgerald ...");
-//          target.addNewLeafTo("menu1", "submenu1.2", "Monsieur Omard ...");
-//          target.addNewLeafTo("menu1", "submenu1.3", "Mademoiselle Martine : 11 rue de ....");
-//  
-//          target.addNewMenu("menu2", "9h30 - 11h");
-//          target.addNewLeafTo("menu2", "submenu2.1", "Madame Fitzgerald ...");
-//          target.addNewLeafTo("menu2", "submenu2.2", "Monsieur Omard ...");
-//          target.addNewLeafTo("menu2", "submenu2.3", "Mademoiselle Martine : 11 rue de ....");
-//  
-//          target.addNewMenu("menu3", "11h - 12h30");
-//          target.addNewLeafTo("menu3", "submenu3.1", "Madame Fitzgerald ...");
-//          target.addNewLeafTo("menu3", "submenu3.2", "Monsieur Omard ...");
-//          target.addNewLeafTo("menu3", "submenu3.3", "Mademoiselle Martine : 11 rue de ....");
-//  
-//          target.addNewMenu("menu4", "14h - 15h30");
-//          target.addNewLeafTo("menu4", "submenu4.1", "Madame Fitzgerald ...");
-//          target.addNewLeafTo("menu4", "submenu4.2", "Monsieur Omard ...");
-//          target.addNewLeafTo("menu4", "submenu4.3", "Mademoiselle Martine : 11 rue de ....");
-//          target.calculateAvaiableSpace();
-//    	}
-    }
+		int iteratorPlage = 1;
+		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
+
+			SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm");
+
+			SimpleDateFormat timeFormatFin = new SimpleDateFormat("H:mm");
+
+			menuHoraires.addNewMenu("menu" + iteratorPlage,
+					timeFormat.format(plage.getHeureDebut()) + "-"
+							+ timeFormatFin.format(plage.getHeureFin()));
+			System.out.println("______________________");
+			int iteratorLiv = 1;
+			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
+				menuHoraires.addNewLeafTo("menu" + iteratorPlage, ""
+						+ livraison.getNoeud().getId(),
+						String.valueOf(livraison.getIdClient()));
+				iteratorLiv++;
+			}
+			iteratorPlage++;
+		}
+
+		MouseAdapter menuMouseAdapter = new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				AccordionItem item = (AccordionItem) e.getSource();
+				changerPointSelectionne(controleur.getPlan().getNoeud(
+						Integer.parseInt(item.getName())));
+			}
+		};
+
+		for (AccordionLeafItem leaf : menuHoraires.getAllLeafs()) {
+			leaf.addMouseListener(menuMouseAdapter);
+		}
+
+		menuHoraires.calculateAvaiableSpace();
+		menuHoraires.repaint();
+	}
 
     /**
      * @param noeud
@@ -486,7 +470,9 @@ public void createSampleMenuStructure(boolean changement) {
 	
 
 	
-	//TODO Javadoc
+	/**
+	 * Affiche le plan à partir des données préalablement chargées depuis un XML
+	 */
 	public void afficherPlan(){
 
 		
@@ -552,8 +538,24 @@ public void createSampleMenuStructure(boolean changement) {
 		return null;
 		
 	}
-
 	
+	/**
+	 * Change le point selectionné sur l'affichage :
+	 * Déselectionne le point qui était selectionné jusque là,
+	 * et sélectionne le nouveau
+	 * @param nouvelleSelection
+	 */
+	private void changerPointSelectionne(Noeud nouvelleSelection){
+		
+		if(pointSelectionne != null){
+			Object[] cells = {points.get(pointSelectionne.getId())};
+			plan.setCellStyle("", cells);
+		}
+		
+		pointSelectionne = nouvelleSelection;
+		Object[] cells = {points.get(pointSelectionne.getId())};
+		plan.setCellStyle("strokeColor=red;strokeWidth=3", cells);
+	}
 	
 
 }

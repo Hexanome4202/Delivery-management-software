@@ -99,7 +99,7 @@ public class Controleur {
 					this.tournee.calculerTournee();
 					// TODO: display
 					System.out.println("fini");
-					fen.createSampleMenuStructure(true);
+					fen.creerMenuHoraires();
 				}
 				// todo : traiter les erreurs
 			}else if(typeFichier.equals("plan")){

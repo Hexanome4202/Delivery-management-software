@@ -101,7 +101,7 @@ public class Plan {
 	}
 
 	/**
-	 * Methode responsable pour construire les noeuds et tronçons du plan
+	 * Methode responsable pour construire les noeuds et tronï¿½ons du plan
 	 * 
 	 * @param noeudDOMRacine element xml
 	 * @return
@@ -144,7 +144,7 @@ public class Plan {
 			toutNoeuds.clear();
 			return code;
 		}
-		remplirTousTroncons();//Je sais pas si ça sert a grand chose
+		remplirTousTroncons();//Je sais pas si ï¿½a sert a grand chose
 
 		return Codes.PARSE_OK;
 	}
@@ -229,6 +229,22 @@ public class Plan {
 
 	public int getMaxY() {
 		return maxY;
+	}
+	
+	/**
+	 * Retourne le Noeud avec l'id passÃ© en paramÃ¨tre s'il existe
+	 * @param id
+	 * @return noeud correspondant
+	 */
+	public Noeud getNoeud(int id){
+		Iterator<Noeud> it = toutNoeuds.iterator();
+		while(it.hasNext()){
+			Noeud n = it.next();
+			if(n.getId() == id){
+				return n;
+			}
+		}
+		return null;
 	}
 	
 	
