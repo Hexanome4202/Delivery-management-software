@@ -8,9 +8,13 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -24,13 +28,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
+
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
 import modele.Noeud;
-
+import modele.Plan;
+import modele.Troncon;
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionMenu;
 import controleur.Controleur;
@@ -63,11 +69,14 @@ public class Fenetre extends JFrame implements Observer {
     private javax.swing.JPanel horairesPannel;
     private mxGraph plan;
     
+    private static final double RAYON_NOEUD = 10;
+    
     /**
      * 
      */
     public Fenetre(Controleur c) {
     	this.controleur = c;
+    	this.controleur.setFen(this);
     	
     	setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -232,7 +241,7 @@ public class Fenetre extends JFrame implements Observer {
 		
 		plan.getModel().beginUpdate();
 		try{
-			Object v1 = plan.insertVertex(parent, null, "", 20, 20, 10,10);
+			Object v1 = plan.insertVertex(parent, "Ploup", "", 20, 20, 10,10);
 			Object v2 = plan.insertVertex(parent, null, "", 200, 150,10, 10);
 			Object v3 = plan.insertVertex(parent, null, "", 200, 20,10,10);
 			Object e1 = plan
@@ -241,12 +250,8 @@ public class Fenetre extends JFrame implements Observer {
 							null,
 							"",
 							v1,
-							v2,
-							"edgeStyle=elbowEdgeStyle;elbow=horizontal;"
-									+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;");
-			Object e2 = plan.insertEdge(parent, null, "", v3, v2,
-					"edgeStyle=elbowEdgeStyle;elbow=horizontal;orthogonal=0;"
-							+ "entryX=0;entryY=0;entryPerimeter=1;");
+							v2);
+			Object e2 = plan.insertEdge(parent, null, "", v3, v2);
 		}finally
 		{
 			plan.getModel().endUpdate();
@@ -430,13 +435,76 @@ public class Fenetre extends JFrame implements Observer {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Fenetre frame = new Fenetre(null);
+					Fenetre frame = new Fenetre(new Controleur());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+	}
+	
+	//TODO Javadoc
+	public void afficherPlan(){
+		System.out.println("ça marche");
+		Set<Noeud> noeuds = controleur.getPlan().getToutNoeuds();
+		HashMap<Integer, Object> points= new HashMap<Integer, Object>();
+		Iterator<Noeud> it = noeuds.iterator();
+		
+		Object parent = plan.getDefaultParent();
+		plan.getModel().beginUpdate();
+		plan.removeCells(plan.getChildCells(parent));
+		
+		//On commence par placer les points
+		while (it.hasNext()) {
+			//TODO : adapter les coordonnées à la taille de la fenêtre
+			Noeud noeudCourant = it.next();
+			double x = noeudCourant.getX();
+			double y = noeudCourant.getY();
+			System.out.println("Point " + noeudCourant.getId() +" : "+x+" ; "+y);
+			points.put(noeudCourant.getId(), plan.insertVertex(parent, "", "", x, y, RAYON_NOEUD, RAYON_NOEUD));
+		}
+		
+		//Puis on trace les tronçons
+		it = noeuds.iterator();
+		while (it.hasNext()) {
+			Noeud noeudCourant = it.next();	
+			
+			Iterator<Troncon> itTroncons = noeudCourant.getTronconSortants().iterator(); 
+			while(itTroncons.hasNext()){
+				plan.insertEdge(parent, null, "", 
+						points.get(noeudCourant.getId()), 
+						points.get(itTroncons.next().getNoeudFin().getId()));
+			}
+			
+		}
+		
+		plan.getModel().endUpdate();
+		
+
+		
+		/*plan.getModel().beginUpdate();
+		try{
+			Object v1 = plan.insertVertex(parent, null, "", 20, 20, 10,10);
+			Object v2 = plan.insertVertex(parent, null, "", 200, 150,10, 10);
+			Object v3 = plan.insertVertex(parent, null, "", 200, 20,10,10);
+			Object e1 = plan
+					.insertEdge(
+							parent,
+							null,
+							"",
+							v1,
+							v2,
+							"edgeStyle=elbowEdgeStyle;elbow=horizontal;"
+									+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;");
+			Object e2 = plan.insertEdge(parent, null, "", v3, v2,
+					"edgeStyle=elbowEdgeStyle;elbow=horizontal;orthogonal=0;"
+							+ "entryX=0;entryY=0;entryPerimeter=1;");
+		}finally
+		{
+			plan.getModel().endUpdate();
+		}*/
+
 	}
 
 	

@@ -96,6 +96,8 @@ public class Controleur {
 					int resultatConstruction = construirePlanAPartirDeDOMXML(racine);
 					if (resultatConstruction != Controleur.PARSE_OK) {
 						JOptionPane.showMessageDialog(null,"PB de lecture de fichier!","Erreur",JOptionPane.ERROR_MESSAGE);
+					}else{
+						fen.afficherPlan();
 					}
 				}
 			}
@@ -159,4 +161,14 @@ public class Controleur {
 	public static void main(String[] args) {
 		new Controleur();
 	}
+
+	/**
+	 * 
+	 * @param fenetre
+	 */
+	public void setFen(Fenetre fenetre) {
+		this.fen = fenetre;
+	}
+	
+	
 }
