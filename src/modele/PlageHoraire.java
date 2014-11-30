@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import controleur.Controleur;
+import errors.Codes;
 
 /**
  * 
@@ -117,13 +118,13 @@ public class PlageHoraire {
 				demandesLivraisonPlage.add(nouvelleDemande);
 			} else {
 				demandesLivraisonPlage.clear();
-				return Controleur.ERREUR_305;
+				return Codes.ERREUR_305;
 			}
 
 			// ajout des elements crees dans la structure objet
 		}
 
-		return Controleur.PARSE_OK;
+		return Codes.PARSE_OK;
 	}
 
 	/**

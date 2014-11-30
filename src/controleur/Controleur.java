@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,6 +18,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import errors.Codes;
 import vue.Fenetre;
 import vue.VueTournee;
 
@@ -25,32 +27,7 @@ import vue.VueTournee;
  */
 public class Controleur {
 
-	static public final int PARSE_ERROR = -1;
-	static public final int PARSE_OK = 1;
-	/**
-	 * Noeud destination du tronçon n’existe pas ou vide
-	 */
-	static public final int ERREUR_301 = 301;
-	/**
-	 * Probleme dans les specifications d’un tronçon (vitesse, longueur..)
-	 */
-	static public final int ERREUR_302 = 302;
-	/**
-	 * Probleme dans les specifications d’un noeud
-	 */
-	static public final int ERREUR_303 = 303;
-	/**
-	 * Probleme dans les specifications d’une plage horaire
-	 */
-	static public final int ERREUR_304 = 304;
-	/**
-	 * Noued correspondant a l'adresse de livraison specifié inexistant
-	 */
-	static public final int ERREUR_305 = 305;
-	/**
-	 * Noued correspondant a l'entrepot n'existe pas
-	 */
-	static public final int ERREUR_306 = 306;
+	
 
 	private Tournee tournee;
 	private VueTournee vueTournee;
@@ -64,8 +41,8 @@ public class Controleur {
 		tournee = new Tournee();
 		vueTournee = new VueTournee(null);
 		plan = new Plan();
-		// this.fen = new Fenetre(this);
-		// this.fen.setVisible(true);
+		 this.fen = new Fenetre(this);
+		 this.fen.setVisible(true);
 	}
 
 	/**
@@ -119,21 +96,22 @@ public class Controleur {
 			}else if(typeFichier.equals("plan")){
 				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
+					fen.afficherPlan();
 				}
 			}
            
            switch (resultatConstruction) {
-			case Controleur.ERREUR_301:
-				JOptionPane.showMessageDialog(null,"Noeud destination du tronçon n’existe pas ou vide!","Erreur 301",JOptionPane.ERROR_MESSAGE);
+			case Codes.ERREUR_301:
+				JOptionPane.showMessageDialog(null,"Noeud destination du tronÃ§on n'existe pas ou vide!","Erreur 301",JOptionPane.ERROR_MESSAGE);
 				break;
-			case Controleur.ERREUR_302:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d’un tronçon (vitesse, longueur..)!","Erreur 302",JOptionPane.ERROR_MESSAGE);
+			case Codes.ERREUR_302:
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un tronÃ§on (vitesse, longueur..)!","Erreur 302",JOptionPane.ERROR_MESSAGE);
 				break;
-			case Controleur.ERREUR_303:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d’un noeud!","Erreur 303",JOptionPane.ERROR_MESSAGE);
+			case Codes.ERREUR_303:
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un noeud!","Erreur 303",JOptionPane.ERROR_MESSAGE);
 				break;
-			case Controleur.ERREUR_304:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d’une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
+			case Codes.ERREUR_304:
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications dÂ’une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
 				break;
 			default:
 				break;
@@ -161,11 +139,11 @@ public class Controleur {
 	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element vueCadreDOMElement) {
 		tournee.setPlanTournee(plan);
-		if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Controleur.PARSE_OK) {
-			return Controleur.PARSE_ERROR;
+		if (tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement) != Codes.PARSE_OK) {
+			return Codes.PARSE_ERROR;
 		}
 		// vueTournee.dessiner();
-		return Controleur.PARSE_OK;
+		return Codes.PARSE_OK;
 	}
 
 	/**
@@ -177,7 +155,7 @@ public class Controleur {
 		plan = new Plan(racineXML);
 		// vueTournee.dessiner();
 		this.tournee.setPlanTournee(this.plan);
-		return Controleur.PARSE_OK;
+		return Codes.PARSE_OK;
 	}
 
 	/**
