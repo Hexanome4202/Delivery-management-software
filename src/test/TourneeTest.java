@@ -150,18 +150,22 @@ public class TourneeTest {
 		itinerairesExpected.add(it12);
 		itinerairesExpected.add(it23);
 		itinerairesExpected.add(it31);
+
+		Controleur c = new Controleur();
+		c.gererFichier(new File("XML/testDijkstraExempleWiki.xml"), "plan");
+		c.gererFichier(new File("XML/testTourneeLivraisons.xml"), "horaires");
 		
-		ArrayList<Itineraire> itinerairesRes = tournee.getItineraires();
+		plan = c.getPlan();
+		c.getTournee().setPlanTournee(plan);
 		
-		assertEquals("L'itinéraire ne fait pas la bonne taille",itinerairesExpected.size(), itinerairesRes.size());
+		c.getTournee().calculerTournee();
+		tournee = c.getTournee();
 		
-		for(int i=0; i<itinerairesExpected.size(); i++){
-			Itineraire resultat = itinerairesRes.get(i);
-			Itineraire expected = itinerairesExpected.get(i);
-			assertEquals("Mauvaise arrivée",expected.getArrivee(),resultat.getArrivee());
-			assertEquals("Mauvais départ", expected.getArrivee(),resultat.getArrivee());
-			assertEquals("Mauvais temps total", expected.getTemps(), resultat.getTemps(), 0);
-		}
+		assertEquals("La tournée n'a pas la bonne taille",4,tournee.getItineraires().size());
+		assertEquals(20,tournee.getItineraires().get(0).getTemps(),0);
+		assertEquals(15,tournee.getItineraires().get(1).getTemps(),0);
+		assertEquals(20,tournee.getItineraires().get(2).getTemps(),0);
+		assertEquals(14,tournee.getItineraires().get(3).getTemps(),0);
 		
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

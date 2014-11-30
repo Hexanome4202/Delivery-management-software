@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import modele.DemandeDeLivraison;
+import modele.Noeud;
 import modele.Plan;
 import modele.Tournee;
 
@@ -73,10 +74,11 @@ public class Controleur {
 	 * @param precedent
 	 */
 
-	public void ajouterLivraison(int client, int noeud,
-			DemandeDeLivraison precedent) {
-		// TODO: Could be cool to write something here
-	}
+
+    public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
+    	this.tournee.ajouterLivraison(precedent, courant, client);
+    }
+
 
 	/**
 	 * @param livraison
