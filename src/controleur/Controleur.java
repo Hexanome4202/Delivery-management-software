@@ -91,6 +91,9 @@ public class Controleur {
            if (typeFichier.equals("horaires")) {
 				if (racine.getNodeName().equals("JourneeType")) {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
+					this.tournee.calculerTournee();
+					// TODO: display
+					System.out.println("fini");
 				}
 				// todo : traiter les erreurs
 			}else if(typeFichier.equals("plan")){

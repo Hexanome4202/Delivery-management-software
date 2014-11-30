@@ -6,7 +6,7 @@
 			<Livraisons>
 				<Livraison id="1" client="611" adresse="1"/>
 				<Livraison id="2" client="621" adresse="3"/>
-				<Livraison id="3" client="611" adresse="1"/>
+				<Livraison id="3" client="611" adresse="2"/>
 			</Livraisons>
 		</Plage>
 	</PlagesHoraires>
