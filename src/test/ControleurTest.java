@@ -64,7 +64,6 @@ public class ControleurTest {
 	@Test
 	public void testGererFichierLivraisons() {
 		// TODO: gérer tous les cas identifiés dans les CUs
-		// TODO: test heures de la plage horaire
 		Controleur c = new Controleur();
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
@@ -79,6 +78,12 @@ public class ControleurTest {
 		assertEquals(1, plages.size());
 		
 		PlageHoraire plage = plages.get(0);
+		assertEquals(8, plage.getHeureDebut().getHours());
+		assertEquals(0, plage.getHeureDebut().getMinutes());
+		assertEquals(0, plage.getHeureDebut().getSeconds());
+		assertEquals(12, plage.getHeureFin().getHours());
+		assertEquals(0, plage.getHeureFin().getMinutes());
+		assertEquals(0, plage.getHeureFin().getSeconds());
 		assertNotNull(plage);
 		assertEquals(3, plage.getDemandeLivraison().size());
 		Noeud n;
