@@ -41,7 +41,6 @@ public class ControleurTest {
 		}
 		
 		List<Troncon> troncons = new ArrayList<Troncon>(c.getPlan().getToutTroncons());
-		//TODO : fail car toutTroncons n'est pas mis à jour après chargement du plan ! 
 		assertEquals(2, troncons.size());
 		Troncon t;
 		for(int i = 0; i < noeuds.size(); ++i) {
@@ -65,7 +64,6 @@ public class ControleurTest {
 	public void testGererFichierLivraisons() {
 		// TODO: gérer tous les cas identifiés dans les CUs
 		// TODO: test heures de la plage horaire
-		// TODO: Créer le fichier de plan
 		Controleur c = new Controleur();
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");

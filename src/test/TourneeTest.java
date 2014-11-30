@@ -1,7 +1,9 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Set;
@@ -17,20 +19,14 @@ import modele.Troncon;
 
 import org.junit.Test;
 
+import controleur.Controleur;
+
 /**
  * Classe de test de la classe <code>Tournee</code>
  * @author asarazin1
  *
  */
 public class TourneeTest {
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testConstruireAPartirDeDOMXML() {
-		fail("todo");
-	}
 	
 	/**
 	 * Test de la méthode <code>calculerDijkstra</code> sur un cas normal
@@ -350,5 +346,15 @@ public class TourneeTest {
 		tournee.setPlanTournee(plan);
 		
 		fail("A faire, attendre que les itinéraires soient affectés");
+	}
+	
+	@Test
+	public void testEditerFeuilleRoute() {
+		Controleur c = new Controleur();
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
+		
+		c.getTournee().calculerTournee();
+		System.out.println(c.editerFeuilleRoute());
 	}
 }

@@ -74,7 +74,6 @@ public class PlageHoraire {
 		while(it.hasNext()) {
 			demande = it.next();
 			if(demande.getNoeud() != null && demande.getNoeud().getId() == id) {
-				// TODO: Marche pas???
 				noeud = demande.getNoeud();
 				break;
 			}

@@ -149,6 +149,7 @@ public class Controleur {
 	public int construirePlanAPartirDeDOMXML(Element racineXML) {
 		plan=new Plan(racineXML);
         //vueTournee.dessiner();
+		this.tournee.setPlanTournee(this.plan);
         return Controleur.PARSE_OK;
     }
 	
