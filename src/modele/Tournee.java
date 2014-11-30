@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 import tsp.SolutionState;
 import tsp.TSP;
 import controleur.Controleur;
+import errors.Codes;
 
 /**
  * 
@@ -297,7 +298,7 @@ public class Tournee {
 
 		NodeList liste = noeudDOMRacine.getElementsByTagName("Entrepot");
 		if (liste.getLength() != 1) {
-			return Controleur.ERREUR_306;
+			return Codes.ERREUR_306;
 		}
 		Element adresseElement = (Element) liste.item(0);
 		int idAdresseEntrepot = Integer.parseInt(adresseElement
@@ -308,7 +309,7 @@ public class Tournee {
 		if(noeudEntrepot!=null){
 			this.entrepot = new DemandeDeLivraison(noeudEntrepot);
 		}else{
-			return Controleur.ERREUR_306;
+			return Codes.ERREUR_306;
 		}
 
 		// creation des Plages;
@@ -323,18 +324,16 @@ public class Tournee {
 						plageElement.getAttribute("heureDebut"),
 						plageElement.getAttribute("heureFin"));
 				int code=nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee);
-				if (code != Controleur.PARSE_OK) {
-					System.out.println("error");
+				if (code != Codes.PARSE_OK) {
 					return code;
 				}
-				// ajout des elements crees dans la structure objet
 				plagesHoraires.add(nouvellePlage);
 			} catch (ParseException e) {
-				return Controleur.ERREUR_304;
+				return Codes.ERREUR_304;
 			}
 			
 		}
-		return Controleur.PARSE_OK;
+		return Codes.PARSE_OK;
 	}
 
 	/**
