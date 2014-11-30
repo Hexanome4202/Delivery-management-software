@@ -55,7 +55,9 @@ public class Dijkstra {
 			Noeud noeudCourant = noeudDePlusPetitePonderation();
 			noeudsNonVisites.remove(noeudCourant);
 			noeudsVisites.add(noeudCourant);
-			evaluerVoisins(noeudCourant);
+			if(graphePonderation.get(noeudCourant) < graphePonderation.get(Dijkstra.noeudDestination)){
+				evaluerVoisins(noeudCourant);
+			}
 		}
 
 		Noeud noeudDebut = null;
