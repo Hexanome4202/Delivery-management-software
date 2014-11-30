@@ -37,6 +37,7 @@ import com.mxgraph.view.mxGraph;
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
 import modele.Noeud;
+import modele.PlageHoraire;
 import modele.Plan;
 import modele.Troncon;
 import b4.advancedgui.menu.AccordionItem;
@@ -178,7 +179,7 @@ public class Fenetre extends JFrame implements Observer {
 		horairesPannel = new javax.swing.JPanel();
 		
 		menuHoraires = new AccordionMenu();
-		createSampleMenuStructure(menuHoraires);
+		createSampleMenuStructure(menuHoraires,true);
 		menuHoraires.setBackground(Color.white);
 		menuHoraires.setFont(new Font("Arial", Font.PLAIN, 16));
 		menuHoraires.setMenusSize(30);

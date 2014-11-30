@@ -1,6 +1,5 @@
 package controleur;
 
-import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,9 +17,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import errors.Codes;
 import vue.Fenetre;
 import vue.VueTournee;
+import errors.Codes;
 
 /**
  * 
@@ -79,6 +78,12 @@ public class Controleur {
 		// TODO implement here
 	}
 
+	/**
+	 * Methode responsable pour le traitement du fichier xml 
+	 * 
+	 * @param xml le fichier xml que l'on veut traiter
+	 * @param typeFichier peut être "horaires" ou "plan"
+	 */
 	public void gererFichier(File xml, String typeFichier) {
     	try {
             // creation d'un constructeur de documents a l'aide d'une fabrique
@@ -103,28 +108,7 @@ public class Controleur {
 				}
 			}
            
-           switch (resultatConstruction) {
-			case Codes.ERREUR_301:
-				JOptionPane.showMessageDialog(null,"Noeud destination du tronÃ§on n'existe pas ou vide!","Erreur 301",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_302:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un tronÃ§on (vitesse, longueur..)!","Erreur 302",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_303:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un noeud!","Erreur 303",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_304:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications dÂ’une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_305:
-				JOptionPane.showMessageDialog(null,"Noued correspondant a l'adresse de livraison specifié inexistant!","Erreur 305",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_306:
-				JOptionPane.showMessageDialog(null,"Noued correspondant a l'entrepot n'existe pas!","Erreur 306",JOptionPane.ERROR_MESSAGE);
-				break;
-			default:
-				break;
-			}
+           afficherErreurs(resultatConstruction);
            
        } catch (ParserConfigurationException pce) {
            System.out.println("Erreur de configuration du parseur DOM");
@@ -141,14 +125,17 @@ public class Controleur {
        }
     }
 
+	
+
 	/**
+	 * Methode responsable pour la construction des livraisons à partir d'un element xml
 	 * 
-	 * @param vueCadreDOMElement
+	 * @param livraisonsElement le element xml
 	 * @return
 	 */
-	public int construireLivraisonsAPartirDeDOMXML(Element vueCadreDOMElement) {
+	public int construireLivraisonsAPartirDeDOMXML(Element livraisonsElement) {
 		tournee.setPlanTournee(plan);
-		int code=tournee.construireLivraisonsAPartirDeDOMXML(vueCadreDOMElement);
+		int code=tournee.construireLivraisonsAPartirDeDOMXML(livraisonsElement);
 		if (code != Codes.PARSE_OK) {
 			return code;
 		}
@@ -157,17 +144,17 @@ public class Controleur {
 	}
 
 	/**
+	 * Methode responsable pour la construction du plan à partir d'un element xml
 	 * 
-	 * @param racineXML
+	 * @param planElement
 	 * @return
 	 */
-	public int construirePlanAPartirDeDOMXML(Element racineXML) {
+	public int construirePlanAPartirDeDOMXML(Element planElement) {
 		plan = new Plan();
-		int code=plan.construireLivraisonsAPartirDeDOMXML(racineXML);
+		int code=plan.construirePlanAPartirDeDOMXML(planElement);
 		if(code!=Codes.PARSE_OK){
 			return code;
 		}
-		// vueTournee.dessiner();
 		this.tournee.setPlanTournee(this.plan);
 		return Codes.PARSE_OK;
 	}
@@ -190,5 +177,34 @@ public class Controleur {
 
 	public static void main(String[] args) {
 		new Controleur();
+	}
+	
+	/**
+	 * Methode responsable pour l'affichage des differents erreurs que l'on peut avoir dans le parsing des fichiers xml
+	 * @param code le code de l'execution du parsing
+	 */
+	private void afficherErreurs(int code) {
+		switch (code) {
+			case Codes.ERREUR_301:
+				JOptionPane.showMessageDialog(null,"Noeud destination du tronçon n'existe pas ou vide!","Erreur 301",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_302:
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un tronçon (vitesse, longueur..)!","Erreur 302",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_303:
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un noeud!","Erreur 303",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_304:
+				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d’une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_305:
+				JOptionPane.showMessageDialog(null,"Noued correspondant a l'adresse de livraison specifié inexistant!","Erreur 305",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_306:
+				JOptionPane.showMessageDialog(null,"Noued correspondant a l'entrepot n'existe pas!","Erreur 306",JOptionPane.ERROR_MESSAGE);
+				break;
+			default:
+				break;
+			}
 	}
 }

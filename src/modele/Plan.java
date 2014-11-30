@@ -50,7 +50,7 @@ public class Plan {
 	public Plan(Element racineXML) {
 		toutTroncons=new HashSet<Troncon>();
 		toutNoeuds= new HashSet<Noeud>();
-		construireLivraisonsAPartirDeDOMXML(racineXML);
+		construirePlanAPartirDeDOMXML(racineXML);
 
 	}
 
@@ -101,11 +101,12 @@ public class Plan {
 	}
 
 	/**
+	 * Methode responsable pour construire les noeuds et tronçons du plan
 	 * 
-	 * @param noeudDOMRacine
+	 * @param noeudDOMRacine element xml
 	 * @return
 	 */
-	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
+	public int construirePlanAPartirDeDOMXML(Element noeudDOMRacine) {
 		// TODO : gerer les erreurs de syntaxe dans le fichier XML
 		// lecture des attributs
 
@@ -117,24 +118,33 @@ public class Plan {
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element planElement = (Element) liste.item(i);
 			
-			int x = Integer.parseInt(planElement.getAttribute("x"));
-			int y = Integer.parseInt(planElement.getAttribute("y"));
-			Noeud nouveauNoeud = new Noeud(
-					Integer.parseInt(planElement.getAttribute("id")), 
-					x, y);
-			
-			majCoordonneesMax(x, y);
-			
-			// ajout des elements crees dans la structure objet
-			toutNoeuds.add(nouveauNoeud);
-			listeElements.add(planElement);
+			try {
+				int x = Integer.parseInt(planElement.getAttribute("x"));
+				int y = Integer.parseInt(planElement.getAttribute("y"));
+				Noeud nouveauNoeud = new Noeud(
+						Integer.parseInt(planElement.getAttribute("id")), 
+						x, y);
+				
+				majCoordonneesMax(x, y);
+				
+				// ajout des elements crees dans la structure objet
+				toutNoeuds.add(nouveauNoeud);
+				listeElements.add(planElement);
+			} catch (NumberFormatException e) {
+				toutNoeuds.clear();
+				return Codes.ERREUR_303;
+			}
 		}
 		for (Noeud n : toutNoeuds) {
-			n.getTronconSortants().clear();
-			construireTronconAPartirDeDOMXML(liste);
+			n.getTronconSortants().clear();		
 		}
 		
-		remplirTousTroncons();
+		int code=construireTronconAPartirDeDOMXML(liste);
+		if(code!=Codes.PARSE_OK){
+			toutNoeuds.clear();
+			return code;
+		}
+		remplirTousTroncons();//Je sais pas si ça sert a grand chose
 
 		return Codes.PARSE_OK;
 	}
@@ -176,23 +186,27 @@ public class Plan {
 			String tag = "LeTronconSortant";
 			NodeList listeNoeud = noeudElement.getElementsByTagName(tag);
 			Set<Troncon> setTroncons = new HashSet<Troncon>();
-			Boolean bool = true;
+			Boolean bool = true; // je sais pas si on a besoin
 			for (int j = 0; j < listeNoeud.getLength(); j++) {
 				Element tronconElement = (Element) listeNoeud.item(j);
 				String nomRue = tronconElement.getAttribute("nomRue");
-				Double vitesse = Double.parseDouble(tronconElement
-						.getAttribute("vitesse").replace(",","."));
-				Double longueur = Double.parseDouble(tronconElement
-						.getAttribute("longueur").replace(",","."));
-				Integer idNoeudFin = Integer.parseInt(tronconElement
-						.getAttribute("idNoeudDestination"));
-				
-				if (vitesse>0 && longueur>0 && !nomRue.equals("") && nomRue!=null) {
-					Troncon troncon = new Troncon(vitesse, longueur, nomRue,
-							recupererNoeud(idNoeudFin));
-					bool = setTroncons.add(troncon);
-					//TODO: afficher erreur si bool false
-				}else {
+				try {
+					Double vitesse = Double.parseDouble(tronconElement
+							.getAttribute("vitesse").replace(",","."));
+					Double longueur = Double.parseDouble(tronconElement
+							.getAttribute("longueur").replace(",","."));
+					Integer idNoeudFin = Integer.parseInt(tronconElement
+							.getAttribute("idNoeudDestination"));
+					
+					if (vitesse>0 && longueur>0 && !nomRue.equals("") && nomRue!=null) {
+						Troncon troncon = new Troncon(vitesse, longueur, nomRue,
+								recupererNoeud(idNoeudFin));
+						bool = setTroncons.add(troncon);
+						//TODO: afficher erreur si bool false (je crois que c'est pas necessaire)
+					}else {
+						return Codes.ERREUR_302;
+					}
+				} catch (NumberFormatException e) {
 					return Codes.ERREUR_302;
 				}
 
