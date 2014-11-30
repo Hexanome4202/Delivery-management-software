@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -31,8 +32,15 @@ public class PlageHoraireTest {
 		noeuds.add(n1);
 		noeuds.add(n2);
 		noeuds.add(n3);
-		PlageHoraire plage = new PlageHoraire("18:00:00", "20:00:00", demandes);
-		assertEquals("Erreur - La liste de noeuds n'est pas correcte", plage.getNoeuds(), noeuds);
+		PlageHoraire plage;
+		try {
+			plage = new PlageHoraire("18:00:00", "20:00:00", demandes);
+			assertEquals("Erreur - La liste de noeuds n'est pas correcte", plage.getNoeuds(), noeuds);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Test
@@ -51,8 +59,15 @@ public class PlageHoraireTest {
 		noeuds.add(n1);
 		noeuds.add(n2);
 		noeuds.add(n3);
-		PlageHoraire plage = new PlageHoraire("18:00:00", "20:00:00", demandes);
-		assertEquals(n1.getId(), plage.recupererNoeud(1).getId());
-		assertEquals(null, plage.recupererNoeud(4));
+		PlageHoraire plage;
+		try {
+			plage = new PlageHoraire("18:00:00", "20:00:00", demandes);
+			assertEquals(n1.getId(), plage.recupererNoeud(1).getId());
+			assertEquals(null, plage.recupererNoeud(4));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
