@@ -114,10 +114,20 @@ public class Plan {
 			n.getTronconSortants().clear();
 			construireTronconAPartirDeDOMXML(liste);
 		}
+		
+		remplirTousTroncons();
 
 		return Controleur.PARSE_OK;
 	}
 
+
+	private void remplirTousTroncons() {
+
+		for (Noeud t : toutNoeuds) {
+			toutTroncons.addAll(t.getTronconSortants());
+		}
+		
+	}
 
 	/**
 	 * 
