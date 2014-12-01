@@ -36,6 +36,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
 
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 
@@ -440,40 +441,60 @@ public class Fenetre extends JFrame implements Observer {
     /**
      * Méthode permettant de dessiner la tournée
      */
-    public void dessinerTournee() {
-        Tournee tournee = controleur.getTournee();
-        Object parent = plan.getDefaultParent();
-        Object noeudPrecedent = points.get(tournee.getEntrepot().getNoeud().getId());
-        Object[] cells = {noeudPrecedent};
-		plan.setCellStyle("shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow", cells);
+	public void dessinerTournee() {
+		Tournee tournee = controleur.getTournee();
+		Object parent = plan.getDefaultParent();
+		int noeudPrecedent = tournee.getEntrepot().getNoeud().getId();
+		Object[] cells = { points.get(noeudPrecedent) };
+		plan.setCellStyle(
+				"shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow",
+				cells);
+
+		ArrayList<Itineraire> itineraires = tournee.getItineraires();
+		Iterator<Itineraire> it = itineraires.iterator();
 		
-		
-		 ArrayList<Itineraire> itineraires = tournee.getItineraires();
-		 Iterator<Itineraire> it = itineraires.iterator();
-		 
-		 while(it.hasNext()){
-			 Itineraire itineraire = it.next();
-			 int idHoraire = 1;
-			 try{
-				 idHoraire = noeudsALivrer.get(itineraire.getDepart().getNoeud().getId());
-			 }catch(Exception e){
-			 }
-		 	String color = couleurBordure[idHoraire];
-			 
-			 Iterator<Troncon> troncons = itineraire.getTronconsItineraire().iterator();
-			 while(troncons.hasNext()){
-				 Troncon troncon = troncons.next();
-				 int idNoeudFin = troncon.getNoeudFin().getId();
-						 
-				 plan.insertEdge(parent, null, "", 
-							noeudPrecedent, 
-							points.get(troncon.getNoeudFin().getId()),
-							"strokeWidth=2;strokeColor="+color);
-				 noeudPrecedent = points.get(troncon.getNoeudFin().getId());
-			 }
-		 }
-        
-    }
+		HashMap<String, Integer> noeudsTraverses = new HashMap<String, Integer>(); 
+
+		while (it.hasNext()) {
+			Itineraire itineraire = it.next();
+			int idHoraire = 1;
+			try {
+				idHoraire = noeudsALivrer.get(itineraire.getDepart().getNoeud()
+						.getId());
+			} catch (Exception e) {
+			}
+			String color = couleurBordure[idHoraire];
+
+			Iterator<Troncon> troncons = itineraire.getTronconsItineraire()
+					.iterator();
+			while (troncons.hasNext()) {
+				Troncon troncon = troncons.next();
+				String key = ""+Math.max(noeudPrecedent,troncon.getNoeudFin().getId())+"-"+ Math.min(troncon.getNoeudFin().getId(), noeudPrecedent);
+				
+				String edgeStyle = (noeudsTraverses.containsKey(key)) ? 
+						"edgeStyle=elbowEdgeStyle;elbow=horizontal;"
+						+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;"+mxConstants.STYLE_ROUNDED+"=1;" : "";
+
+				plan.insertEdge(parent, null, "", 
+						points.get(noeudPrecedent),
+						points.get(troncon.getNoeudFin().getId()),
+						edgeStyle +
+						"strokeWidth=2;strokeColor=" + color);
+				
+				
+				
+				if(noeudsTraverses.containsKey(key)){
+					noeudsTraverses.put(key, noeudsTraverses.get(key)+1);
+					System.out.println(key+" : "+noeudsTraverses.get(key)+" fois");
+				}else{
+					noeudsTraverses.put(key, 1);
+				}
+				
+				noeudPrecedent = troncon.getNoeudFin().getId();
+			}
+		}
+
+	}
 
     /**
      * @param demandes
