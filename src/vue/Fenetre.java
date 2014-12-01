@@ -77,7 +77,12 @@ public class Fenetre extends JFrame implements Observer {
     private AccordionMenu menuHoraires;
     private javax.swing.JPanel horairesPannel;
     private mxGraph plan;
-    mxGraphComponent planComponent;
+    private mxGraphComponent planComponent;
+    
+    private JButton btnCalculer;
+	private JButton btnModifier;
+	private JButton btnImprimer;
+	JMenuItem actionChargerHoraires;
     
     private static final double RAYON_NOEUD = 10;
     private static final int TOLERANCE = 10;
@@ -139,7 +144,8 @@ public class Fenetre extends JFrame implements Observer {
 		});
 		
 		JMenuItem actionChargerPlan = new JMenuItem("Charger le plan");
-		JMenuItem actionChargerHoraires = new JMenuItem("Charger les horaires");
+		actionChargerHoraires = new JMenuItem("Charger les horaires");
+		actionChargerHoraires.setEnabled(false);
 		
 		
 		actionChargerPlan.addActionListener(new ActionListener(){
@@ -175,24 +181,27 @@ public class Fenetre extends JFrame implements Observer {
 		
 		this.setJMenuBar(menuBar);
 		
-		JButton btnCalculer = new JButton("Calculer");
+		btnCalculer = new JButton("Calculer");
 		btnCalculer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
 			}
 		});
+		btnCalculer.setEnabled(false);
 		
-		JButton btnModifier = new JButton("Modifier");
+		btnModifier = new JButton("Modifier");
 		btnModifier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
+		btnModifier.setEnabled(false);
 		
-		JButton btnImprimer = new JButton("Imprimer");
+		btnImprimer = new JButton("Imprimer");
 		btnImprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
+		btnImprimer.setEnabled(false);
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
 		
@@ -587,7 +596,20 @@ public class Fenetre extends JFrame implements Observer {
 			}
 			numPlage++;
 		}		
-		
+	}
+	
+	/**
+	 * Methode permettant d'activer le bouton Charger les Horaires
+	 */
+	public void activerChargementHoraires(){
+		actionChargerHoraires.setEnabled(true);
+	}
+	
+	/**
+	 * Methode permettant d'activer le bouton Calculer
+	 */
+	public void activerCalculItineraire(){
+		btnCalculer.setEnabled(true);
 	}
 	
 

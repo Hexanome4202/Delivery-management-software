@@ -101,12 +101,14 @@ public class Controleur {
 					System.out.println("fini");
 					fen.creerMenuHoraires();
 					fen.afficherDemandesLivraisonsSurPlan();
+					fen.activerCalculItineraire();
 				}
 				// todo : traiter les erreurs
 			}else if(typeFichier.equals("plan")){
 				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
 					fen.afficherPlan();
+					fen.activerChargementHoraires();
 				}
 			}
            
