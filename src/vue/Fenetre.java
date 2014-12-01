@@ -37,6 +37,7 @@ import javax.swing.border.BevelBorder;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
+import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
@@ -81,7 +82,13 @@ public class Fenetre extends JFrame implements Observer {
     private static final double RAYON_NOEUD = 10;
     private static final int TOLERANCE = 10;
     
-    private Set<Integer> idNoeudsALivrer;
+    /**
+     * L'id des noeuds à livrer associé au numéro de plage horaire
+     */
+    private HashMap<Integer, Integer> noeudsALivrer;
+    
+    String[] couleurRemplissage = {"#a7a7a7", "#4407a6", "#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f"};
+    String[] couleurBordure = {"#838383", "#2d0968", "#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828"};
     
     /**
      * Facteurs de mise à l'échelle pour l'affichage sur le plan
@@ -495,7 +502,8 @@ public class Fenetre extends JFrame implements Observer {
 			Noeud noeudCourant = it.next();
 			double x = noeudCourant.getX();
 			double y = noeudCourant.getY();
-			points.put(noeudCourant.getId(), plan.insertVertex(parent, "", "", hX*x, hY*y, RAYON_NOEUD, RAYON_NOEUD));
+			points.put(noeudCourant.getId(), plan.insertVertex(parent, "", "", hX*x, hY*y, RAYON_NOEUD, RAYON_NOEUD, 
+					"fillColor="+couleurRemplissage[0]+";strokeColor="+couleurBordure[0]));
 		}
 		
 		//Puis on trace les tronçons
@@ -507,7 +515,8 @@ public class Fenetre extends JFrame implements Observer {
 			while(itTroncons.hasNext()){
 				plan.insertEdge(parent, null, "", 
 						points.get(noeudCourant.getId()), 
-						points.get(itTroncons.next().getNoeudFin().getId()));
+						points.get(itTroncons.next().getNoeudFin().getId()),
+						"strokeColor="+couleurRemplissage[0]);
 			}
 			
 		}
@@ -550,31 +559,33 @@ public class Fenetre extends JFrame implements Observer {
 	private void changerPointSelectionne(Noeud nouvelleSelection){		
 		//TODO Changer la couleur des demandes de livraison en fonction de leur plage horaire
 		if(pointSelectionne != null){
-			String styleEventuel = idNoeudsALivrer != null && idNoeudsALivrer.contains(pointSelectionne.getId()) ? "fillColor=green;" : "";
+			int idCouleur = (noeudsALivrer != null && noeudsALivrer.containsKey(pointSelectionne.getId()) ? noeudsALivrer.get(pointSelectionne.getId()) : 0);
 			Object[] cells = {points.get(pointSelectionne.getId())};
-			plan.setCellStyle(""+styleEventuel, cells);
+			plan.setCellStyle("fillColor="+couleurRemplissage[idCouleur]+";strokeColor="+couleurBordure[idCouleur], cells);
 		}
 		
-		String styleEventuel = idNoeudsALivrer != null && idNoeudsALivrer.contains(nouvelleSelection.getId()) ? "fillColor=green;" : "";
+		int idCouleur = (noeudsALivrer != null && noeudsALivrer.containsKey(nouvelleSelection.getId()) ? noeudsALivrer.get(nouvelleSelection.getId()) : 0);
 		pointSelectionne = nouvelleSelection;
 		Object[] cells = {points.get(pointSelectionne.getId())};
-		plan.setCellStyle("strokeColor=red;strokeWidth=3;"+styleEventuel, cells);
+		plan.setCellStyle("strokeColor=red;strokeWidth=3;fillColor="+couleurRemplissage[idCouleur], cells);
 	}
 	
 	/**
 	 * Méthode permettant d'afficher d'une couleur différente les demandes de livraison sur le plan
 	 */
 	public void afficherDemandesLivraisonsSurPlan(){
-		idNoeudsALivrer = new HashSet<Integer>();
+		noeudsALivrer = new HashMap<Integer, Integer>();
 		
+		int numPlage = 1;
 		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
 
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				int noeud = livraison.getNoeud().getId();
-				idNoeudsALivrer.add(noeud);
+				noeudsALivrer.put(noeud, numPlage);
 				Object[] cells = {points.get(noeud)};
-				plan.setCellStyle("fillColor=green", cells);
+				plan.setCellStyle("fillColor="+couleurRemplissage[numPlage]+";strokeColor="+couleurBordure[numPlage], cells);
 			}
+			numPlage++;
 		}		
 		
 	}
