@@ -7,6 +7,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -109,8 +110,8 @@ public class TourneeTest {
 		PlageHoraire plage1;
 		PlageHoraire plage2;
 		try {
-			plage1 = new PlageHoraire("8h", "9h");
-			plage2 = new PlageHoraire("9h", "10h");
+			plage1 = new PlageHoraire("8:00:00", "9:00:00");
+			plage2 = new PlageHoraire("9:00:00", "10:00:00");
 		
 		
 			DemandeDeLivraison entrepot = new DemandeDeLivraison(noeud1);
@@ -237,35 +238,6 @@ public class TourneeTest {
 	}
 	
 	@Test
-	public void testEffacerItineraire() {
-		Noeud noeud1 = new Noeud(1, 0, 0);
-		Noeud noeud2 = new Noeud(2, 1, 2);
-		Noeud noeud3 = new Noeud(3, 4, 3);
-		
-		Set<Noeud> noeuds = new TreeSet<Noeud>();
-		noeuds.add(noeud1);
-		noeuds.add(noeud2);
-		noeuds.add(noeud3);
-		
-		Troncon troncon12 = new Troncon(1, 9, "", noeud2);
-		noeud1.ajouterTronconSortant(troncon12);
-		
-		Troncon troncon32 = new Troncon(1, 9, "", noeud2);
-		noeud3.ajouterTronconSortant(troncon32);
-		
-		Set<Troncon> troncons = new TreeSet<Troncon>();
-		troncons.add(troncon12);
-		troncons.add(troncon32);
-		
-		Plan plan = new Plan(troncons,noeuds);
-		
-		Tournee tournee = new Tournee();
-		tournee.setPlanTournee(plan);
-		
-		fail("A faire, attendre que les itinéraires soient affectés");
-	}
-	
-	@Test
 	public void testEditerFeuilleRoute() {
 		Controleur c = new Controleur();
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
@@ -274,5 +246,35 @@ public class TourneeTest {
 		c.getTournee().calculerTournee();
 		assertEquals("0 : DDL-1 --> DDL1 (154.3846153846154min)\n\tDe 2 vers 1\n1 : DDL1 --> DDL2 (154.3846153846154min)\n\tDe 1 vers 3\n2 : DDL2 --> DDL3 (154.3846153846154min)\n\tDe 3 vers 2\n3 : DDL3 --> DDL-1 (0.0min)"
 				, c.editerFeuilleRoute());
+	}
+	
+	@Test
+	public void testAjouterLivraison() {
+		Controleur c = new Controleur();
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
+		
+		c.getTournee().calculerTournee();
+		List<Itineraire> itineraires = new ArrayList<Itineraire>(c.getTournee().getItineraires());
+		c.getTournee().ajouterLivraison(c.getPlan().recupererNoeud(1), c.getPlan().recupererNoeud(2), 3);
+		assertEquals(itineraires.size() + 1, c.getTournee().getItineraires().size());
+		itineraires = c.getTournee().getItineraires();
+		assertEquals(1, itineraires.get(2).getDepart().getNoeud().getId());
+		assertEquals(2, itineraires.get(2).getArrivee().getNoeud().getId());
+		assertEquals(2, itineraires.get(3).getDepart().getNoeud().getId());
+		assertEquals(3, itineraires.get(3).getArrivee().getNoeud().getId());
+		c.getTournee().supprimerLivraison(itineraires.get(2).getDepart());
+	}
+	
+	@Test
+	public void testSupprimerLivraison() {
+		Controleur c = new Controleur();
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
+		
+		c.getTournee().calculerTournee();
+		List<Itineraire> itineraires = new ArrayList<Itineraire>(c.getTournee().getItineraires());
+		c.getTournee().supprimerLivraison(itineraires.get(1).getDepart());
+		assertEquals(itineraires.size() - 1, c.getTournee().getItineraires().size());
 	}
 }

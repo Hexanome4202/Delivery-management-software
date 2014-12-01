@@ -83,4 +83,8 @@ public class Itineraire {
 	public void setArrivee(DemandeDeLivraison arrivee) {
 		this.arrivee = arrivee;
 	}
+	
+	public void setTroncons(List<Troncon> troncons) {
+		this.tronconsItineraire = troncons;
+	}
 }

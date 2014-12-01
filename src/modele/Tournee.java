@@ -8,13 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import tsp.SolutionState;
 import tsp.TSP;
-import controleur.Controleur;
 import errors.Codes;
 
 /**
@@ -65,6 +63,10 @@ public class Tournee {
 			if(itineraire.getDepart().compareTo(livraison) == 0) {
 				if(avant != null) {
 					avant.setArrivee(itineraire.getArrivee());
+					Dijkstra.calculerDijkstra(avant.getDepart().getNoeud(), 
+							avant.getArrivee().getNoeud(), 
+							this.planTournee.getToutNoeuds());
+					avant.setTroncons(Dijkstra.chemin);
 				}
 				it.remove();
 				return true;
@@ -136,6 +138,7 @@ public class Tournee {
 		int pos;
 		if((pos = effacerItineraire(noeudPrecedent)) == -1) return;
 		DemandeDeLivraison livraison = new DemandeDeLivraison(noeudCourant, client, null);
+		System.out.println(livraison.getId());
 		Dijkstra.calculerDijkstra(noeudPrecedent, noeudCourant, this.planTournee.getToutNoeuds());
 		List<Troncon> troncons = Dijkstra.chemin;
 		Itineraire it1 = new Itineraire(this.itineraires.get(pos-1).getArrivee(), 
