@@ -585,6 +585,9 @@ public class Fenetre extends JFrame implements Observer {
 	public void afficherDemandesLivraisonsSurPlan(){
 		noeudsALivrer = new HashMap<Integer, Integer>();
 		
+		//On réaffiche le plan proprement, sans point de livraison
+		afficherPlan();
+		
 		int numPlage = 1;
 		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
 
