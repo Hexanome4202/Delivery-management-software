@@ -452,13 +452,23 @@ public class Fenetre extends JFrame implements Observer {
 		 Iterator<Itineraire> it = itineraires.iterator();
 		 
 		 while(it.hasNext()){
-			 Iterator<Troncon> troncons = it.next().getTronconsItineraire().iterator();
+			 Itineraire itineraire = it.next();
+			 int idHoraire = 0;
+			 try{
+				 idHoraire = noeudsALivrer.get(itineraire.getDepart().getNoeud().getId());
+			 }catch(Exception e){
+			 }
+		 	String color = couleurBordure[idHoraire];
+			 
+			 Iterator<Troncon> troncons = itineraire.getTronconsItineraire().iterator();
 			 while(troncons.hasNext()){
 				 Troncon troncon = troncons.next();
+				 int idNoeudFin = troncon.getNoeudFin().getId();
+						 
 				 plan.insertEdge(parent, null, "", 
 							noeudPrecedent, 
 							points.get(troncon.getNoeudFin().getId()),
-							"strokeColor=blue");
+							"strokeColor="+color);
 				 noeudPrecedent = points.get(troncon.getNoeudFin().getId());
 			 }
 		 }
