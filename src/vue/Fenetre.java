@@ -41,9 +41,11 @@ import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
+import modele.Itineraire;
 import modele.Noeud;
 import modele.PlageHoraire;
 import modele.Plan;
+import modele.Tournee;
 import modele.Troncon;
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionLeafItem;
@@ -183,7 +185,7 @@ public class Fenetre extends JFrame implements Observer {
 		btnCalculer = new JButton("Calculer");
 		btnCalculer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				controleur.calculerTournee();
 			}
 		});
 		btnCalculer.setEnabled(false);
@@ -436,10 +438,31 @@ public class Fenetre extends JFrame implements Observer {
     }
 
     /**
-     * 
+     * Méthode permettant de dessiner la tournée
      */
     public void dessinerTournee() {
-        // TODO implement here
+        Tournee tournee = controleur.getTournee();
+        Object parent = plan.getDefaultParent();
+        Object noeudPrecedent = points.get(tournee.getEntrepot().getNoeud().getId());
+        Object[] cells = {noeudPrecedent};
+		plan.setCellStyle("shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow", cells);
+		
+		
+		 ArrayList<Itineraire> itineraires = tournee.getItineraires();
+		 Iterator<Itineraire> it = itineraires.iterator();
+		 
+		 while(it.hasNext()){
+			 Iterator<Troncon> troncons = it.next().getTronconsItineraire().iterator();
+			 while(troncons.hasNext()){
+				 Troncon troncon = troncons.next();
+				 plan.insertEdge(parent, null, "", 
+							noeudPrecedent, 
+							points.get(troncon.getNoeudFin().getId()),
+							"strokeColor=blue");
+				 noeudPrecedent = points.get(troncon.getNoeudFin().getId());
+			 }
+		 }
+        
     }
 
     /**

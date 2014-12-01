@@ -18,7 +18,7 @@ public class Itineraire {
 	private DemandeDeLivraison arrivee;
 
 	/**
-     * Troçons empruntés lors de l'itinéraire
+     * Tronçons empruntés lors de l'itinéraire
      */
 	private List<Troncon> tronconsItineraire;
 	
