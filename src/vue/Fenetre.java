@@ -161,7 +161,6 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Coucou");
 				lireDepuisFichierXML("horaires");
 			}
 			
@@ -218,13 +217,14 @@ public class Fenetre extends JFrame implements Observer {
 		horairesPannel = new javax.swing.JPanel();
 		
 		menuHoraires = new AccordionMenu();
-		creerMenuHoraires();
 		menuHoraires.setBackground(Color.white);
 		menuHoraires.setFont(new Font("Arial", Font.PLAIN, 16));
 		menuHoraires.setMenusSize(30);
 		menuHoraires.setMenuBorders(new BevelBorder(BevelBorder.RAISED));
 		menuHoraires.setSelectionColor(Color.lightGray);
 		menuHoraires.setLeafHorizontalAlignment(AccordionItem.LEFT);
+		creerMenuHoraires();
+
 
 		horairesPannel.add(menuHoraires);
 
@@ -297,10 +297,7 @@ public class Fenetre extends JFrame implements Observer {
 			{
 				Noeud n = getNoeudA(e.getX(), e.getY());
 				if(n != null){
-					System.out.println(n.getId());
 					changerPointSelectionne(n);
-				}else{
-					System.out.println("Pas trouvé");
 				}
 			}
 		});
@@ -385,7 +382,6 @@ public class Fenetre extends JFrame implements Observer {
      * Crée le menu contenant les demandes de livraisons classées par Plage Horaire
      */
 	public void creerMenuHoraires() {
-
 		int iteratorPlage = 1;
 		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
 
@@ -396,7 +392,7 @@ public class Fenetre extends JFrame implements Observer {
 			menuHoraires.addNewMenu("menu" + iteratorPlage,
 					timeFormat.format(plage.getHeureDebut()) + "-"
 							+ timeFormatFin.format(plage.getHeureFin()));
-			System.out.println("______________________");
+
 			int iteratorLiv = 1;
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				menuHoraires.addNewLeafTo("menu" + iteratorPlage, ""
