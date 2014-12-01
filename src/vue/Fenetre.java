@@ -550,12 +550,12 @@ public class Fenetre extends JFrame implements Observer {
 	private void changerPointSelectionne(Noeud nouvelleSelection){		
 		//TODO Changer la couleur des demandes de livraison en fonction de leur plage horaire
 		if(pointSelectionne != null){
-			String styleEventuel = idNoeudsALivrer.contains(pointSelectionne.getId()) ? "fillColor=green;" : "";
+			String styleEventuel = idNoeudsALivrer != null && idNoeudsALivrer.contains(pointSelectionne.getId()) ? "fillColor=green;" : "";
 			Object[] cells = {points.get(pointSelectionne.getId())};
 			plan.setCellStyle(""+styleEventuel, cells);
 		}
 		
-		String styleEventuel = idNoeudsALivrer.contains(nouvelleSelection.getId()) ? "fillColor=green;" : "";
+		String styleEventuel = idNoeudsALivrer != null && idNoeudsALivrer.contains(nouvelleSelection.getId()) ? "fillColor=green;" : "";
 		pointSelectionne = nouvelleSelection;
 		Object[] cells = {points.get(pointSelectionne.getId())};
 		plan.setCellStyle("strokeColor=red;strokeWidth=3;"+styleEventuel, cells);
