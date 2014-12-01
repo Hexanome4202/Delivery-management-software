@@ -453,7 +453,7 @@ public class Fenetre extends JFrame implements Observer {
 		 
 		 while(it.hasNext()){
 			 Itineraire itineraire = it.next();
-			 int idHoraire = 0;
+			 int idHoraire = 1;
 			 try{
 				 idHoraire = noeudsALivrer.get(itineraire.getDepart().getNoeud().getId());
 			 }catch(Exception e){
@@ -468,7 +468,7 @@ public class Fenetre extends JFrame implements Observer {
 				 plan.insertEdge(parent, null, "", 
 							noeudPrecedent, 
 							points.get(troncon.getNoeudFin().getId()),
-							"strokeColor="+color);
+							"strokeWidth=2;strokeColor="+color);
 				 noeudPrecedent = points.get(troncon.getNoeudFin().getId());
 			 }
 		 }
