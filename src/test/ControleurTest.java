@@ -7,6 +7,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import modele.DemandeDeLivraison;
 import modele.Noeud;
@@ -179,7 +181,7 @@ public class ControleurTest {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
+		//TODO sensé ignorer seulement la plage horaire fautive
 		assertEquals("Liste de plages horaires pas de la bonne taille...",1,c.getTournee().getPlagesHoraires().size());
 		assertEquals("Il ne reste pas la bonne plage horaire...",plage,c.getTournee().getPlagesHoraires().get(0));
 	}
@@ -212,4 +214,21 @@ public class ControleurTest {
 		assertNull("L'entrepôt n'est pas nul...",c.getTournee().getEntrepot());
 	}
 	
+	/**
+	 * Test pour une livraison invalide
+	 */
+	@Test
+	public void testGererFichierLivraisonsLivraisonInvalide(){
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/error/livraisonsLivraisonInvalide.xml"), "horaires");
+		
+		DemandeDeLivraison demande = new DemandeDeLivraison(1, c.getPlan().getNoeud(3), 621, null);
+		//TODO sensé ignorer seulement la livraison fautive
+		assertEquals(1,c.getTournee().getPlagesHoraires().size());
+		assertEquals(1,c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison().size());
+		DemandeDeLivraison[] demandes = (DemandeDeLivraison[]) c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison().toArray();
+		assertTrue(demandes[0].compareTo(demande)==0);
+	}
 }
