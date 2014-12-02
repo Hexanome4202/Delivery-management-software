@@ -55,6 +55,7 @@ public class Controleur {
 	 */
     public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
     	this.tournee.ajouterLivraison(precedent, courant, client);
+    	ajouterAListeTournees(tournee);
     	fen.afficherPlan();
     	fen.afficherDemandesLivraisonsSurPlan();
     	fen.dessinerTournee();

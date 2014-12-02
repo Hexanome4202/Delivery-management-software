@@ -18,6 +18,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
+import javax.sound.midi.ControllerEventListener;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -148,6 +149,22 @@ public class Fenetre extends JFrame implements Observer {
 		JMenuItem actionChargerPlan = new JMenuItem("Charger le plan");
 		actionChargerHoraires = new JMenuItem("Charger les horaires");
 		actionChargerHoraires.setEnabled(false);
+		
+		actionAnnuler.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controleur.undo();
+			}
+		});
+		
+		actionRetablir.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controleur.redo();
+			}
+		});
 		
 		
 		actionChargerPlan.addActionListener(new ActionListener(){
