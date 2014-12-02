@@ -125,10 +125,12 @@ public class Controleur {
 				}
 				// todo : traiter les erreurs
 			}else if(typeFichier.equals("plan")){
-				if (racine.getNodeName().equals("Reseau") && !this.modeTests) {
+				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
-					fen.afficherPlan();
-					fen.activerChargementHoraires();
+					if (!this.modeTests) {
+						fen.afficherPlan();
+						fen.activerChargementHoraires();
+					}
 				}
 			}
            
