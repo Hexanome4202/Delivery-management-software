@@ -2,8 +2,10 @@ package controleur;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import javax.swing.undo.UndoableEdit;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,6 +34,7 @@ public class Controleur {
 	private VueTournee vueTournee;
 	private Plan plan;
 	private Fenetre fen;
+	private ArrayList<Tournee> listeTournees;
 
 	/**
      * 
@@ -40,6 +43,7 @@ public class Controleur {
 		tournee = new Tournee();
 		vueTournee = new VueTournee(null);
 		plan = new Plan();
+		listeTournees= new ArrayList<Tournee>();
 		 this.fen = new Fenetre(this);
 		 this.fen.setVisible(true);
 	}
@@ -117,7 +121,7 @@ public class Controleur {
 				}
 			}
            
-           afficherErreurs(resultatConstruction);
+           Codes.afficherErreurs(resultatConstruction);
            
        } catch (ParserConfigurationException pce) {
            System.out.println("Erreur de configuration du parseur DOM");
@@ -168,6 +172,34 @@ public class Controleur {
 		this.tournee.getPlagesHoraires().clear();
 		return Codes.PARSE_OK;
 	}
+	
+	public int undo(){
+		
+		int index = listeTournees.size()-2;
+		
+		if(index>=0){
+			this.tournee=listeTournees.get(index);
+		}else{
+			return Codes.PARSE_ERROR;
+		}
+		return Codes.PARSE_OK;
+	}
+	
+	public int redo(){
+		
+		int index = listeTournees.lastIndexOf(tournee)+1;
+		
+		if(index<listeTournees.size()){
+			this.tournee=listeTournees.get(index);
+		}else{
+			return Codes.PARSE_ERROR;
+		}
+		return Codes.PARSE_OK;
+	}
+	
+	public void ajouterAListeTournees(Tournee tournee){
+		listeTournees.add(tournee);
+	}
 
 	/**
 	 * 
@@ -189,32 +221,4 @@ public class Controleur {
 		new Controleur();
 	}
 	
-	/**
-	 * Methode responsable pour l'affichage des differents erreurs que l'on peut avoir dans le parsing des fichiers xml
-	 * @param code le code de l'execution du parsing
-	 */
-	private void afficherErreurs(int code) {
-		switch (code) {
-			case Codes.ERREUR_301:
-				JOptionPane.showMessageDialog(null,"Noeud destination du tronçon n'existe pas ou vide!","Erreur 301",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_302:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un tronçon (vitesse, longueur..)!","Erreur 302",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_303:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'un noeud!","Erreur 303",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_304:
-				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_305:
-				JOptionPane.showMessageDialog(null,"Noued correspondant a l'adresse de livraison specifiée inexistant!","Erreur 305",JOptionPane.ERROR_MESSAGE);
-				break;
-			case Codes.ERREUR_306:
-				JOptionPane.showMessageDialog(null,"Noued correspondant a l'entrepot n'existe pas!","Erreur 306",JOptionPane.ERROR_MESSAGE);
-				break;
-			default:
-				break;
-			}
-	}
 }
