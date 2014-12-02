@@ -36,9 +36,10 @@ public class Controleur {
 	private Fenetre fen;
 	private ArrayList<Tournee> listeTournees;
 	private Integer indexTourneeAct;
+	private boolean modeTests;
 
 	/**
-     * 
+     * Constructeur par défaut de la classe <code>Controleur</code>
      */
 	public Controleur() {
 		tournee = new Tournee();
@@ -48,6 +49,7 @@ public class Controleur {
 		indexTourneeAct=-1;
 		 this.fen = new Fenetre(this);
 		 this.fen.setVisible(true);
+		 this.modeTests = false;
 	}
 
 	/**
@@ -103,7 +105,7 @@ public class Controleur {
 	 * @param xml le fichier xml que l'on veut traiter
 	 * @param typeFichier peut être "horaires" ou "plan"
 	 */
-	public void gererFichier(File xml, String typeFichier) {
+	public int gererFichier(File xml, String typeFichier) {
     	try {
             // creation d'un constructeur de documents a l'aide d'une fabrique
            DocumentBuilder constructeur = DocumentBuilderFactory.newInstance().newDocumentBuilder();	
@@ -130,21 +132,23 @@ public class Controleur {
 				}
 			}
            
-           Codes.afficherErreurs(resultatConstruction);
+           if(!this.modeTests) Codes.afficherErreurs(resultatConstruction);
+           return resultatConstruction;
            
        } catch (ParserConfigurationException pce) {
            System.out.println("Erreur de configuration du parseur DOM");
-           JOptionPane.showMessageDialog(null,"Erreur de configuration du parseur DOM!","Erreur",JOptionPane.ERROR_MESSAGE);
+           if(!this.modeTests) JOptionPane.showMessageDialog(null,"Erreur de configuration du parseur DOM!","Erreur",JOptionPane.ERROR_MESSAGE);
            System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");
        } catch (SAXException se) {
            System.out.println("Erreur lors du parsing du document");
            System.out.println("lors de l'appel a construteur.parse(xml)");
-           JOptionPane.showMessageDialog(null,"PB de parsing du document xml!","Erreur",JOptionPane.ERROR_MESSAGE);
+           if(!this.modeTests) JOptionPane.showMessageDialog(null,"PB de parsing du document xml!","Erreur",JOptionPane.ERROR_MESSAGE);
        } catch (IOException ioe) {
            System.out.println("Erreur d'entree/sortie");
-           JOptionPane.showMessageDialog(null,"Erreur d'entree/sortie!","Erreur",JOptionPane.ERROR_MESSAGE);
+           if(!this.modeTests) JOptionPane.showMessageDialog(null,"Erreur d'entree/sortie!","Erreur",JOptionPane.ERROR_MESSAGE);
            System.out.println("lors de l'appel a construteur.parse(xml)");
        }
+    	return Codes.PARSE_ERROR;
     }
 
 	
@@ -229,6 +233,16 @@ public class Controleur {
 	 */
 	public Tournee getTournee() {
 		return this.tournee;
+	}
+	
+	/**
+	 * Permet de lancer les tests sans obtenir de pop-up qui doit être fermée à la main
+	 * @param val
+	 */
+	public void setModeTest(boolean val) {
+		this.modeTests = val;
+		if(val) this.fen.setVisible(false);
+		else this.fen.setVisible(false);
 	}
 
 	public static void main(String[] args) {

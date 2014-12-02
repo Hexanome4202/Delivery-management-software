@@ -14,6 +14,7 @@ import modele.Troncon;
 import org.junit.Test;
 
 import controleur.Controleur;
+import errors.Codes;
 
 public class ControleurTest {
 
@@ -59,6 +60,13 @@ public class ControleurTest {
 				assertEquals(602.1, t.getLongueur(), 0.01);
 			}
 		}
+	}
+	
+	@Test
+	public void testGererFichierPlanNonXML() {
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		assertEquals(Codes.PARSE_ERROR, c.gererFichier(new File("XML/testPlan2.xml"), "plan"));
 	}
 	
 	@Test
