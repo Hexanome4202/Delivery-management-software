@@ -35,6 +35,7 @@ public class Controleur {
 	private Plan plan;
 	private Fenetre fen;
 	private ArrayList<Tournee> listeTournees;
+	private Integer indexTourneeAct;
 
 	/**
      * 
@@ -44,6 +45,7 @@ public class Controleur {
 		vueTournee = new VueTournee(null);
 		plan = new Plan();
 		listeTournees= new ArrayList<Tournee>();
+		indexTourneeAct=-1;
 		 this.fen = new Fenetre(this);
 		 this.fen.setVisible(true);
 	}
@@ -176,7 +178,7 @@ public class Controleur {
 	
 	public int undo(){
 		
-		int index = listeTournees.size()-2;
+		int index = indexTourneeAct-1;
 		
 		if(index>=0){
 			this.tournee=listeTournees.get(index);
@@ -188,10 +190,11 @@ public class Controleur {
 	
 	public int redo(){
 		
-		int index = listeTournees.lastIndexOf(tournee)+1;
+		int index = indexTourneeAct+1;
 		
 		if(index<listeTournees.size()){
 			this.tournee=listeTournees.get(index);
+			indexTourneeAct=index;
 		}else{
 			return Codes.PARSE_ERROR;
 		}
@@ -200,6 +203,7 @@ public class Controleur {
 	
 	public void ajouterAListeTournees(Tournee tournee){
 		listeTournees.add(tournee);
+		indexTourneeAct++;
 	}
 
 	/**
