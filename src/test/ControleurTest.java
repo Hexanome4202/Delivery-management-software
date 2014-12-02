@@ -64,9 +64,42 @@ public class ControleurTest {
 	
 	@Test
 	public void testGererFichierPlanNonXML() {
+		// Test Noeud destination inexistant pour un tronçon 
 		Controleur c = new Controleur();
 		c.setModeTest(true);
 		assertEquals(Codes.PARSE_ERROR, c.gererFichier(new File("XML/testPlan2.xml"), "plan"));
+		assertEquals(0, c.getPlan().getToutNoeuds().size());
+		assertEquals(0, c.getPlan().getToutTroncons().size());
+	}
+	
+	@Test
+	public void testGererFichierPlanNoeudDestInexistant() {
+		// Test poru des informations erronés pour la description d'un torncon
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		assertEquals(Codes.ERREUR_301, c.gererFichier(new File("XML/errors/plan301.xml"), "plan"));
+		assertEquals(0, c.getPlan().getToutNoeuds().size());
+		assertEquals(0, c.getPlan().getToutTroncons().size());
+	}
+	
+	@Test
+	public void testGererFichierPlanMauvaiseSpecTroncon() {
+		// Vitesse négative, taille négative, nom vide, id négatif
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		assertEquals(Codes.ERREUR_302, c.gererFichier(new File("XML/errors/plan302.xml"), "plan"));
+		assertEquals(0, c.getPlan().getToutNoeuds().size());
+		assertEquals(0, c.getPlan().getToutTroncons().size());
+	}
+	
+	@Test
+	public void testGererFichierPlanMauvaiseSpecNoeud() {
+		// Id de noeud négatif
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		assertEquals(Codes.ERREUR_303, c.gererFichier(new File("XML/errors/plan303.xml"), "plan"));
+		assertEquals(0, c.getPlan().getToutNoeuds().size());
+		assertEquals(0, c.getPlan().getToutTroncons().size());
 	}
 	
 	@Test
