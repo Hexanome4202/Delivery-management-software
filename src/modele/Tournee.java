@@ -2,6 +2,9 @@
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -342,6 +345,39 @@ public class Tournee {
 		return Codes.PARSE_OK;
 	}
 
+	public List<DemandeDeLivraison> getDemandesTempsDepasse(){
+		ArrayList<DemandeDeLivraison> demandesDepassees = new ArrayList<DemandeDeLivraison>();
+		
+		GregorianCalendar dateLivreur = new GregorianCalendar();
+		dateLivreur.setTime(itineraires.get(0).getArrivee().getPlage().getHeureDebut());
+
+		Iterator<Itineraire> it = itineraires.iterator();
+		while(it.hasNext()){
+			Itineraire itineraire = it.next();
+			
+			DemandeDeLivraison demande = itineraire.getArrivee();
+			if(demande.getId() != -1){
+				PlageHoraire plage = demande.getPlage();
+				Date tempsFin = plage.getHeureFin();
+				Date tempsDebut = plage.getHeureDebut();
+				
+				dateLivreur.add(Calendar.SECOND, (int) itineraire.getTemps());
+				
+				if(dateLivreur.getTime().compareTo(tempsFin) <= 0){
+					if(dateLivreur.getTime().compareTo(tempsDebut) < 0){
+						dateLivreur.setTime(tempsDebut);
+					}
+					dateLivreur.add(Calendar.MINUTE, 10);
+				}
+				else{
+					demandesDepassees.add(demande);
+					dateLivreur.add(Calendar.MINUTE, 10);
+				}
+			}
+		}
+		return demandesDepassees;
+	}
+	
 	/**
 	 * 
 	 * @param planTournee : la <code>Plan</code> de la tournée

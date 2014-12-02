@@ -1,8 +1,6 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -110,8 +108,8 @@ public class TourneeTest {
 		PlageHoraire plage1;
 		PlageHoraire plage2;
 		try {
-			plage1 = new PlageHoraire("8:00:00", "9:00:00");
-			plage2 = new PlageHoraire("9:00:00", "10:00:00");
+			plage1 = new PlageHoraire("8:0:0", "8:10:30");
+			plage2 = new PlageHoraire("10:00:00", "11:00:00");
 		
 		
 			DemandeDeLivraison entrepot = new DemandeDeLivraison(noeud1);
@@ -169,7 +167,6 @@ public class TourneeTest {
 			assertEquals(14,tournee.getItineraires().get(3).getTemps(),0);
 		
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -272,9 +269,38 @@ public class TourneeTest {
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
 		
-		c.getTournee().calculerTournee();
+		c.calculerTournee();
 		List<Itineraire> itineraires = new ArrayList<Itineraire>(c.getTournee().getItineraires());
 		c.getTournee().supprimerLivraison(itineraires.get(1).getDepart());
 		assertEquals(itineraires.size() - 1, c.getTournee().getItineraires().size());
+	}
+	
+	/**
+	 * Méthode testant la méthode <code>getDemandesTempsDepasse</code>
+	 */
+	@Test
+	public void testDemandesDepassees(){
+		Controleur c = new Controleur();
+		c.gererFichier(new File("XML/testDijkstraExempleWiki.xml"), "plan");
+		c.gererFichier(new File("XML/testTourneeLivraisons.xml"), "horaires");
+		c.calculerTournee();
+		
+		Tournee tournee = c.getTournee();
+		List<DemandeDeLivraison> resultat = tournee.getDemandesTempsDepasse();
+		
+		Noeud noeud9 = new Noeud(9,0,0);
+		PlageHoraire plage = null;
+		try {
+			plage = new PlageHoraire("8:0:0", "8:10:30");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		DemandeDeLivraison demande = new DemandeDeLivraison(2,noeud9,621,plage);
+		
+		List<DemandeDeLivraison> attendu = new ArrayList<DemandeDeLivraison>();
+		attendu.add(demande);
+		
+		assertEquals("Les listes de demandes n'ont pas la même taille.",attendu.size(), resultat.size());
+		assertEquals("Les demandes dépassées ne sont pas les mêmes.",0,attendu.get(0).compareTo(resultat.get(0)));
 	}
 }
