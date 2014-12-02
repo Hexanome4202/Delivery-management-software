@@ -103,28 +103,33 @@ public class PlageHoraire {
 		String tag = "Livraison";
 		NodeList liste = plageElement.getElementsByTagName(tag);
 		demandesLivraisonPlage.clear();
+		int code=Codes.PARSE_OK;
 		for (int i = 0; i < liste.getLength(); i++) {
-			Element livraisonElement = (Element) liste.item(i);
-			Integer id = Integer.parseInt(livraisonElement.getAttribute("id"));
-			Integer adresse = Integer.parseInt(livraisonElement
-					.getAttribute("adresse"));
-			Integer idClient = Integer.parseInt(livraisonElement
-					.getAttribute("client"));
-			Noeud noeud = planTournee.recupererNoeud(adresse);
-
-			if (noeud != null) {
-				DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,
-						noeud, idClient, this);
-				demandesLivraisonPlage.add(nouvelleDemande);
-			} else {
-				demandesLivraisonPlage.clear();
-				return Codes.ERREUR_305;
+			try{
+				Element livraisonElement = (Element) liste.item(i);
+				Integer id = Integer.parseInt(livraisonElement.getAttribute("id"));
+				Integer adresse = Integer.parseInt(livraisonElement
+						.getAttribute("adresse"));
+				Integer idClient = Integer.parseInt(livraisonElement
+						.getAttribute("client"));
+				Noeud noeud = planTournee.recupererNoeud(adresse);
+	
+				if (noeud != null) {
+					DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,
+							noeud, idClient, this);
+					demandesLivraisonPlage.add(nouvelleDemande);
+				} else {
+					demandesLivraisonPlage.clear();
+					return Codes.ERREUR_305;
+				}
+			} catch (NumberFormatException e) {
+				code=Codes.ERREUR_308;
 			}
 
 			// ajout des elements crees dans la structure objet
 		}
 
-		return Codes.PARSE_OK;
+		return code;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 ﻿package modele;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.w3c.dom.Element;
@@ -325,24 +327,38 @@ public class Tournee {
 		String tag = "Plage";
 		liste = noeudDOMRacine.getElementsByTagName(tag);
 		plagesHoraires.clear();
+		int code=Codes.PARSE_OK;
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element plageElement = (Element) liste.item(i);
-			PlageHoraire nouvellePlage;
+			PlageHoraire nouvellePlage=null;
 			try {
+				Date heureDebut = new SimpleDateFormat("H:m:s", Locale.ENGLISH)
+				.parse(plageElement.getAttribute("heureDebut"));
+				Date heureFin = new SimpleDateFormat("H:m:s", Locale.ENGLISH)
+				.parse(plageElement.getAttribute("heureFin"));
+				if(heureDebut.before(heureFin)){
 				nouvellePlage = new PlageHoraire(
 						plageElement.getAttribute("heureDebut"),
 						plageElement.getAttribute("heureFin"));
-				int code=nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee);
-				if (code != Codes.PARSE_OK) {
-					return code;
+				}else
+				{
+					//erreur si heure fin < heure début
+					code = Codes.ERREUR_307;
 				}
-				plagesHoraires.add(nouvellePlage);
+				if(code==1 && nouvellePlage!=null){
+				code=nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee);
+				}else if(nouvellePlage!=null){
+					nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee);
+					plagesHoraires.add(nouvellePlage);
+				}
+				// erreur si plages horaires se chevauchent
+				
 			} catch (ParseException e) {
-				return Codes.ERREUR_304;
+				code=Codes.ERREUR_304;
 			}
 			
 		}
-		return Codes.PARSE_OK;
+		return code;
 	}
 
 	public List<DemandeDeLivraison> getDemandesTempsDepasse(){

@@ -12,30 +12,31 @@ public class Codes {
 	 */
 	static public final int PARSE_OK = 1;
 	/**
-	 * Noeud destination du tronçon n’existe pas ou vide
+	 * Noeud destination du tronï¿½on nï¿½existe pas ou vide
 	 */
 	static public final int ERREUR_301 = 301;
 	/**
-	 * Probleme dans les specifications d’un tronçon (vitesse, longueur..)
+	 * Probleme dans les specifications dï¿½un tronï¿½on (vitesse, longueur..)
 	 */
 	static public final int ERREUR_302 = 302;
 	/**
-	 * Probleme dans les specifications d’un noeud
+	 * Probleme dans les specifications dï¿½un noeud
 	 */
 	static public final int ERREUR_303 = 303;
 	/**
-	 * Probleme dans les specifications d’une plage horaire
+	 * Probleme dans les specifications dï¿½une plage horaire
 	 */
 	static public final int ERREUR_304 = 304;
 	/**
-	 * Noued correspondant a l'adresse de livraison specifié inexistant
+	 * Noued correspondant a l'adresse de livraison specifiï¿½ inexistant
 	 */
 	static public final int ERREUR_305 = 305;
 	/**
 	 * Noued correspondant a l'entrepot n'existe pas
 	 */
 	static public final int ERREUR_306 = 306;
-	
+	static public final int ERREUR_307 = 307;
+	static public final int ERREUR_308 = 308;
 	/**
 	 * Methode responsable pour l'affichage des differents erreurs que l'on peut avoir dans le parsing des fichiers xml
 	 * @param code le code de l'execution du parsing
@@ -55,10 +56,16 @@ public class Codes {
 				JOptionPane.showMessageDialog(null,"Probleme dans les specifications d'une plage horaire!","Erreur 304",JOptionPane.ERROR_MESSAGE);
 				break;
 			case Codes.ERREUR_305:
-				JOptionPane.showMessageDialog(null,"Noued correspondant a l'adresse de livraison specifiÃ©e inexistant!","Erreur 305",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Noeud correspondant a l'adresse de livraison specifiÃ©e inexistant!","Erreur 305",JOptionPane.ERROR_MESSAGE);
 				break;
 			case Codes.ERREUR_306:
 				JOptionPane.showMessageDialog(null,"Noued correspondant a l'entrepot n'existe pas!","Erreur 306",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_307:
+				JOptionPane.showMessageDialog(null,"L'heure de debut de la plage horaire est plus grande que la fin!","Erreur 307",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_308:
+				JOptionPane.showMessageDialog(null,"erreur dans la construction des livraisons!","Erreur 308",JOptionPane.ERROR_MESSAGE);
 				break;
 			default:
 				break;

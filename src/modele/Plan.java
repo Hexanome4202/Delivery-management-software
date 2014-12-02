@@ -141,6 +141,7 @@ public class Plan {
 				listeElements.add(planElement);
 			} catch (NumberFormatException e) {
 				toutNoeuds.clear();
+				toutTroncons.clear();
 				return Codes.ERREUR_303;
 			}
 		}
@@ -151,6 +152,7 @@ public class Plan {
 		int code=construireTronconAPartirDeDOMXML(liste);
 		if(code!=Codes.PARSE_OK){
 			toutNoeuds.clear();
+			toutTroncons.clear();
 			return code;
 		}
 		remplirTousTroncons();//Je sais pas si �a sert a grand chose
@@ -219,6 +221,8 @@ public class Plan {
 						return Codes.ERREUR_302;
 					}
 				} catch (NumberFormatException e) {
+					toutTroncons.clear();
+					toutNoeuds.clear();
 					return Codes.ERREUR_302;
 				}
 
@@ -228,6 +232,8 @@ public class Plan {
 			if (noeud!=null) {
 				noeud.setSortants(setTroncons);
 			}else {
+				toutTroncons.clear();
+				toutNoeuds.clear();
 				return Codes.ERREUR_303;
 			}
 		}
