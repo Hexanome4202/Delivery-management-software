@@ -86,6 +86,7 @@ public class Fenetre extends JFrame implements Observer {
 	private JButton btnModifier;
 	private JButton btnImprimer;
 	private JButton btnAjouter;
+	private JButton btnSupprimer;
 	JMenuItem actionChargerHoraires;
     
     private static final double RAYON_NOEUD = 10;
@@ -114,7 +115,9 @@ public class Fenetre extends JFrame implements Observer {
      * Le point actuellement selectionné
      */
     private Noeud pointSelectionne;
+    
     private Noeud entrepot;
+    private Noeud noeudAAjouter = null;
     
     /**
      * 
@@ -199,7 +202,7 @@ public class Fenetre extends JFrame implements Observer {
 			}
 		});
 		btnModifier.setEnabled(false);
-		
+
 		btnImprimer = new JButton("Imprimer");
 		btnImprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -212,12 +215,24 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				noeudAAjouter = pointSelectionne;
+				btnAjouter.setEnabled(false);
 			}
 			
 		});
 		btnAjouter.setEnabled(false);
+		
+		btnSupprimer = new JButton("Supprimer");
+		btnSupprimer.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO supprimer le noeud
+				btnSupprimer.setEnabled(false);
+			}
+			
+		});
+		btnSupprimer.setEnabled(false);
 		
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
@@ -315,11 +330,23 @@ public class Fenetre extends JFrame implements Observer {
 			{
 				Noeud n = getNoeudA(e.getX(), e.getY());
 				if(n != null){
-					changerPointSelectionne(n);
-					if(n==entrepot || noeudsALivrer.containsKey(n.getId())){
-						btnAjouter.setEnabled(false);
-					}else if(entrepot != null && n != entrepot && !noeudsALivrer.containsKey(n.getId())){
-						btnAjouter.setEnabled(true);
+					
+					if(noeudAAjouter != null){
+						if(noeudsALivrer.containsKey(n.getId())){
+							controleur.ajouterLivraison(0, noeudAAjouter, n);
+							noeudAAjouter = null;
+						}
+					}else{
+					
+						changerPointSelectionne(n);
+						if(n==entrepot || noeudsALivrer.containsKey(n.getId())){
+							btnAjouter.setEnabled(false);
+						}else if(entrepot != null && n != entrepot && !noeudsALivrer.containsKey(n.getId())){
+							btnAjouter.setEnabled(true);
+						}
+						
+						btnSupprimer.setEnabled(noeudsALivrer.containsKey(n.getId()));
+
 					}
 				}
 			}
@@ -354,7 +381,9 @@ public class Fenetre extends JFrame implements Observer {
 					.addComponent(btnCalculer)
 					.addPreferredGap(ComponentPlacement.RELATED, 313, Short.MAX_VALUE)
 					.addComponent(btnAjouter)
-					.addPreferredGap(ComponentPlacement.RELATED, 400, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+					.addComponent(btnSupprimer)
+					.addPreferredGap(ComponentPlacement.RELATED, 450, Short.MAX_VALUE)
 					.addComponent(btnModifier)
 					.addGap(5)
 					.addComponent(btnImprimer)
@@ -370,6 +399,7 @@ public class Fenetre extends JFrame implements Observer {
 						.addComponent(planLabel)
 						.addComponent(btnCalculer)
 						.addComponent(btnAjouter)
+						.addComponent(btnSupprimer)
 						.addComponent(horairesLabel))
 					
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -664,12 +694,14 @@ public class Fenetre extends JFrame implements Observer {
 		
 		int numPlage = 1;
 		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
-
+			
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				int noeud = livraison.getNoeud().getId();
+				System.out.println(""+noeud);
 				noeudsALivrer.put(noeud, numPlage);
 				Object[] cells = {points.get(noeud)};
 				plan.setCellStyle("fillColor="+couleurRemplissage[numPlage]+";strokeColor="+couleurBordure[numPlage], cells);
+				
 			}
 			numPlage++;
 		}		
