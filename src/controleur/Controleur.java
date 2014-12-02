@@ -61,10 +61,12 @@ public class Controleur {
     	fen.afficherPlan();
     	fen.afficherDemandesLivraisonsSurPlan();
     	fen.dessinerTournee();
+    	fen.majMenuHoraire();
     }
     
     public void calculerTournee(){
 		this.tournee.calculerTournee();
+		ajouterAListeTournees(tournee);
 		fen.dessinerTournee();
     }
 
@@ -74,6 +76,10 @@ public class Controleur {
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
 		// TODO implement here
+		fen.afficherPlan();
+    	fen.afficherDemandesLivraisonsSurPlan();
+    	fen.dessinerTournee();
+    	fen.majMenuHoraire();
 	}
 
 	/**
