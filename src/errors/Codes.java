@@ -38,6 +38,10 @@ public class Codes {
 	static public final int ERREUR_307 = 307;
 	static public final int ERREUR_308 = 308;
 	/**
+	 * Le fichier contient des plages horaires qui se chevauchent
+	 */
+	static public final int ERREUR_309 = 309;
+	/**
 	 * Methode responsable pour l'affichage des differents erreurs que l'on peut avoir dans le parsing des fichiers xml
 	 * @param code le code de l'execution du parsing
 	 */
@@ -66,6 +70,9 @@ public class Codes {
 				break;
 			case Codes.ERREUR_308:
 				JOptionPane.showMessageDialog(null,"erreur dans la construction des livraisons!","Erreur 308",JOptionPane.ERROR_MESSAGE);
+				break;
+			case Codes.ERREUR_309:
+				JOptionPane.showMessageDialog(null,"xml contient des plages horaires qui se chevauchent!","Erreur 309",JOptionPane.ERROR_MESSAGE);
 				break;
 			default:
 				break;

@@ -219,6 +219,9 @@ public class Controleur {
 	}
 	
 	public void ajouterAListeTournees(Tournee tournee){
+		for (int i = indexTourneeAct+1; i < listeTournees.size(); i++) {
+			listeTournees.remove(i);
+		}
 		listeTournees.add(new Tournee(tournee));
 		indexTourneeAct++;
 	}
