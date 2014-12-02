@@ -431,8 +431,12 @@ public class Fenetre extends JFrame implements Observer {
 
 	}
 	
-	
-	
+	/**
+	 * Met à jour le menu horaires
+	 */
+	public void majMenuHoraire(){
+		//TODO : Cécilia - trouver un moyen de mettre à jour le menu horaires
+	}
 	
     /**
      * Crée le menu contenant les demandes de livraisons classées par Plage Horaire
