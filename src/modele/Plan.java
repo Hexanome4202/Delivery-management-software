@@ -206,10 +206,13 @@ public class Plan {
 							.getAttribute("longueur").replace(",","."));
 					Integer idNoeudFin = Integer.parseInt(tronconElement
 							.getAttribute("idNoeudDestination"));
-					
-					if (vitesse>0 && longueur>0 && !nomRue.equals("") && nomRue!=null) {
-						Troncon troncon = new Troncon(vitesse, longueur, nomRue,
-								recupererNoeud(idNoeudFin));
+					Noeud noeudFin=null;
+					if(idNoeudFin!=null){
+						noeudFin=recupererNoeud(idNoeudFin);
+					}
+					if (vitesse>0 && longueur>0 && !nomRue.equals("") && nomRue!=null && noeudFin!=null) {
+						
+						Troncon troncon = new Troncon(vitesse, longueur, nomRue,noeudFin);
 						bool = setTroncons.add(troncon);
 						//TODO: afficher erreur si bool false (je crois que c'est pas necessaire)
 					}else {
