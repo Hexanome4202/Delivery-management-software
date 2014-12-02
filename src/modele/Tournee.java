@@ -378,16 +378,16 @@ public class Tournee {
 			}
 
 		}
-		
-		code= testerListePlagesHoraires();
-		
-		if (code!=Codes.PARSE_OK) {
-//			plagesHoraires.clear();
-//			itineraires.clear();
-//			this.entrepot = null;
-//			this.planTournee = null;
+
+		code = testerListePlagesHoraires();
+
+		if (code != Codes.PARSE_OK) {
+			// plagesHoraires.clear();
+			// itineraires.clear();
+			// this.entrepot = null;
+			// this.planTournee = null;
 		}
-		
+
 		return code;
 	}
 
@@ -407,7 +407,6 @@ public class Tournee {
 				PlageHoraire plage = demande.getPlage();
 				Date tempsFin = plage.getHeureFin();
 				Date tempsDebut = plage.getHeureDebut();
-
 				dateLivreur.add(Calendar.SECOND, (int) itineraire.getTemps());
 
 				if (dateLivreur.getTime().compareTo(tempsFin) <= 0) {
@@ -416,8 +415,19 @@ public class Tournee {
 					}
 					dateLivreur.add(Calendar.MINUTE, 10);
 				} else {
-					demandesDepassees.add(demande);
-					dateLivreur.add(Calendar.MINUTE, 10);
+
+					dateLivreur.add(GregorianCalendar.SECOND,
+							(int) itineraire.getTemps());
+
+					if (dateLivreur.getTime().compareTo(tempsFin) <= 0) {
+						if (dateLivreur.getTime().compareTo(tempsDebut) < 0) {
+							dateLivreur.setTime(tempsDebut);
+						}
+						dateLivreur.add(GregorianCalendar.MINUTE, 10);
+					} else {
+						demandesDepassees.add(demande);
+						dateLivreur.add(GregorianCalendar.MINUTE, 10);
+					}
 				}
 			}
 		}
@@ -425,10 +435,10 @@ public class Tournee {
 	}
 
 	private int testerListePlagesHoraires() {
-		
-		int code=Codes.PARSE_OK;
-		List<PlageHoraire> lp= new ArrayList<PlageHoraire>();
-		
+
+		int code = Codes.PARSE_OK;
+		List<PlageHoraire> lp = new ArrayList<PlageHoraire>();
+
 		for (PlageHoraire p1 : plagesHoraires) {
 			for (PlageHoraire p2 : plagesHoraires) {
 				if (!lp.contains(p1) && !lp.contains(p2)) {
