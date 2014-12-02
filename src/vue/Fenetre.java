@@ -238,7 +238,12 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO supprimer le noeud
+				if(noeudsALivrer.containsKey(pointSelectionne.getId())){
+					controleur.supprimerLivraison(pointSelectionne);
+				}else{
+					//TODO remplacer ça par un affichage graphique
+					System.out.println("Rien à supprimer");
+				}
 				btnSupprimer.setEnabled(false);
 			}
 			

@@ -70,7 +70,7 @@ public class Controleur {
 	/**
 	 * @param livraison
 	 */
-	public void supprimerLivraison(DemandeDeLivraison livraison) {
+	public void supprimerLivraison(Noeud noeudASupprimer) {
 		// TODO implement here
 	}
 
