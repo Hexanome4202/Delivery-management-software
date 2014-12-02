@@ -92,4 +92,12 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
 	public int getIdClient() {
 		return this.idClient;
 	}
+	
+	/**
+	 * 
+	 * @return la plage horaire de la demande
+	 */
+	public PlageHoraire getPlage(){
+		return plageHoraire;
+	}
 }

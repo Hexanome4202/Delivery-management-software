@@ -33,12 +33,12 @@ public class Troncon implements Comparable<Troncon>{
     }
 
     /**
-     * La vitesse de déplacement sur le <code>Troncon</code>
+     * La vitesse de déplacement sur le <code>Troncon</code> en m/s
      */
     private double vitesse;
 
     /**
-     * La longueur du <code>Troncon</code>
+     * La longueur du <code>Troncon</code> en mètres
      */
     private double longueur;
 
@@ -70,7 +70,7 @@ public class Troncon implements Comparable<Troncon>{
 	}
 
 	/**
-     * Calcule et retourne le temps estimé pour parcourir le tronçon.
+     * Calcule et retourne le temps estimé pour parcourir le tronçon en secondes.
      * @return le temps estimé de parcours.
      */
     public double getTemps(){

@@ -43,6 +43,15 @@ public class Plan {
 		toutTroncons=new HashSet<Troncon>();
 		toutNoeuds= new HashSet<Noeud>();
 	}
+	
+	/**
+	 * Constructeur de copie de Plan
+	 * @param p
+	 */
+	public Plan(Plan p) {
+		toutTroncons=p.getToutTroncons();
+		toutNoeuds= p.getToutNoeuds();
+	}
 
 	/**
 	 * @param racineXML
