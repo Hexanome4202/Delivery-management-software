@@ -347,6 +347,7 @@ public class Tournee {
 				}
 				if(code==1 && nouvellePlage!=null){
 				code=nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee);
+				plagesHoraires.add(nouvellePlage);
 				}else if(nouvellePlage!=null){
 					nouvellePlage.construireLivraisonsAPartirDeDOMXML(plageElement, planTournee);
 					plagesHoraires.add(nouvellePlage);
