@@ -18,7 +18,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import javax.sound.midi.ControllerEventListener;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -71,6 +70,8 @@ public class Fenetre extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
 	private JFileChooser jFileChooserXML;
 	private Controleur controleur;
+	
+	private String repertoireActuel;
 	
     private AccordionMenu menuHoraires;
     private javax.swing.JPanel horairesPannel;
@@ -326,7 +327,6 @@ public class Fenetre extends JFrame implements Observer {
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
 		
-	
 		/*---------------------PLAN------------------------------*/
 		plan = new mxGraph();
 		planComponent = new mxGraphComponent(plan);	
@@ -518,7 +518,7 @@ public class Fenetre extends JFrame implements Observer {
 		Tournee tournee = controleur.getTournee();
 		Object parent = plan.getDefaultParent();
 		
-		entrepot = tournee.getEntrepot().getNoeud();;
+		entrepot = tournee.getEntrepot().getNoeud();
 		
 		int noeudPrecedent = entrepot.getId();		
 
@@ -596,12 +596,17 @@ public class Fenetre extends JFrame implements Observer {
         jFileChooserXML.setFileFilter(filter);
         jFileChooserXML.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int returnVal;
-        if (mode == 'o')
+        if (mode == 'o'){
+        	if(repertoireActuel!=null)
+        		jFileChooserXML.setCurrentDirectory(new File(repertoireActuel));
         	returnVal = jFileChooserXML.showOpenDialog(null);
-        else
+        }else{
         	returnVal = jFileChooserXML.showSaveDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        }
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+        		repertoireActuel=jFileChooserXML.getSelectedFile().getAbsolutePath();
                 return new File(jFileChooserXML.getSelectedFile().getAbsolutePath());
+        }
         return null;
 	}
 

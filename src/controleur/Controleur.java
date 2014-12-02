@@ -188,6 +188,9 @@ public class Controleur {
 		
 		if(index>=0){
 			this.tournee=listeTournees.get(index);
+			fen.afficherPlan();
+	    	fen.afficherDemandesLivraisonsSurPlan();
+	    	fen.dessinerTournee();
 		}else{
 			return Codes.PARSE_ERROR;
 		}
