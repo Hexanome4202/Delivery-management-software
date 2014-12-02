@@ -49,6 +49,17 @@ public class Tournee {
 		this.entrepot = null;
 		this.planTournee = null;
 	}
+	
+	/**
+	 * Constructeur par copie de Tournee
+	 * @param t
+	 */
+	public Tournee(Tournee t){
+		this.plagesHoraires = (ArrayList<PlageHoraire>) t.getPlagesHoraires().clone();
+		this.itineraires = (ArrayList<Itineraire>) t.getItineraires().clone();
+		this.entrepot = new DemandeDeLivraison(t.getEntrepot().getNoeud());
+		this.planTournee = new Plan(t.getPlanTournee());
+	}
 
 	/**
 	 * @param livraison
@@ -376,4 +387,10 @@ public class Tournee {
 	public ArrayList<PlageHoraire> getPlagesHoraires() {
 		return this.plagesHoraires;
 	}
+
+	public Plan getPlanTournee() {
+		return planTournee;
+	}
+	
+	
 }

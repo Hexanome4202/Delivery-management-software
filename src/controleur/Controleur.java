@@ -186,36 +186,38 @@ public class Controleur {
 		return Codes.PARSE_OK;
 	}
 	
-	public int undo(){
+	public void undo(){
 		
 		int index = indexTourneeAct-1;
 		
 		if(index>=0){
 			this.tournee=listeTournees.get(index);
+			indexTourneeAct=index;
 			fen.afficherPlan();
 	    	fen.afficherDemandesLivraisonsSurPlan();
 	    	fen.dessinerTournee();
 		}else{
-			return Codes.PARSE_ERROR;
+			JOptionPane.showMessageDialog(null,"Undo n'est pas possible!","Erreur 151",JOptionPane.ERROR_MESSAGE);
 		}
-		return Codes.PARSE_OK;
 	}
 	
-	public int redo(){
+	public void redo(){
 		
 		int index = indexTourneeAct+1;
 		
 		if(index<listeTournees.size()){
 			this.tournee=listeTournees.get(index);
 			indexTourneeAct=index;
+			fen.afficherPlan();
+	    	fen.afficherDemandesLivraisonsSurPlan();
+	    	fen.dessinerTournee();
 		}else{
-			return Codes.PARSE_ERROR;
+			JOptionPane.showMessageDialog(null,"Redo n'est pas possible!","Erreur 152",JOptionPane.ERROR_MESSAGE);
 		}
-		return Codes.PARSE_OK;
 	}
 	
 	public void ajouterAListeTournees(Tournee tournee){
-		listeTournees.add(tournee);
+		listeTournees.add(new Tournee(tournee));
 		indexTourneeAct++;
 	}
 
