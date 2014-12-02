@@ -198,4 +198,18 @@ public class ControleurTest {
 		assertNull("L'entrepôt n'est pas nul...",c.getTournee().getEntrepot());
 	}
 
+	/**
+	 * Test pour une plage horaire invalide (heureDebut > heureFin)
+	 */
+	@Test
+	public void testGererFichierLivraisonsPlageHoraireInvalide(){
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/error/livraisonsPlageInvalide.xml"), "horaires");
+		
+		assertEquals("La liste des plages horaires n'est pas nulle...",new ArrayList<PlageHoraire>(),c.getTournee().getPlagesHoraires());
+		assertNull("L'entrepôt n'est pas nul...",c.getTournee().getEntrepot());
+	}
+	
 }
