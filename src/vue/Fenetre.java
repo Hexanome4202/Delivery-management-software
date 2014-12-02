@@ -85,6 +85,7 @@ public class Fenetre extends JFrame implements Observer {
     private JButton btnCalculer;
 	private JButton btnModifier;
 	private JButton btnImprimer;
+	private JButton btnAjouter;
 	JMenuItem actionChargerHoraires;
     
     private static final double RAYON_NOEUD = 10;
@@ -113,6 +114,7 @@ public class Fenetre extends JFrame implements Observer {
      * Le point actuellement selectionné
      */
     private Noeud pointSelectionne;
+    private Noeud entrepot;
     
     /**
      * 
@@ -204,6 +206,19 @@ public class Fenetre extends JFrame implements Observer {
 			}
 		});
 		btnImprimer.setEnabled(false);
+		
+		btnAjouter = new JButton("Ajouter");
+		btnAjouter.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		btnAjouter.setEnabled(false);
+		
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
 		
@@ -301,6 +316,11 @@ public class Fenetre extends JFrame implements Observer {
 				Noeud n = getNoeudA(e.getX(), e.getY());
 				if(n != null){
 					changerPointSelectionne(n);
+					if(n==entrepot || noeudsALivrer.containsKey(n.getId())){
+						btnAjouter.setEnabled(false);
+					}else if(entrepot != null && n != entrepot && !noeudsALivrer.containsKey(n.getId())){
+						btnAjouter.setEnabled(true);
+					}
 				}
 			}
 		});
@@ -333,6 +353,8 @@ public class Fenetre extends JFrame implements Observer {
 					.addGap(90)
 					.addComponent(btnCalculer)
 					.addPreferredGap(ComponentPlacement.RELATED, 313, Short.MAX_VALUE)
+					.addComponent(btnAjouter)
+					.addPreferredGap(ComponentPlacement.RELATED, 400, Short.MAX_VALUE)
 					.addComponent(btnModifier)
 					.addGap(5)
 					.addComponent(btnImprimer)
@@ -347,6 +369,7 @@ public class Fenetre extends JFrame implements Observer {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(planLabel)
 						.addComponent(btnCalculer)
+						.addComponent(btnAjouter)
 						.addComponent(horairesLabel))
 					
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -444,11 +467,13 @@ public class Fenetre extends JFrame implements Observer {
 	public void dessinerTournee() {
 		Tournee tournee = controleur.getTournee();
 		Object parent = plan.getDefaultParent();
-		int noeudPrecedent = tournee.getEntrepot().getNoeud().getId();
-		Object[] cells = { points.get(noeudPrecedent) };
-		plan.setCellStyle(
-				"shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow",
-				cells);
+		
+		entrepot = tournee.getEntrepot().getNoeud();;
+		
+		int noeudPrecedent = entrepot.getId();		
+
+		plan.insertVertex(parent, "", "", hX*entrepot.getX(), hY*entrepot.getY(), RAYON_NOEUD+6, RAYON_NOEUD+6, 
+				"shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow");
 
 		ArrayList<Itineraire> itineraires = tournee.getItineraires();
 		Iterator<Itineraire> it = itineraires.iterator();
@@ -493,7 +518,6 @@ public class Fenetre extends JFrame implements Observer {
 				noeudPrecedent = troncon.getNoeudFin().getId();
 			}
 		}
-
 	}
 
     /**
@@ -665,5 +689,11 @@ public class Fenetre extends JFrame implements Observer {
 		btnCalculer.setEnabled(true);
 	}
 	
+	/**
+	 * Methode permettant d'activer le bouton Ajouter
+	 */
+	public void activerAjouter(){
+		btnAjouter.setEnabled(true);
+	}
 
 }
