@@ -136,9 +136,12 @@ public class Plan {
 				
 				majCoordonneesMax(x, y);
 				
-				// ajout des elements crees dans la structure objet
-				toutNoeuds.add(nouveauNoeud);
-				listeElements.add(planElement);
+				if (nouveauNoeud.getId()>=0 && nouveauNoeud.getX()>=0 && nouveauNoeud.getY()>=0) {
+					toutNoeuds.add(nouveauNoeud);
+					listeElements.add(planElement);
+				}else{
+					return Codes.ERREUR_303;
+				}
 			} catch (NumberFormatException e) {
 				toutNoeuds.clear();
 				return Codes.ERREUR_303;
@@ -153,7 +156,7 @@ public class Plan {
 			toutNoeuds.clear();
 			return code;
 		}
-		remplirTousTroncons();//Je sais pas si �a sert a grand chose
+		remplirTousTroncons();//Je sais pas si ça sert a grand chose
 
 		return Codes.PARSE_OK;
 	}
@@ -208,9 +211,14 @@ public class Plan {
 							.getAttribute("idNoeudDestination"));
 					
 					if (vitesse>0 && longueur>0 && !nomRue.equals("") && nomRue!=null) {
-						Troncon troncon = new Troncon(vitesse, longueur, nomRue,
-								recupererNoeud(idNoeudFin));
-						bool = setTroncons.add(troncon);
+						Noeud noeudSort = recupererNoeud(idNoeudFin);
+						if(noeudSort!=null){
+							Troncon troncon = new Troncon(vitesse, longueur, nomRue,
+									noeudSort);
+							bool = setTroncons.add(troncon);
+						}else{
+							return Codes.ERREUR_301;
+						}
 						//TODO: afficher erreur si bool false (je crois que c'est pas necessaire)
 					}else {
 						return Codes.ERREUR_302;
