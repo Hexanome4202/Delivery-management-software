@@ -3,7 +3,9 @@ package test;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import modele.DemandeDeLivraison;
@@ -119,12 +121,15 @@ public class ControleurTest {
 		assertEquals(1, plages.size());
 		
 		PlageHoraire plage = plages.get(0);
-		assertEquals(8, plage.getHeureDebut().getHours());
-		assertEquals(0, plage.getHeureDebut().getMinutes());
-		assertEquals(0, plage.getHeureDebut().getSeconds());
-		assertEquals(12, plage.getHeureFin().getHours());
-		assertEquals(0, plage.getHeureFin().getMinutes());
-		assertEquals(0, plage.getHeureFin().getSeconds());
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(plage.getHeureDebut());
+		assertEquals(8, calendar.get(GregorianCalendar.HOUR_OF_DAY));
+		assertEquals(0, calendar.get(GregorianCalendar.MINUTE));
+		assertEquals(0, calendar.get(GregorianCalendar.SECOND));
+		calendar.setTime(plage.getHeureFin());
+		assertEquals(12, calendar.get(GregorianCalendar.HOUR_OF_DAY));
+		assertEquals(0, calendar.get(GregorianCalendar.MINUTE));
+		assertEquals(0, calendar.get(GregorianCalendar.SECOND));
 		assertNotNull(plage);
 		assertEquals(3, plage.getDemandeLivraison().size());
 		Noeud n;
@@ -144,6 +149,53 @@ public class ControleurTest {
 				fail("Cette demande ne devrait pas exister...");
 			}
 		}
+	}
+	
+	/**
+	 * Test pour un fichier de livraisons vide
+	 */
+	@Test
+	public void testGererFichierLivraisonsVide(){
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/error/livraisonsVide.xml"), "horaires");
+		assertEquals(new ArrayList<PlageHoraire>(),c.getTournee().getPlagesHoraires());
+	}
+	
+	/**
+	 * Test pour un fichier où des plages horaires se chevauchent
+	 */
+	@Test
+	public void testGererFichierLivraisonsPlagesChevauchent(){
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/error/livraisonsChevauche.xml"), "horaires");
+		PlageHoraire plage = null;
+		
+		try {
+			plage = new PlageHoraire("8:0:0","9:0:0");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		assertEquals("Liste de plages horaires pas de la bonne taille...",1,c.getTournee().getPlagesHoraires().size());
+		assertEquals("Il ne reste pas la bonne plage horaire...",plage,c.getTournee().getPlagesHoraires().get(0));
+	}
+	
+	/**
+	 * Test pour un entrepôt invalide
+	 */
+	@Test
+	public void testGererFichierLivraisonsEntrepotInvalide(){
+		Controleur c = new Controleur();
+		c.setModeTest(true);
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/error/livraisonsEntrepotFaux.xml"), "horaires");
+		
+		assertEquals("La liste des plages horaires n'est pas nulle...",new ArrayList<PlageHoraire>(),c.getTournee().getPlagesHoraires());
+		assertNull("L'entrepôt n'est pas nul...",c.getTournee().getEntrepot());
 	}
 
 }

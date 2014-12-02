@@ -3,7 +3,6 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -378,17 +377,17 @@ public class Tournee {
 				Date tempsFin = plage.getHeureFin();
 				Date tempsDebut = plage.getHeureDebut();
 				
-				dateLivreur.add(Calendar.SECOND, (int) itineraire.getTemps());
+				dateLivreur.add(GregorianCalendar.SECOND, (int) itineraire.getTemps());
 				
 				if(dateLivreur.getTime().compareTo(tempsFin) <= 0){
 					if(dateLivreur.getTime().compareTo(tempsDebut) < 0){
 						dateLivreur.setTime(tempsDebut);
 					}
-					dateLivreur.add(Calendar.MINUTE, 10);
+					dateLivreur.add(GregorianCalendar.MINUTE, 10);
 				}
 				else{
 					demandesDepassees.add(demande);
-					dateLivreur.add(Calendar.MINUTE, 10);
+					dateLivreur.add(GregorianCalendar.MINUTE, 10);
 				}
 			}
 		}
