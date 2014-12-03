@@ -229,7 +229,7 @@ public class ControleurTest {
 		//TODO sensé ignorer seulement la livraison fautive
 		assertEquals(1,c.getTournee().getPlagesHoraires().size());
 		assertEquals(1,c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison().size());
-		DemandeDeLivraison[] demandes = (DemandeDeLivraison[]) c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison().toArray();
-		assertTrue(demandes[0].compareTo(demande)==0);
+		Object[] demandes = c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison().toArray();
+		assertTrue(((DemandeDeLivraison)demandes[0]).compareTo(demande)==0);
 	}
 }
