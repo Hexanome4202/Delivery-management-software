@@ -8,9 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,6 +25,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import commande.Commande;
+import commande.CommandeAjouterLivraison;
+import commande.CommandeSupprimerLivraison;
+import commande.GestionnaireDeCommandes;
 import vue.Fenetre;
 import vue.VueTournee;
 import errors.Codes;
@@ -35,16 +37,19 @@ import errors.Codes;
  * 
  */
 public class Controleur {
-	
-	public static final int TEMPS_REPOS=10;
+
+	public static final int TEMPS_REPOS = 10;
 
 	private Tournee tournee;
 	private VueTournee vueTournee;
 	private Plan plan;
 	private Fenetre fen;
-	private ArrayList<Tournee> listeTournees;
-	private Integer indexTourneeAct;
 	private boolean modeTests;
+
+	/**
+	 * Le gestionnaire des commandes de l'application
+	 */
+	private GestionnaireDeCommandes gestionnaire;
 
 	/**
 	 * Constructeur par défaut de la classe <code>Controleur</code>
@@ -53,30 +58,43 @@ public class Controleur {
 		tournee = new Tournee();
 		vueTournee = new VueTournee(null);
 		plan = new Plan();
-		listeTournees = new ArrayList<Tournee>();
-		indexTourneeAct = -1;
 		this.fen = new Fenetre(this);
 		this.fen.setVisible(true);
 		this.modeTests = false;
+		this.gestionnaire = new GestionnaireDeCommandes();
 	}
 
 	/**
+	 * Ajouter une nouvelle livraison
+	 * 
 	 * @param client
+	 *            l'id du client
 	 * @param noeud
+	 *            le <code>Noeud</code> pour lequel on souhaite ajouter une
+	 *            <code>DemandeDeLivraison</code>
 	 * @param precedent
+	 *            le <code>Noeud</code> après lequel on souhaite ajouter une
+	 *            <code>DemandeDeLivraison</code>
 	 */
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
-		this.tournee.ajouterLivraison(precedent, courant, client);
-		ajouterAListeTournees(tournee);
+		Commande commande = new CommandeAjouterLivraison(tournee, client,
+				courant, precedent);
+		gestionnaire.executerNouvelleCommande(commande);
+		testBoutonsAnnulerRetablir();
+
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
+		fen.setBtnAnnulerEnabled(true);
+		fen.setMessage("");
 	}
 
+	/**
+	 * Calcule la tournée
+	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
-		ajouterAListeTournees(tournee);
 		fen.dessinerTournee();
 	}
 
@@ -84,11 +102,18 @@ public class Controleur {
 	 * @param livraison
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
-		// this.tournee.supprimerLivraison(noeudASupprimer)
+		fen.setMessage("Suppression du point de livraison en cours...");
+
+		Commande commande = new CommandeSupprimerLivraison(tournee,
+				noeudASupprimer);
+		gestionnaire.executerNouvelleCommande(commande);
+		testBoutonsAnnulerRetablir();
+
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
+		fen.setBtnAnnulerEnabled(true);
 	}
 
 	/**
@@ -107,7 +132,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour le traitement du fichier xml
+	 * Methode responsable du traitement du fichier xml
 	 * 
 	 * @param xml
 	 *            le fichier xml que l'on veut traiter
@@ -133,6 +158,7 @@ public class Controleur {
 					fen.majMenuHoraire();
 					fen.afficherDemandesLivraisonsSurPlan();
 					fen.activerCalculItineraire();
+					fen.setMessage("");
 				}
 				// todo : traiter les erreurs
 			} else if (typeFichier.equals("plan")) {
@@ -141,6 +167,7 @@ public class Controleur {
 					if (!this.modeTests) {
 						fen.afficherPlan();
 						fen.activerChargementHoraires();
+						fen.setMessage("");
 					}
 				}
 			}
@@ -152,29 +179,27 @@ public class Controleur {
 		} catch (ParserConfigurationException pce) {
 			System.out.println("Erreur de configuration du parseur DOM");
 			if (!this.modeTests)
-				JOptionPane.showMessageDialog(null,
-						"Erreur de configuration du parseur DOM!", "Erreur",
-						JOptionPane.ERROR_MESSAGE);
-			System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");
+				fen.afficherPopupErreur(
+						"Erreur de configuration du parseur DOM!", "Erreur");
+			System.out
+					.println("lors de l'appel a fabrique.newDocumentBuilder();");
 		} catch (SAXException se) {
 			System.out.println("Erreur lors du parsing du document");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
 			if (!this.modeTests)
-				JOptionPane.showMessageDialog(null,
-						"PB de parsing du document xml!", "Erreur",
-						JOptionPane.ERROR_MESSAGE);
+				fen.afficherPopupErreur("Problème de parsing du document xml!",
+						"Erreur");
 		} catch (IOException ioe) {
 			System.out.println("Erreur d'entree/sortie");
 			if (!this.modeTests)
-				JOptionPane.showMessageDialog(null, "Erreur d'entree/sortie!",
-						"Erreur", JOptionPane.ERROR_MESSAGE);
+				fen.afficherPopupErreur("Erreur d'entree/sortie!", "Erreur");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
 		}
 		return Codes.PARSE_ERROR;
 	}
 
 	/**
-	 * Methode responsable pour la construction des livraisons à partir d'un
+	 * Methode responsable de la construction des livraisons à partir d'un
 	 * element xml
 	 * 
 	 * @param livraisonsElement
@@ -193,8 +218,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour la construction du plan à partir d'un element
-	 * xml
+	 * Methode responsable de la construction du plan à partir d'un element xml
 	 * 
 	 * @param planElement
 	 * @return
@@ -211,43 +235,29 @@ public class Controleur {
 	}
 
 	public void undo() {
-
-		int index = indexTourneeAct - 1;
-
-		if (index >= 0) {
-			this.tournee = listeTournees.get(index);
-			indexTourneeAct = index;
+		if (gestionnaire.annulerDerniereCommande()) {
+			testBoutonsAnnulerRetablir();
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
+
+			fen.majMenuHoraire();
 		} else {
-			JOptionPane.showMessageDialog(null, "Undo n'est pas possible!",
-					"Erreur 151", JOptionPane.ERROR_MESSAGE);
+			fen.afficherPopupErreur("Undo n'est pas possible!", "Erreur 151");
 		}
 	}
 
 	public void redo() {
-
-		int index = indexTourneeAct + 1;
-
-		if (index < listeTournees.size()) {
-			this.tournee = listeTournees.get(index);
-			indexTourneeAct = index;
+		if (gestionnaire.refaireCommandeAnnulee()) {
+			testBoutonsAnnulerRetablir();
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
-		} else {
-			JOptionPane.showMessageDialog(null, "Redo n'est pas possible!",
-					"Erreur 152", JOptionPane.ERROR_MESSAGE);
-		}
-	}
 
-	public void ajouterAListeTournees(Tournee tournee) {
-		for (int i = indexTourneeAct + 1; i < listeTournees.size(); i++) {
-			listeTournees.remove(i);
+			fen.majMenuHoraire();
+		} else {
+			fen.afficherPopupErreur("Redo n'est pas possible!", "Erreur 152");
 		}
-		listeTournees.add(new Tournee(tournee));
-		indexTourneeAct++;
 	}
 
 	/**
@@ -283,11 +293,11 @@ public class Controleur {
 	public static void main(String[] args) {
 		new Controleur();
 	}
-	
 
 	/**
 	 * 
-	 * @param fichier dont on va realiser la sauvegarde de la tournee
+	 * @param fichier
+	 *            dont on va realiser la sauvegarde de la tournee
 	 */
 	public void genererFichierImpression(File fichier) {
 		try {
@@ -295,52 +305,80 @@ public class Controleur {
 			FileOutputStream is = new FileOutputStream(fichier);
 			OutputStreamWriter osw = new OutputStreamWriter(is);
 			Writer w = new BufferedWriter(osw);
-			PlageHoraire plage=null;
-			Double tempsSortie=0.0;
+			PlageHoraire plage = null;
+			Double tempsSortie = 0.0;
 			for (Itineraire it : tournee.getItineraires()) {
-				
 
 				DemandeDeLivraison dArrive = it.getArrivee();
-				Double tempsPourLivrer=0.0;
-				
-				
-				if(dArrive.getPlage()!=plage && it.getArrivee().getId()!=-1){
-					
-					tempsSortie=(double) dArrive.getPlage().getHeureDebut().getHours()*60 + 
-							dArrive.getPlage().getHeureDebut().getMinutes();
-					plage=dArrive.getPlage();
+				Double tempsPourLivrer = 0.0;
+
+				if (dArrive.getPlage() != plage
+						&& it.getArrivee().getId() != -1) {
+
+					tempsSortie = (double) dArrive.getPlage().getHeureDebut().getHours()*60
+							+ dArrive.getPlage().getHeureDebut().getMinutes();
+					plage = dArrive.getPlage();
 				}
-					tempsPourLivrer = it.getTemps()/60;
-					Double tempsArrive=tempsSortie + tempsPourLivrer;
-					Double tempsDepart=tempsArrive+TEMPS_REPOS;
-					int tempsArriveH = (int) ((tempsArrive)/60);
-					int tempsArriveM = (int) ((tempsArrive)%60);
-					int tempsDepartH = (int) ((tempsDepart)/60);
-					int tempsDepartM = (int) ((tempsDepart)%60);
-					NumberFormat formatter = new DecimalFormat("00");
-				String descLivraison="Livraison: "+dArrive.getId();
-				if(descLivraison.equals("Livraison: -1")){descLivraison="Retour Entrepot";}
-				
-				w.write(descLivraison+"\n");
-				w.write("\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
-						+ "," + dArrive.getNoeud().getY() + ")"+"\n");
-				w.write("\tHeure d'arrivé prevue: " + formatter.format(tempsArriveH)+":"+formatter.format(tempsArriveM)+"\n");
-				if(dArrive.getId()!=-1){
-					w.write("\tHeure de départ prevu: " + formatter.format(tempsDepartH)+":"+formatter.format(tempsDepartM)+"\n");
-					}
+				tempsPourLivrer = it.getTemps() / 60;
+				Double tempsArrive = tempsSortie + tempsPourLivrer;
+				Double tempsDepart = tempsArrive + TEMPS_REPOS;
+				int tempsArriveH = (int) ((tempsArrive) / 60);
+				int tempsArriveM = (int) ((tempsArrive) % 60);
+				int tempsDepartH = (int) ((tempsDepart) / 60);
+				int tempsDepartM = (int) ((tempsDepart) % 60);
+				NumberFormat formatter = new DecimalFormat("00");
+				String descLivraison = "Livraison: " + dArrive.getId();
+				if (descLivraison.equals("Livraison: -1")) {
+					descLivraison = "Retour Entrepot";
+				}
+
+				w.write(descLivraison + "\n");
+				w.write("\tCoordonées de l'adresse: ("
+						+ dArrive.getNoeud().getX() + ","
+						+ dArrive.getNoeud().getY() + ")" + "\n");
+				w.write("\tHeure d'arrivé prevue: "
+						+ formatter.format(tempsArriveH) + ":"
+						+ formatter.format(tempsArriveM) + "\n");
+				if (dArrive.getId() != -1) {
+					w.write("\tHeure de départ prevu: "
+							+ formatter.format(tempsDepartH) + ":"
+							+ formatter.format(tempsDepartM) + "\n");
+				}
 				w.write("\tChemin:\n");
-				for(Troncon t : it.getTronconsItineraire()){
-					w.write("\t\t" + t.getNomRue() + ": ("+t.getNoeudFin().getX()+","+t.getNoeudFin().getY()+")\n");
+				for (Troncon t : it.getTronconsItineraire()) {
+					w.write("\t\t" + t.getNomRue() + ": ("
+							+ t.getNoeudFin().getX() + ","
+							+ t.getNoeudFin().getY() + ")\n");
 				}
-				w.write("\tIdentifiant du client à contacter en cas de problème: " + dArrive.getIdClient());
+				w.write("\tIdentifiant du client à contacter en cas de problème: "
+						+ dArrive.getIdClient());
 				w.write("\n");
-				
-				tempsSortie=tempsDepart;
+
+				tempsSortie = tempsDepart;
 			}
+			w.write(this.editerFeuilleRoute());
+
 			w.close();
 		} catch (IOException e) {
 			System.err.println("Probleme de creation du fichier d'impression");
 		}
 	}
 
+	/**
+	 * Méthode qui grise ou dégrise les boutons Annuler et Rétablir en fonction
+	 * du gestionnaire
+	 */
+	public void testBoutonsAnnulerRetablir() {
+		if (gestionnaire.getIndex() > 0) {
+			fen.setBtnAnnulerEnabled(true);
+		} else {
+			fen.setBtnAnnulerEnabled(false);
+		}
+
+		if (gestionnaire.getIndex() < gestionnaire.getCommandesSize()) {
+			fen.setBtnRetablirEnabled(true);
+		} else {
+			fen.setBtnRetablirEnabled(false);
+		}
+	}
 }
