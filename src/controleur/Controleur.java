@@ -123,7 +123,7 @@ public class Controleur {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
 					// TODO: display
 					System.out.println("fini");
-					fen.creerMenuHoraires();
+					fen.majMenuHoraire();
 					fen.afficherDemandesLivraisonsSurPlan();
 					fen.activerCalculItineraire();
 				}
