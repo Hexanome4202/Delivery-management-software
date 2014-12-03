@@ -299,33 +299,7 @@ public class Controleur {
 			FileOutputStream is = new FileOutputStream(fichier);
 			OutputStreamWriter osw = new OutputStreamWriter(is);
 			Writer w = new BufferedWriter(osw);
-			for (Itineraire it : tournee.getItineraires()) {
-				
-				DemandeDeLivraison dDepart = it.getDepart();
-				DemandeDeLivraison dArrive = it.getArrivee();
-				Double tempsPourLivrer=0.0;
-				Double tempsSortie=0.0;
-				if (it.getDepart().getId()!=-1) {
-					tempsSortie = (double) dDepart.getPlage()
-							.getHeureDebut().getHours()*60;
-				}
-					tempsPourLivrer = it.getTemps()/60 + 15;
-					int tempsArriveH = (int) ((tempsSortie + tempsPourLivrer)/60);
-					int tempsArriveM = (int) ((tempsSortie + tempsPourLivrer)%60);
-					NumberFormat formatter = new DecimalFormat("00");
-				String descLivraison="Livraison: "+dArrive.getId();
-				if(descLivraison.equals("Livraison: -1")){descLivraison="Retour Entrepot";}
-				
-				w.write(descLivraison+"\n");
-				w.write("\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
-						+ "," + dArrive.getNoeud().getY() + ")"+"\n");
-				w.write("\tHeure d'arrivé prevue: " + formatter.format(tempsArriveH)+":"+formatter.format(tempsArriveM)+"\n");
-				for(Troncon t : it.getTronconsItineraire()){
-					w.write("\t\t" + t.getNomRue() + ": ("+t.getNoeudFin().getX()+","+t.getNoeudFin().getY()+")\n");
-				}
-				w.write("\tIdentifiant du client à contacter en cas de problème: " + dArrive.getIdClient());
-				w.write("\n");
-			}
+			w.write(this.editerFeuilleRoute());
 			w.close();
 		} catch (IOException e) {
 			System.err.println("Probleme de creation du fichier d'impression");
