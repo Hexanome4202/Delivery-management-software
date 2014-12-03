@@ -87,11 +87,25 @@ public class Tournee {
 					avant.setTroncons(Dijkstra.chemin);
 				}
 				it.remove();
+				livraison.getPlage().getDemandeLivraison().remove(livraison);
 				return true;
 			}
 			avant = itineraire;
 		}
 		return false;
+	}
+	
+	/**
+	 * Supprimer une <code>DemandeDeLivraison</code> à partir d'un <code>Noeud n</code>
+	 * @param n <code>Noeud</code> à supprimer
+	 * @return vrai si la suppression a été faite, faux sinon
+	 */
+	public boolean supprimerLivraison(Noeud n) {
+		DemandeDeLivraison demande;
+		if((demande = getDemandeDeLivraison(n)) == null) {
+			return false;
+		}
+		return supprimerLivraison(demande);
 	}
 
 	/**
