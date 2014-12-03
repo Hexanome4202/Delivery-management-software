@@ -27,6 +27,8 @@ import errors.Codes;
  */
 public class Tournee {
 
+	public static final int TEMPS_REPOS = 10;
+	
 	/**
 	 * <code>DemandeDeLivraison</code> correspondant à l'entrepot
 	 */
@@ -118,32 +120,56 @@ public class Tournee {
 	 */
 	public String editerFeuilleRoute() {
 		String ret = "";
+		PlageHoraire plage = null;
+		Double tempsSortie = 0.0;
 		for (Itineraire it : this.getItineraires()) {
-			
-			DemandeDeLivraison dDepart = it.getDepart();
+
 			DemandeDeLivraison dArrive = it.getArrivee();
-			Double tempsPourLivrer=0.0;
-			Double tempsSortie=0.0;
-			if (it.getDepart().getId()!=-1) {
-				tempsSortie = (double) dDepart.getPlage()
-						.getHeureDebut().getHours()*60;
+			Double tempsPourLivrer = 0.0;
+
+			if (dArrive.getPlage() != plage
+					&& it.getArrivee().getId() != -1) {
+
+				tempsSortie = (double) dArrive.getPlage().getHeureDebut().getHours()*60
+						+ dArrive.getPlage().getHeureDebut().getMinutes();
+				plage = dArrive.getPlage();
 			}
-				tempsPourLivrer = it.getTemps()/60 + 15;
-				int tempsArriveH = (int) ((tempsSortie + tempsPourLivrer)/60);
-				int tempsArriveM = (int) ((tempsSortie + tempsPourLivrer)%60);
-				NumberFormat formatter = new DecimalFormat("00");
-			String descLivraison="Livraison: "+dArrive.getId();
-			if(descLivraison.equals("Livraison: -1")){descLivraison="Retour Entrepot";}
-			
-			ret += descLivraison+"\n";
-			ret += "\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
-					+ "," + dArrive.getNoeud().getY() + ")"+"\n";
-			ret += "\tHeure d'arrivé prevue: " + formatter.format(tempsArriveH)+":"+formatter.format(tempsArriveM)+"\n";
-			for(Troncon t : it.getTronconsItineraire()){
-				ret += "\t\t" + t.getNomRue() + ": ("+t.getNoeudFin().getX()+","+t.getNoeudFin().getY()+")\n";
+			tempsPourLivrer = it.getTemps() / 60;
+			Double tempsArrive = tempsSortie + tempsPourLivrer;
+			Double tempsDepart = tempsArrive + TEMPS_REPOS;
+			int tempsArriveH = (int) ((tempsArrive) / 60);
+			int tempsArriveM = (int) ((tempsArrive) % 60);
+			int tempsDepartH = (int) ((tempsDepart) / 60);
+			int tempsDepartM = (int) ((tempsDepart) % 60);
+			NumberFormat formatter = new DecimalFormat("00");
+			String descLivraison = "Livraison: " + dArrive.getId();
+			if (descLivraison.equals("Livraison: -1")) {
+				descLivraison = "Retour Entrepot";
 			}
-			ret += "\tIdentifiant du client à contacter en cas de problème: " + dArrive.getIdClient();
-			ret += "\n";
+
+			ret+=descLivraison + "\n";
+			ret+="\tCoordonées de l'adresse: ("
+					+ dArrive.getNoeud().getX() + ","
+					+ dArrive.getNoeud().getY() + ")" + "\n";
+			ret+="\tHeure d'arrivé prevue: "
+					+ formatter.format(tempsArriveH) + ":"
+					+ formatter.format(tempsArriveM) + "\n";
+			if (dArrive.getId() != -1) {
+				ret+="\tHeure de départ prevu: "
+						+ formatter.format(tempsDepartH) + ":"
+						+ formatter.format(tempsDepartM) + "\n";
+			}
+			ret+="\tChemin:\n";
+			for (Troncon t : it.getTronconsItineraire()) {
+				ret+="\t\t" + t.getNomRue() + ": ("
+						+ t.getNoeudFin().getX() + ","
+						+ t.getNoeudFin().getY() + ")\n";
+			}
+			ret+="\tIdentifiant du client à contacter en cas de problème: "
+					+ dArrive.getIdClient();
+			ret+="\n";
+
+			tempsSortie = tempsDepart;
 		}
 
 		return ret;
@@ -344,7 +370,7 @@ public class Tournee {
 	}
 
 	/**
-	 * 
+	 * Méthode responsable pour construire des livraisons a partir d'un element xml
 	 * @param noeudDOMRacine
 	 * @return
 	 */

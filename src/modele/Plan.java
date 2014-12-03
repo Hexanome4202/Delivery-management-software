@@ -111,7 +111,7 @@ public class Plan {
 	}
 
 	/**
-	 * Methode responsable pour construire les noeuds et tron�ons du plan
+	 * Methode responsable pour construire les noeuds et tronçons du plan a partir d'un element xml
 	 * 
 	 * @param noeudDOMRacine
 	 *            element xml
@@ -191,7 +191,7 @@ public class Plan {
 	}
 
 	/**
-	 * 
+	 * Methode responsable pour construire les tronçons a partir de une NodeList xml
 	 * @param liste
 	 * @return
 	 */
