@@ -16,7 +16,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import modele.DemandeDeLivraison;
 import modele.Itineraire;
 import modele.Noeud;
-import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
 import modele.Troncon;
