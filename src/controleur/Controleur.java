@@ -71,6 +71,7 @@ public class Controleur {
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
 		fen.setBtnAnnulerEnabled(true);
+		fen.setMessage("");
 	}
 
 	/**

@@ -137,6 +137,7 @@ public class Fenetre extends JFrame implements Observer {
 		/*---------------------HORAIRES-----------------------*/
 		JLabel horairesLabel = new JLabel("Horaires");
 		message = new javax.swing.JTextField();
+		message.setEditable(false);
 		horairesLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
 		horairesPannel = new javax.swing.JPanel();
