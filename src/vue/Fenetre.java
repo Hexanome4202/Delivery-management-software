@@ -12,6 +12,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -96,7 +97,7 @@ public class Fenetre extends JFrame implements Observer {
      * L'id des demandes de livraison qui ne pouront pas être livrés
      * dans la plage horaire demandée.
      */
-    private Set<Integer> demandesTempsDepasse;
+    private Set<Integer> demandesTempsDepasse = new HashSet<Integer>();
     
     private final String[] couleurRemplissage = {"#a7a7a7", "#4407a6", "#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f"};
     private final String[] couleurBordure = {"#838383", "#2d0968", "#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828"};
