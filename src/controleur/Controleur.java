@@ -63,29 +63,35 @@ public class Controleur {
 	 * @param precedent
 	 */
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
+		fen.setMessage("Ajout du point de livraison en cours...");
 		this.tournee.ajouterLivraison(precedent, courant, client);
 		ajouterAListeTournees(tournee);
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
+		fen.setMessage("");
 	}
 
 	public void calculerTournee() {
+		fen.setMessage("Calcul de la tournée en cours...");
 		this.tournee.calculerTournee();
 		ajouterAListeTournees(tournee);
 		fen.dessinerTournee();
+		fen.setMessage("");
 	}
 
 	/**
 	 * @param livraison
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
+		fen.setMessage("Suppression du point de livraison en cours...");
 		// this.tournee.supprimerLivraison(noeudASupprimer)
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
+		fen.setMessage("");;
 	}
 
 	/**
@@ -104,7 +110,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour le traitement du fichier xml
+	 * Methode responsable du traitement du fichier xml
 	 * 
 	 * @param xml
 	 *            le fichier xml que l'on veut traiter
@@ -130,6 +136,7 @@ public class Controleur {
 					fen.majMenuHoraire();
 					fen.afficherDemandesLivraisonsSurPlan();
 					fen.activerCalculItineraire();
+					fen.setMessage("");
 				}
 				// todo : traiter les erreurs
 			} else if (typeFichier.equals("plan")) {
@@ -138,6 +145,7 @@ public class Controleur {
 					if (!this.modeTests) {
 						fen.afficherPlan();
 						fen.activerChargementHoraires();
+						fen.setMessage("");
 					}
 				}
 			}
@@ -171,7 +179,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour la construction des livraisons à partir d'un
+	 * Methode responsable de la construction des livraisons à partir d'un
 	 * element xml
 	 * 
 	 * @param livraisonsElement
@@ -190,7 +198,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour la construction du plan à partir d'un element
+	 * Methode responsable de la construction du plan à partir d'un element
 	 * xml
 	 * 
 	 * @param planElement
