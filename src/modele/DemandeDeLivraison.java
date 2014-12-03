@@ -55,7 +55,7 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
     public DemandeDeLivraison(Noeud noeud, int client, PlageHoraire plage) {
         this.adresseLivraison = noeud;
         this.idClient = client;
-        this.id = DemandeDeLivraison.maxId++;
+        this.id = ++DemandeDeLivraison.maxId;
         this.plageHoraire = plage;
     }
     

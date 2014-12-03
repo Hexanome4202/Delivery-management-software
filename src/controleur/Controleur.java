@@ -6,31 +6,27 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import modele.DemandeDeLivraison;
-import modele.Itineraire;
 import modele.Noeud;
-import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
-import modele.Troncon;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import vue.Fenetre;
+import vue.VueTournee;
+
 import commande.Commande;
 import commande.CommandeAjouterLivraison;
 import commande.CommandeSupprimerLivraison;
 import commande.GestionnaireDeCommandes;
-import vue.Fenetre;
-import vue.VueTournee;
+
 import errors.Codes;
 
 /**
@@ -38,7 +34,7 @@ import errors.Codes;
  */
 public class Controleur {
 
-	public static final int TEMPS_REPOS = 10;
+
 
 	/**
 	 * La <code>Tournee</code> calculée à partir du <code>Plan</code> et des <code>DemandeDeLivraison</code>
@@ -328,59 +324,7 @@ public class Controleur {
 			FileOutputStream is = new FileOutputStream(fichier);
 			OutputStreamWriter osw = new OutputStreamWriter(is);
 			Writer w = new BufferedWriter(osw);
-			PlageHoraire plage = null;
-			Double tempsSortie = 0.0;
-			for (Itineraire it : tournee.getItineraires()) {
-
-				DemandeDeLivraison dArrive = it.getArrivee();
-				Double tempsPourLivrer = 0.0;
-
-				if (dArrive.getPlage() != plage
-						&& it.getArrivee().getId() != -1) {
-
-					tempsSortie = (double) dArrive.getPlage().getHeureDebut().getHours()*60
-							+ dArrive.getPlage().getHeureDebut().getMinutes();
-					plage = dArrive.getPlage();
-				}
-				tempsPourLivrer = it.getTemps() / 60;
-				Double tempsArrive = tempsSortie + tempsPourLivrer;
-				Double tempsDepart = tempsArrive + TEMPS_REPOS;
-				int tempsArriveH = (int) ((tempsArrive) / 60);
-				int tempsArriveM = (int) ((tempsArrive) % 60);
-				int tempsDepartH = (int) ((tempsDepart) / 60);
-				int tempsDepartM = (int) ((tempsDepart) % 60);
-				NumberFormat formatter = new DecimalFormat("00");
-				String descLivraison = "Livraison: " + dArrive.getId();
-				if (descLivraison.equals("Livraison: -1")) {
-					descLivraison = "Retour Entrepot";
-				}
-
-				w.write(descLivraison + "\n");
-				w.write("\tCoordonées de l'adresse: ("
-						+ dArrive.getNoeud().getX() + ","
-						+ dArrive.getNoeud().getY() + ")" + "\n");
-				w.write("\tHeure d'arrivé prevue: "
-						+ formatter.format(tempsArriveH) + ":"
-						+ formatter.format(tempsArriveM) + "\n");
-				if (dArrive.getId() != -1) {
-					w.write("\tHeure de départ prevu: "
-							+ formatter.format(tempsDepartH) + ":"
-							+ formatter.format(tempsDepartM) + "\n");
-				}
-				w.write("\tChemin:\n");
-				for (Troncon t : it.getTronconsItineraire()) {
-					w.write("\t\t" + t.getNomRue() + ": ("
-							+ t.getNoeudFin().getX() + ","
-							+ t.getNoeudFin().getY() + ")\n");
-				}
-				w.write("\tIdentifiant du client à contacter en cas de problème: "
-						+ dArrive.getIdClient());
-				w.write("\n");
-
-				tempsSortie = tempsDepart;
-			}
 			w.write(this.editerFeuilleRoute());
-
 			w.close();
 		} catch (IOException e) {
 			System.err.println("Probleme de creation du fichier d'impression");

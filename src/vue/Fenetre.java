@@ -221,7 +221,18 @@ public class Fenetre extends JFrame implements Observer {
 					// Si on est dans l'ajout de point de livraison
 					if (noeudAAjouter != null) {
 						if (noeudsALivrer.containsKey(n.getId())) {
-							controleur.ajouterLivraison(0, noeudAAjouter, n);
+							String idClient = JOptionPane.showInputDialog(null,"Veuillez saisir le numero du client:", null);
+							int id=Integer.parseInt(idClient);
+							try {
+								if (id>=0) {
+									controleur.ajouterLivraison(id,
+											noeudAAjouter, n);
+								}else{
+									JOptionPane.showMessageDialog(null,"L'identifiant doit être positif!","Erreur",JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (NumberFormatException e1) {
+								JOptionPane.showMessageDialog(null,"Erreur de saisie!","Erreur",JOptionPane.ERROR_MESSAGE);
+							}
 							noeudAAjouter = null;
 						}
 					} else {
