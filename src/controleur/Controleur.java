@@ -81,7 +81,7 @@ public class Controleur {
 	 * @param livraison
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
-		// this.tournee.supprimerLivraison(noeudASupprimer)
+		this.tournee.supprimerLivraison(noeudASupprimer);
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
