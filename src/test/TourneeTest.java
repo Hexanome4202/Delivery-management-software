@@ -274,11 +274,12 @@ public class TourneeTest {
 		c.getTournee().ajouterLivraison(c.getPlan().recupererNoeud(1), c.getPlan().recupererNoeud(2), 3);
 		assertEquals(itineraires.size() + 1, c.getTournee().getItineraires().size());
 		itineraires = c.getTournee().getItineraires();
-		assertEquals(1, itineraires.get(2).getDepart().getNoeud().getId());
-		assertEquals(2, itineraires.get(2).getArrivee().getNoeud().getId());
-		assertEquals(2, itineraires.get(3).getDepart().getNoeud().getId());
-		assertEquals(3, itineraires.get(3).getArrivee().getNoeud().getId());
-		c.getTournee().supprimerLivraison(itineraires.get(2).getDepart());
+		for(int i = 0; i < itineraires.size(); ++i) {
+			if(itineraires.get(i).getArrivee().equals(c.getPlan().recupererNoeud(2))) {
+				assertEquals(c.getPlan().recupererNoeud(1), itineraires.get(i).getDepart().getNoeud());
+				assertEquals(c.getPlan().recupererNoeud(2), itineraires.get(i+1).getDepart().getNoeud());
+			}
+		}
 	}
 	
 	@Test
