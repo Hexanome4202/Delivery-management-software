@@ -43,9 +43,11 @@ import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionLeafItem;
 import b4.advancedgui.menu.AccordionMenu;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxGraph;
 
 import controleur.Controleur;
@@ -98,7 +100,7 @@ public class Fenetre extends JFrame implements Observer {
      * L'id des demandes de livraison qui ne pouront pas être livrés
      * dans la plage horaire demandée.
      */
-    private Set<Integer> demandesTempsDepasse = new HashSet<Integer>();
+    private Set<Integer> demandesTempsDepasse;
     
     private final String[] couleurRemplissage = {"#a7a7a7", "#4407a6", "#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f"};
     private final String[] couleurBordure = {"#838383", "#2d0968", "#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828"};
@@ -540,6 +542,8 @@ public class Fenetre extends JFrame implements Observer {
 		Iterator<Itineraire> it = itineraires.iterator();
 		
 		HashMap<String, Integer> noeudsTraverses = new HashMap<String, Integer>(); 
+		
+		afficherDemandesTempsDepasse();
 
 		while (it.hasNext()) {
 			Itineraire itineraire = it.next();
@@ -579,8 +583,7 @@ public class Fenetre extends JFrame implements Observer {
 			}
 			tourneeDessinee = true;
 		}
-		
-		afficherDemandesTempsDepasse();
+
 		btnImprimer.setEnabled(true);
 	}
 	
@@ -590,14 +593,19 @@ public class Fenetre extends JFrame implements Observer {
 	 * dans la plage horaire demandée
 	 */
 	private void afficherDemandesTempsDepasse(){
-		Iterator<DemandeDeLivraison> it = controleur.getTournee().getDemandesTempsDepasse().iterator();
-		while(it.hasNext()){
-			Noeud noeud = it.next().getNoeud();
-			demandesTempsDepasse.add(noeud.getId());
-			int numPlage = noeudsALivrer.get(noeud.getId());
-			Object[] cells = {points.get(noeud.getId())};
+		if(demandesTempsDepasse == null){
+			demandesTempsDepasse = new HashSet<Integer>();
+			Iterator<DemandeDeLivraison> it = controleur.getTournee().getDemandesTempsDepasse().iterator();
+			while(it.hasNext()){
+				Noeud noeud = it.next().getNoeud();
+				demandesTempsDepasse.add(noeud.getId());
+			}
+		}
+		
+		for (Integer idNoeud : demandesTempsDepasse) {
+			int numPlage = noeudsALivrer.get(idNoeud);
+			Object[] cells = {points.get(idNoeud)};
 			plan.setCellStyle("shape=triangle;strokeWidth=2;fillColor=red;strokeColor="+couleurBordure[numPlage], cells);
-
 		}
 	}
 
@@ -750,11 +758,12 @@ public class Fenetre extends JFrame implements Observer {
 		//On réaffiche le plan proprement, sans point de livraison
 		afficherPlan();
 		
-		entrepot = controleur.getTournee().getEntrepot().getNoeud();
-
-		plan.insertVertex(plan.getDefaultParent(), "", "", hX*entrepot.getX(), hY*entrepot.getY(), RAYON_NOEUD+6, RAYON_NOEUD+6, 
+		if(controleur.getTournee().getEntrepot() != null){
+			entrepot = controleur.getTournee().getEntrepot().getNoeud();
+	
+			plan.insertVertex(plan.getDefaultParent(), "", "", hX*entrepot.getX(), hY*entrepot.getY(), RAYON_NOEUD+6, RAYON_NOEUD+6, 
 				"shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow");
-
+		}
 		
 		int numPlage = 1;
 		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
@@ -764,7 +773,6 @@ public class Fenetre extends JFrame implements Observer {
 				noeudsALivrer.put(noeud, numPlage);
 				Object[] cells = {points.get(noeud)};
 				plan.setCellStyle("fillColor="+couleurRemplissage[numPlage]+";strokeColor="+couleurBordure[numPlage], cells);
-				
 			}
 			numPlage++;
 		}		
