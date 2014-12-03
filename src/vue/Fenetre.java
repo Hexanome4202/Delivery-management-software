@@ -124,6 +124,8 @@ public class Fenetre extends JFrame implements Observer {
     
     private boolean tourneeDessinee = false;
     
+    private String repertoireActuel;
+    
     /**
      * 
      */
@@ -625,12 +627,16 @@ public class Fenetre extends JFrame implements Observer {
         jFileChooserXML.setFileFilter(filter);
         jFileChooserXML.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int returnVal;
-        if (mode == 'o')
+        if (mode == 'o'){
+        	if(repertoireActuel!=null)
+        		jFileChooserXML.setCurrentDirectory(new File(repertoireActuel));
         	returnVal = jFileChooserXML.showOpenDialog(null);
-        else
+        }else
         	returnVal = jFileChooserXML.showSaveDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+        		repertoireActuel=jFileChooserXML.getSelectedFile().getAbsolutePath();
                 return new File(jFileChooserXML.getSelectedFile().getAbsolutePath());
+        }
         return null;
 	}
 

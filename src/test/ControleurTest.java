@@ -161,7 +161,7 @@ public class ControleurTest {
 		Controleur c = new Controleur();
 		c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
-		c.gererFichier(new File("XML/error/livraisonsVide.xml"), "horaires");
+		c.gererFichier(new File("XML/errors/livraisonsVide.xml"), "horaires");
 		assertEquals(new ArrayList<PlageHoraire>(),c.getTournee().getPlagesHoraires());
 	}
 	
@@ -173,7 +173,7 @@ public class ControleurTest {
 		Controleur c = new Controleur();
 		c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
-		c.gererFichier(new File("XML/error/livraisonsChevauche.xml"), "horaires");
+		c.gererFichier(new File("XML/errors/livraisonsChevauche.xml"), "horaires");
 		PlageHoraire plage = null;
 		
 		try {
@@ -183,7 +183,9 @@ public class ControleurTest {
 		}
 		//TODO sensé ignorer seulement la plage horaire fautive
 		assertEquals("Liste de plages horaires pas de la bonne taille...",1,c.getTournee().getPlagesHoraires().size());
-		assertEquals("Il ne reste pas la bonne plage horaire...",plage,c.getTournee().getPlagesHoraires().get(0));
+		assertEquals("Il ne reste pas la bonne plage horaire...",plage.getHeureDebut(),c.getTournee().getPlagesHoraires().get(0).getHeureDebut());
+		assertEquals("Il ne reste pas la bonne plage horaire...",plage.getHeureFin(),c.getTournee().getPlagesHoraires().get(0).getHeureFin());
+		
 	}
 	
 	/**
@@ -194,10 +196,8 @@ public class ControleurTest {
 		Controleur c = new Controleur();
 		c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
-		c.gererFichier(new File("XML/error/livraisonsEntrepotFaux.xml"), "horaires");
 		
-		assertEquals("La liste des plages horaires n'est pas nulle...",new ArrayList<PlageHoraire>(),c.getTournee().getPlagesHoraires());
-		assertNull("L'entrepôt n'est pas nul...",c.getTournee().getEntrepot());
+		assertEquals(Codes.PARSE_ERROR,c.gererFichier(new File("XML/errors/livraisonsEntrepotFaux.xml"), "horaires"));
 	}
 
 	/**
@@ -208,10 +208,11 @@ public class ControleurTest {
 		Controleur c = new Controleur();
 		c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
-		c.gererFichier(new File("XML/error/livraisonsPlageInvalide.xml"), "horaires");
+		c.gererFichier(new File("XML/errors/livraisonsPlageInvalide.xml"), "horaires");
 		
-		assertEquals("La liste des plages horaires n'est pas nulle...",new ArrayList<PlageHoraire>(),c.getTournee().getPlagesHoraires());
-		assertNull("L'entrepôt n'est pas nul...",c.getTournee().getEntrepot());
+		assertEquals("Il n'y a pas qu'une seule plage...",1,c.getTournee().getPlagesHoraires().size());
+		assertEquals("Il n'y a pas qu'une seule demande...",1,c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison().size());
+		assertEquals("La demande n'a pas le bon ID...",1,new ArrayList<DemandeDeLivraison>(c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison()).get(0).getId());
 	}
 	
 	/**
@@ -222,7 +223,7 @@ public class ControleurTest {
 		Controleur c = new Controleur();
 		c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
-		c.gererFichier(new File("XML/error/livraisonsLivraisonInvalide.xml"), "horaires");
+		c.gererFichier(new File("XML/errors/livraisonsLivraisonInvalide.xml"), "horaires");
 		
 		DemandeDeLivraison demande = new DemandeDeLivraison(1, c.getPlan().getNoeud(3), 621, null);
 		//TODO sensé ignorer seulement la livraison fautive

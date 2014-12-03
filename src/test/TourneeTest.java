@@ -251,7 +251,7 @@ public class TourneeTest {
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
 		
-		c.getTournee().calculerTournee();
+		c.calculerTournee();
 		List<Itineraire> itineraires = new ArrayList<Itineraire>(c.getTournee().getItineraires());
 		c.getTournee().ajouterLivraison(c.getPlan().recupererNoeud(1), c.getPlan().recupererNoeud(2), 3);
 		assertEquals(itineraires.size() + 1, c.getTournee().getItineraires().size());
