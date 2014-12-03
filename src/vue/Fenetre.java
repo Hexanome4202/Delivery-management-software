@@ -12,6 +12,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -82,7 +83,12 @@ public class Fenetre extends JFrame implements Observer {
 	private JButton btnImprimer;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
+<<<<<<< HEAD
 	JMenuItem actionChargerHoraires;
+	
+=======
+	private JMenuItem actionChargerHoraires;
+>>>>>>> FETCH_HEAD
     
     private static final double RAYON_NOEUD = 10;
     private static final int TOLERANCE = 10;
@@ -92,8 +98,14 @@ public class Fenetre extends JFrame implements Observer {
      */
     private HashMap<Integer, Integer> noeudsALivrer;
     
-    String[] couleurRemplissage = {"#a7a7a7", "#4407a6", "#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f"};
-    String[] couleurBordure = {"#838383", "#2d0968", "#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828"};
+    /**
+     * L'id des demandes de livraison qui ne pouront pas être livrés
+     * dans la plage horaire demandée.
+     */
+    private Set<Integer> demandesTempsDepasse = new HashSet<Integer>();
+    
+    private final String[] couleurRemplissage = {"#a7a7a7", "#4407a6", "#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f"};
+    private final String[] couleurBordure = {"#838383", "#2d0968", "#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828"};
     
     /**
      * Facteurs de mise à l'échelle pour l'affichage sur le plan
@@ -113,6 +125,10 @@ public class Fenetre extends JFrame implements Observer {
     
     private Noeud entrepot;
     private Noeud noeudAAjouter = null;
+    
+    private boolean tourneeDessinee = false;
+    
+    private String repertoireActuel;
     
     /**
      * 
@@ -326,6 +342,12 @@ public class Fenetre extends JFrame implements Observer {
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
 		
+	    /**
+	     * Creates a simple MouseAdapter binded to an AccordionItem. On mouse Pressed it writes on a textBox the source of event.
+	     * @return {@link MouseAdapter} object.
+	     */
+
+    
 	
 		/*---------------------PLAN------------------------------*/
 		plan = new mxGraph();
@@ -355,17 +377,19 @@ public class Fenetre extends JFrame implements Observer {
 					}else{
 					
 						changerPointSelectionne(n);
-						if(n==entrepot || noeudsALivrer.containsKey(n.getId())){
+						if(!tourneeDessinee || n==entrepot || noeudsALivrer.containsKey(n.getId())){
 							btnAjouter.setEnabled(false);
 						}else if(entrepot != null && n != entrepot && !noeudsALivrer.containsKey(n.getId())){
 							btnAjouter.setEnabled(true);
 						}
 						
-						btnSupprimer.setEnabled(noeudsALivrer.containsKey(n.getId()));
+						btnSupprimer.setEnabled(tourneeDessinee && noeudsALivrer.containsKey(n.getId()));
 
 					}
 				}else{
 					changerPointSelectionne(null);
+					btnAjouter.setEnabled(false);
+					btnSupprimer.setEnabled(false);
 				}
 			}
 		});
@@ -454,6 +478,61 @@ public class Fenetre extends JFrame implements Observer {
 	 */
 	public void majMenuHoraire(){
 		//TODO : Cécilia - trouver un moyen de mettre à jour le menu horaires
+		//horairesPannel.remove(menuHoraires); //remove component from your jpanel in this case i used jpanel
+		horairesPannel.removeAll();
+		horairesPannel.revalidate();
+		horairesPannel.repaint();//repaint a JFrame jframe in this case 
+		
+		
+		AccordionMenu menuHorairesMaj;
+		menuHorairesMaj = new AccordionMenu();
+		menuHorairesMaj.setBackground(Color.white);
+		menuHorairesMaj.setFont(new Font("Arial", Font.PLAIN, 16));
+		menuHorairesMaj.setMenusSize(30);
+		menuHorairesMaj.setMenuBorders(new BevelBorder(BevelBorder.RAISED));
+		menuHorairesMaj.setSelectionColor(Color.lightGray);
+		menuHorairesMaj.setLeafHorizontalAlignment(AccordionItem.LEFT);
+		
+		int iteratorPlage = 1;
+		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
+
+			SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm");
+
+			SimpleDateFormat timeFormatFin = new SimpleDateFormat("H:mm");
+
+			menuHorairesMaj.addNewMenu("menu" + iteratorPlage,
+					timeFormat.format(plage.getHeureDebut()) + "-"
+							+ timeFormatFin.format(plage.getHeureFin()));
+
+			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
+				menuHorairesMaj.addNewLeafTo("menu" + iteratorPlage, ""
+						+ livraison.getNoeud().getId(),
+						String.valueOf(livraison.getIdClient()));
+			}
+			iteratorPlage++;
+		}
+
+		MouseAdapter menuMouseAdapter = new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				AccordionItem item = (AccordionItem) e.getSource();
+				changerPointSelectionne(controleur.getPlan().getNoeud(
+						Integer.parseInt(item.getName())));
+			}
+		};
+
+		for (AccordionLeafItem leaf : menuHorairesMaj.getAllLeafs()) {
+			leaf.addMouseListener(menuMouseAdapter);
+		}
+
+		menuHorairesMaj.calculateAvaiableSpace();
+		menuHorairesMaj.repaint();
+		
+		
+		horairesPannel.add(menuHorairesMaj); //add component to jpanel in this case i used jpanel
+		horairesPannel.revalidate();
+		horairesPannel.repaint();//repaint a JFrame jframe in this case 
 	}
 	
     /**
@@ -471,12 +550,10 @@ public class Fenetre extends JFrame implements Observer {
 					timeFormat.format(plage.getHeureDebut()) + "-"
 							+ timeFormatFin.format(plage.getHeureFin()));
 
-			int iteratorLiv = 1;
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				menuHoraires.addNewLeafTo("menu" + iteratorPlage, ""
 						+ livraison.getNoeud().getId(),
 						String.valueOf(livraison.getIdClient()));
-				iteratorLiv++;
 			}
 			iteratorPlage++;
 		}
@@ -557,13 +634,33 @@ public class Fenetre extends JFrame implements Observer {
 				
 				if(noeudsTraverses.containsKey(key)){
 					noeudsTraverses.put(key, noeudsTraverses.get(key)+1);
-					System.out.println(key+" : "+noeudsTraverses.get(key)+" fois");
 				}else{
 					noeudsTraverses.put(key, 1);
 				}
 				
 				noeudPrecedent = troncon.getNoeudFin().getId();
 			}
+			tourneeDessinee = true;
+		}
+		
+		afficherDemandesTempsDepasse();
+	}
+	
+	/**
+	 * Méthode permettant de mettre en évidence sur l'affichage
+	 * les points de livraisons qui ne pourront pas être livrés
+	 * dans la plage horaire demandée
+	 */
+	private void afficherDemandesTempsDepasse(){
+		Iterator<DemandeDeLivraison> it = controleur.getTournee().getDemandesTempsDepasse().iterator();
+		while(it.hasNext()){
+			int noeud = it.next().getNoeud().getId();
+			System.out.println(""+noeud);
+			demandesTempsDepasse.add(noeud);
+			int numPlage = noeudsALivrer.get(noeud);
+			Object[] cells = {points.get(noeud)};
+			plan.setCellStyle("strokeWidth=2;fillColor=red;strokeColor="+couleurBordure[numPlage], cells);
+			
 		}
 	}
 
@@ -593,12 +690,16 @@ public class Fenetre extends JFrame implements Observer {
         jFileChooserXML.setFileFilter(filter);
         jFileChooserXML.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int returnVal;
-        if (mode == 'o')
+        if (mode == 'o'){
+        	if(repertoireActuel!=null)
+        		jFileChooserXML.setCurrentDirectory(new File(repertoireActuel));
         	returnVal = jFileChooserXML.showOpenDialog(null);
-        else
+        }else
         	returnVal = jFileChooserXML.showSaveDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+        		repertoireActuel=jFileChooserXML.getSelectedFile().getAbsolutePath();
                 return new File(jFileChooserXML.getSelectedFile().getAbsolutePath());
+        }
         return null;
 	}
 
@@ -723,7 +824,6 @@ public class Fenetre extends JFrame implements Observer {
 			
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				int noeud = livraison.getNoeud().getId();
-				System.out.println(""+noeud);
 				noeudsALivrer.put(noeud, numPlage);
 				Object[] cells = {points.get(noeud)};
 				plan.setCellStyle("fillColor="+couleurRemplissage[numPlage]+";strokeColor="+couleurBordure[numPlage], cells);
@@ -753,5 +853,5 @@ public class Fenetre extends JFrame implements Observer {
 	public void activerAjouter(){
 		btnAjouter.setEnabled(true);
 	}
-
+	
 }
