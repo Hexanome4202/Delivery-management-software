@@ -21,13 +21,11 @@ import org.xml.sax.SAXException;
 
 import vue.Fenetre;
 import vue.VueTournee;
-
 import commande.Commande;
 import commande.CommandeAjouterLivraison;
 import commande.CommandeSupprimerLivraison;
 import commande.GestionnaireDeCommandes;
-
-import errors.Codes;
+import erreurs.Codes;
 
 /**
  * 

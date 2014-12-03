@@ -9,7 +9,7 @@ import java.util.Set;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import errors.Codes;
+import erreurs.Codes;
 
 /**
  * 

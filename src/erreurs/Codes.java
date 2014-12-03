@@ -1,4 +1,4 @@
-package errors;
+package erreurs;
 
 import javax.swing.JOptionPane;
 
