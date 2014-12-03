@@ -14,10 +14,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import modele.DemandeDeLivraison;
+import modele.Itineraire;
 import modele.Noeud;
 import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
+import modele.Troncon;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -277,6 +279,10 @@ public class Controleur {
 	public static void main(String[] args) {
 		new Controleur();
 	}
+	
+	/*la liste des livraisons à faire et, pour chacune de ces livraisons, l’adresse de livraison, les
+heures prévues d’arrivée et de départ, l’itinéraire à suivre pour rejoindre cette livraison depuis la livraison
+précédente ou depuis le dépôt, et les coordonnées d’une personne à contacter en cas de problème.*/
 
 	public void genererFichierImpression(File fichier) {
 		try {
@@ -284,17 +290,31 @@ public class Controleur {
 			FileOutputStream is = new FileOutputStream(fichier);
 			OutputStreamWriter osw = new OutputStreamWriter(is);
 			Writer w = new BufferedWriter(osw);
-			for (PlageHoraire p : tournee.getPlagesHoraires()) {
-				w.write("Debut: " + p.getHeureDebut().getHours()+"\n");
-				w.write("Fin: " + p.getHeureFin().getHours()+"\n");
-				for (DemandeDeLivraison d : p.getDemandeLivraison()) {
-					w.write("\tIdentifiant de la Demande: " + d.getId()+"\n");
-					w.write("\tIdentifiant du client: " + d.getIdClient()+"\n");
-					w.write("\tAdresse de la Demande -  identifiant:"
-							+ d.getNoeud().getId() + " (" + d.getNoeud().getX()
-							+ "," + d.getNoeud().getY() + ")"+"\n");
-					
+			for (Itineraire it : tournee.getItineraires()) {
+				
+				DemandeDeLivraison dDepart = it.getDepart();
+				DemandeDeLivraison dArrive = it.getArrivee();
+				Double tempsPourLivrer=0.0;
+				Double tempsSortie=0.0;
+				if (it.getDepart().getId()!=-1) {
+					tempsSortie = (double) dDepart.getPlage()
+							.getHeureDebut().getHours()*60;
 				}
+					tempsPourLivrer = it.getTemps();
+					int tempsArriveH = (int) ((tempsSortie + tempsPourLivrer)/60);
+					int tempsArriveM = (int) ((tempsSortie + tempsPourLivrer)/60);
+				String descLivraison="Livraison: "+dArrive.getId();
+				if(descLivraison.equals("Livraison: -1")){descLivraison="Retour Entrepot";}
+				
+				w.write(descLivraison+"\n");
+				w.write("\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
+						+ "," + dArrive.getNoeud().getY() + ")"+"\n");
+				w.write("\tHeure d'arrivé prevue: " + tempsArriveH+":"+tempsArriveM+"\n");
+				for(Troncon t : it.getTronconsItineraire()){
+					w.write("\t\t" + t.getNomRue() + ": ("+t.getNoeudFin().getX()+","+t.getNoeudFin().getY()+")\n");
+				}
+				w.write("\tIdentifiant du client à contacter en cas de problème: " + dArrive.getIdClient());
+				w.write("\n");
 			}
 			w.close();
 		} catch (IOException e) {
