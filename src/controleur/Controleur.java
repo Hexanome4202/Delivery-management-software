@@ -18,6 +18,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import modele.DemandeDeLivraison;
 import modele.Itineraire;
 import modele.Noeud;
+import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
 import modele.Troncon;
@@ -34,6 +35,8 @@ import errors.Codes;
  * 
  */
 public class Controleur {
+	
+	public static final int TEMPS_REPOS=10;
 
 	private Tournee tournee;
 	private VueTournee vueTournee;
@@ -292,19 +295,28 @@ public class Controleur {
 			FileOutputStream is = new FileOutputStream(fichier);
 			OutputStreamWriter osw = new OutputStreamWriter(is);
 			Writer w = new BufferedWriter(osw);
+			PlageHoraire plage=null;
+			Double tempsSortie=0.0;
 			for (Itineraire it : tournee.getItineraires()) {
 				
-				DemandeDeLivraison dDepart = it.getDepart();
+
 				DemandeDeLivraison dArrive = it.getArrivee();
 				Double tempsPourLivrer=0.0;
-				Double tempsSortie=0.0;
-				if (it.getDepart().getId()!=-1) {
-					tempsSortie = (double) dDepart.getPlage()
-							.getHeureDebut().getHours()*60;
+				
+				
+				if(dArrive.getPlage()!=plage && it.getArrivee().getId()!=-1){
+					
+					tempsSortie=(double) dArrive.getPlage().getHeureDebut().getHours()*60 + 
+							dArrive.getPlage().getHeureDebut().getMinutes();
+					plage=dArrive.getPlage();
 				}
-					tempsPourLivrer = it.getTemps()/60 + 15;
-					int tempsArriveH = (int) ((tempsSortie + tempsPourLivrer)/60);
-					int tempsArriveM = (int) ((tempsSortie + tempsPourLivrer)%60);
+					tempsPourLivrer = it.getTemps()/60;
+					Double tempsArrive=tempsSortie + tempsPourLivrer;
+					Double tempsDepart=tempsArrive+TEMPS_REPOS;
+					int tempsArriveH = (int) ((tempsArrive)/60);
+					int tempsArriveM = (int) ((tempsArrive)%60);
+					int tempsDepartH = (int) ((tempsDepart)/60);
+					int tempsDepartM = (int) ((tempsDepart)%60);
 					NumberFormat formatter = new DecimalFormat("00");
 				String descLivraison="Livraison: "+dArrive.getId();
 				if(descLivraison.equals("Livraison: -1")){descLivraison="Retour Entrepot";}
@@ -313,11 +325,17 @@ public class Controleur {
 				w.write("\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
 						+ "," + dArrive.getNoeud().getY() + ")"+"\n");
 				w.write("\tHeure d'arrivé prevue: " + formatter.format(tempsArriveH)+":"+formatter.format(tempsArriveM)+"\n");
+				if(dArrive.getId()!=-1){
+					w.write("\tHeure de départ prevu: " + formatter.format(tempsDepartH)+":"+formatter.format(tempsDepartM)+"\n");
+					}
+				w.write("\tChemin:\n");
 				for(Troncon t : it.getTronconsItineraire()){
 					w.write("\t\t" + t.getNomRue() + ": ("+t.getNoeudFin().getX()+","+t.getNoeudFin().getY()+")\n");
 				}
 				w.write("\tIdentifiant du client à contacter en cas de problème: " + dArrive.getIdClient());
 				w.write("\n");
+				
+				tempsSortie=tempsDepart;
 			}
 			w.close();
 		} catch (IOException e) {
