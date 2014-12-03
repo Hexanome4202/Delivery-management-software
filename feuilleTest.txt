@@ -1,0 +1,19 @@
+Livraison: 3
+	Coordonées de l'adresse: (1,9)
+	Heure d'arrivé prevue: 00:15
+	Identifiant du client à contacter en cas de problème: 611
+Livraison: 1
+	Coordonées de l'adresse: (3,4)
+	Heure d'arrivé prevue: 08:17
+		v1: (3,4)
+	Identifiant du client à contacter en cas de problème: 611
+Livraison: 2
+	Coordonées de l'adresse: (1,2)
+	Heure d'arrivé prevue: 08:17
+		v0: (1,2)
+	Identifiant du client à contacter en cas de problème: 621
+Retour Entrepot
+	Coordonées de l'adresse: (1,9)
+	Heure d'arrivé prevue: 08:17
+		v1: (1,9)
+	Identifiant du client à contacter en cas de problème: 0
