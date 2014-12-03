@@ -62,9 +62,8 @@ public class Tournee {
 	 * @param t
 	 */
 	public Tournee(Tournee t) {
-		this.plagesHoraires = (ArrayList<PlageHoraire>) t.getPlagesHoraires()
-				.clone();
-		this.itineraires = (ArrayList<Itineraire>) t.getItineraires().clone();
+		this.plagesHoraires = new ArrayList<PlageHoraire>(t.getPlagesHoraires());
+		this.itineraires = new ArrayList<Itineraire>(t.getItineraires());
 		this.entrepot = new DemandeDeLivraison(t.getEntrepot().getNoeud());
 		this.planTournee = new Plan(t.getPlanTournee());
 	}
