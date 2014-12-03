@@ -76,6 +76,8 @@ public class Fenetre extends JFrame implements Observer {
 	private JButton btnImprimer;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
+	JMenuItem actionAnnuler;
+	JMenuItem actionRetablir;
 
 	private JMenuItem actionChargerHoraires;
 	private JTextField message;
@@ -407,8 +409,10 @@ public class Fenetre extends JFrame implements Observer {
 		JMenuItem actionQuitter = new JMenuItem("Quitter");
 
 		JMenu menuEdition = new JMenu("Edition");
-		JMenuItem actionAnnuler = new JMenuItem("Annuler");
-		JMenuItem actionRetablir = new JMenuItem("Rétablir");
+		actionAnnuler = new JMenuItem("Annuler");
+		actionRetablir = new JMenuItem("Rétablir");
+		actionAnnuler.setEnabled(false);
+		actionRetablir.setEnabled(false);
 
 		JMenu menuAide = new JMenu("Aide");
 
@@ -632,6 +636,7 @@ public class Fenetre extends JFrame implements Observer {
 	public void dessinerTournee() {
 		noeudAAjouter = null;
 		pointSelectionne = null;
+		btnCalculer.setEnabled(false);
 
 		Tournee tournee = controleur.getTournee();
 		Object parent = plan.getDefaultParent();
@@ -934,6 +939,22 @@ public class Fenetre extends JFrame implements Observer {
 	public void setMessage(String message){
 		this.message.setText(message);
 		System.out.println(message);
+	}
+	
+	/**
+	 * Permet d'activer ou désactiver le bouton Annuler
+	 * @param valeur
+	 */
+	public void setBtnAnnulerEnabled(boolean valeur){
+		actionAnnuler.setEnabled(valeur);
+	}
+	
+	/**
+	 * Permet d'activer ou désactiver le bouton Annuler
+	 * @param valeur
+	 */
+	public void setBtnRetablirEnabled(boolean valeur){
+		actionRetablir.setEnabled(valeur);
 	}
 
 }

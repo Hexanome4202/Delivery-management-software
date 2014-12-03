@@ -87,11 +87,25 @@ public class Tournee {
 					avant.setTroncons(Dijkstra.chemin);
 				}
 				it.remove();
+				livraison.getPlage().getDemandeLivraison().remove(livraison);
 				return true;
 			}
 			avant = itineraire;
 		}
 		return false;
+	}
+	
+	/**
+	 * Supprimer une <code>DemandeDeLivraison</code> à partir d'un <code>Noeud n</code>
+	 * @param n <code>Noeud</code> à supprimer
+	 * @return vrai si la suppression a été faite, faux sinon
+	 */
+	public boolean supprimerLivraison(Noeud n) {
+		DemandeDeLivraison demande;
+		if((demande = getDemandeDeLivraison(n)) == null) {
+			return false;
+		}
+		return supprimerLivraison(demande);
 	}
 
 	/**
@@ -155,14 +169,14 @@ public class Tournee {
 	 */
 	public void ajouterLivraison(Noeud noeudPrecedent, Noeud noeudCourant,
 			int client) {
-		// TODO: faire quelque chose pour la plage horaire
-		// TODO: tester
 		int pos;
+		DemandeDeLivraison precedent;
 		if ((pos = effacerItineraire(noeudPrecedent)) == -1)
 			return;
+		if((precedent = getDemandeDeLivraison(noeudPrecedent)) == null) return;
 		DemandeDeLivraison livraison = new DemandeDeLivraison(noeudCourant,
-				client, null);
-		System.out.println(livraison.getId());
+				client, precedent.getPlage());
+		precedent.getPlage().getDemandeLivraison().add(livraison);
 		Dijkstra.calculerDijkstra(noeudPrecedent, noeudCourant,
 				this.planTournee.getToutNoeuds());
 		List<Troncon> troncons = Dijkstra.chemin;
@@ -511,8 +525,31 @@ public class Tournee {
 		return this.plagesHoraires;
 	}
 
+	/**
+	 * 
+	 * @return le plan de la <code>Tournee</code>
+	 */
 	public Plan getPlanTournee() {
 		return planTournee;
 	}
 
+	/**
+	 * 
+	 * @param n Le <code>Noeud</code> dont on cherche la <code>DemandeDeLivraison</code>
+	 * @return La <code>DemandeDeLivraison</code> associée au <code>Noeud n</code>
+	 */
+	public DemandeDeLivraison getDemandeDeLivraison(Noeud n) {
+		DemandeDeLivraison demande = null;
+		PlageHoraire plage;
+		List<DemandeDeLivraison> demandes;
+		for(int i = 0; i < this.plagesHoraires.size(); ++i) {
+			plage = this.plagesHoraires.get(i);
+			demandes = new ArrayList<DemandeDeLivraison>(plage.getDemandeLivraison());
+			for(int j = 0; j < demandes.size(); ++j) {
+				if(demandes.get(j).getNoeud().compareTo(n) == 0) return demandes.get(j);
+			}
+		}
+		System.out.println("nope");
+		return demande;
+	}
 }

@@ -63,22 +63,18 @@ public class Controleur {
 	 * @param precedent
 	 */
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
-		fen.setMessage("Ajout du point de livraison en cours...");
 		this.tournee.ajouterLivraison(precedent, courant, client);
 		ajouterAListeTournees(tournee);
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
-		fen.setMessage("");
 	}
 
 	public void calculerTournee() {
-		fen.setMessage("Calcul de la tournée en cours...");
 		this.tournee.calculerTournee();
 		ajouterAListeTournees(tournee);
 		fen.dessinerTournee();
-		fen.setMessage("");
 	}
 
 	/**
@@ -86,12 +82,11 @@ public class Controleur {
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
 		fen.setMessage("Suppression du point de livraison en cours...");
-		// this.tournee.supprimerLivraison(noeudASupprimer)
+		this.tournee.supprimerLivraison(noeudASupprimer);
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
-		fen.setMessage("");;
 	}
 
 	/**
