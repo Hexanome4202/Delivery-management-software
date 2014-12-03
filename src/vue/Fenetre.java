@@ -82,7 +82,7 @@ public class Fenetre extends JFrame implements Observer {
 	private JButton btnImprimer;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
-	JMenuItem actionChargerHoraires;
+	private JMenuItem actionChargerHoraires;
     
     private static final double RAYON_NOEUD = 10;
     private static final int TOLERANCE = 10;
@@ -92,8 +92,8 @@ public class Fenetre extends JFrame implements Observer {
      */
     private HashMap<Integer, Integer> noeudsALivrer;
     
-    String[] couleurRemplissage = {"#a7a7a7", "#4407a6", "#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f"};
-    String[] couleurBordure = {"#838383", "#2d0968", "#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828"};
+    private final String[] couleurRemplissage = {"#a7a7a7", "#4407a6", "#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f"};
+    private final String[] couleurBordure = {"#838383", "#2d0968", "#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828"};
     
     /**
      * Facteurs de mise à l'échelle pour l'affichage sur le plan
@@ -113,6 +113,8 @@ public class Fenetre extends JFrame implements Observer {
     
     private Noeud entrepot;
     private Noeud noeudAAjouter = null;
+    
+    private boolean tourneeDessinee = false;
     
     /**
      * 
@@ -355,17 +357,19 @@ public class Fenetre extends JFrame implements Observer {
 					}else{
 					
 						changerPointSelectionne(n);
-						if(n==entrepot || noeudsALivrer.containsKey(n.getId())){
+						if(!tourneeDessinee || n==entrepot || noeudsALivrer.containsKey(n.getId())){
 							btnAjouter.setEnabled(false);
 						}else if(entrepot != null && n != entrepot && !noeudsALivrer.containsKey(n.getId())){
 							btnAjouter.setEnabled(true);
 						}
 						
-						btnSupprimer.setEnabled(noeudsALivrer.containsKey(n.getId()));
+						btnSupprimer.setEnabled(tourneeDessinee && noeudsALivrer.containsKey(n.getId()));
 
 					}
 				}else{
 					changerPointSelectionne(null);
+					btnAjouter.setEnabled(false);
+					btnSupprimer.setEnabled(false);
 				}
 			}
 		});
@@ -564,6 +568,7 @@ public class Fenetre extends JFrame implements Observer {
 				
 				noeudPrecedent = troncon.getNoeudFin().getId();
 			}
+			tourneeDessinee = true;
 		}
 	}
 
