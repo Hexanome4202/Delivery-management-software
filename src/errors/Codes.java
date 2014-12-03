@@ -2,6 +2,9 @@ package errors;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Classe contenant les codes d'erreur de l'application ainsi qu'une fonction gérant l'affichage des erreurs
+ */
 public class Codes {
 	/**
 	 * 

@@ -40,10 +40,29 @@ public class Controleur {
 
 	public static final int TEMPS_REPOS = 10;
 
+	/**
+	 * La <code>Tournee</code> calculée à partir du <code>Plan</code> et des <code>DemandeDeLivraison</code>
+	 */
 	private Tournee tournee;
+	
+	/**
+	 * La vue correspondant à la <code>Tournee</code> calculée
+	 */
 	private VueTournee vueTournee;
+	
+	/**
+	 * Le <code>Plan</code> contenant les <code>Noeud</code>s ainsi que les <code>Troncon</code>s
+	 */
 	private Plan plan;
+	
+	/**
+	 * La <code>Fenetre</code>, c'est à dire l'IHM
+	 */
 	private Fenetre fen;
+	
+	/**
+	 * Booléen permettant d'activier/désactiver le mode de test afin d'éviter l'affichage des IHMs durant les tests
+	 */
 	private boolean modeTests;
 
 	/**
@@ -51,6 +70,7 @@ public class Controleur {
 	 */
 	private GestionnaireDeCommandes gestionnaire;
 
+	// ----- Constructeur(s)
 	/**
 	 * Constructeur par défaut de la classe <code>Controleur</code>
 	 */
@@ -64,6 +84,39 @@ public class Controleur {
 		this.gestionnaire = new GestionnaireDeCommandes();
 	}
 
+	// ----- Getter(s)
+	/**
+	 * Getter de l'attribut <code>plan</code>
+	 * @return le <code>Plan</code>
+	 */
+	public Plan getPlan() {
+		return this.plan;
+	}
+
+	/**
+	 * Getter de l'attribut <code>tournee</code>
+	 * @return la <code>Tournee</code>
+	 */
+	public Tournee getTournee() {
+		return this.tournee;
+	}
+	
+	// ----- Setter(s)
+	/**
+	 * Permet de lancer les tests sans obtenir de pop-up qui doit être fermée à
+	 * la main
+	 * 
+	 * @param val
+	 */
+	public void setModeTest(boolean val) {
+		this.modeTests = val;
+		if (val)
+			this.fen.setVisible(false);
+		else
+			this.fen.setVisible(false);
+	}
+	
+	// ----- Méthode(s)
 	/**
 	 * Ajouter une nouvelle livraison
 	 * 
@@ -91,7 +144,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Calcule la tournée
+	 * Calcule la tournée correspondant au <code>Plan</code> ainsi qu'aux <code>DemandeDeLivraison</code>s
 	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
@@ -99,7 +152,8 @@ public class Controleur {
 	}
 
 	/**
-	 * @param livraison
+	 * Supprime une <code>DemandeDeLivraison</code> à partir de son <code>Noeud</code>
+	 * @param noeudASupprimer le <code>Noeud</code> correspondant à la <code>DemandeDeLivraison</code> à supprimer
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
 		fen.setMessage("Suppression du point de livraison en cours...");
@@ -117,18 +171,11 @@ public class Controleur {
 	}
 
 	/**
-	 * @return un object de type <code>String</code> contenant la feuille editee
+	 * Permet d'éditer la feuille de route
+	 * @return un object de type <code>String</code> contenant la feuille éditée
 	 */
 	public String editerFeuilleRoute() {
 		return this.tournee.editerFeuilleRoute();
-	}
-
-	/**
-	 * @param x
-	 * @param y
-	 */
-	public void planClique(int x, int y) {
-		// TODO implement here
 	}
 
 	/**
@@ -234,6 +281,9 @@ public class Controleur {
 		return Codes.PARSE_OK;
 	}
 
+	/**
+	 * Méthode permettant d'annuler une <code>Commande</code>
+	 */
 	public void undo() {
 		if (gestionnaire.annulerDerniereCommande()) {
 			testBoutonsAnnulerRetablir();
@@ -247,6 +297,9 @@ public class Controleur {
 		}
 	}
 
+	/**
+	 * Méthode permettant de rétablir l'exécution d'une <code>commande</code>
+	 */
 	public void redo() {
 		if (gestionnaire.refaireCommandeAnnulee()) {
 			testBoutonsAnnulerRetablir();
@@ -260,42 +313,12 @@ public class Controleur {
 		}
 	}
 
-	/**
-	 * 
-	 * @return le <code>Plan</code>
-	 */
-	public Plan getPlan() {
-		return this.plan;
-	}
-
-	/**
-	 * 
-	 * @return la <code>Tournee</code>
-	 */
-	public Tournee getTournee() {
-		return this.tournee;
-	}
-
-	/**
-	 * Permet de lancer les tests sans obtenir de pop-up qui doit être fermée à
-	 * la main
-	 * 
-	 * @param val
-	 */
-	public void setModeTest(boolean val) {
-		this.modeTests = val;
-		if (val)
-			this.fen.setVisible(false);
-		else
-			this.fen.setVisible(false);
-	}
-
 	public static void main(String[] args) {
 		new Controleur();
 	}
 
 	/**
-	 * 
+	 * Permet d'enregistrer la feuille de route dans un fichier texte
 	 * @param fichier
 	 *            dont on va realiser la sauvegarde de la tournee
 	 */

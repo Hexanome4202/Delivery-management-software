@@ -26,10 +26,14 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
      */
     private PlageHoraire plageHoraire;
     
+    /**
+     * Permet de sauvegarder l'ID max afin de générer des IDs cohérents et non utilisés lors de l'ajout de livraisons 
+     */
     private static int maxId = 0;
     
+    // ----- Constructeur(s)
     /**
-     * 
+     * Constructeur de la classe <code>DemandeDeLivraison</code>
      * @param id
      * @param noeud
      * @param client
@@ -43,7 +47,7 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
         this.plageHoraire = plage;
     }
      /**
-      * 
+      * Constructeur de la classe <code>DemandeDeLivraison</code>
       * @param noeud
       * @param client
       * @param plage
@@ -57,36 +61,16 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
     
     /**
      * Utilisé pour créer le noeud spécial correspondant à l'entrepot
-     * @param entrepot
+     * @param entrepot <code>Noeud</code> correspondant à l'entrepot
      */
     public DemandeDeLivraison(Noeud entrepot) {
         this.adresseLivraison = entrepot;
         this.id = -1;
     }
-
-    /**
-     * @return le noeud rattache a la demande de livraison
-     */
-    public Noeud getNoeud() {
-        return this.adresseLivraison;
-    }
     
+    // ----- Getter(s)
     /**
-     * 
-     * @return l'id de la demande de livraison
-     */
-    public int getId() {
-    	return this.id;
-    }
-
-	@Override
-	public int compareTo(DemandeDeLivraison demande) {
-		return (demande != null && this.id == demande.getId()) ? 
-				0 : this.id - demande.getId();
-	}
-
-	/**
-	 * 
+	 * Getter de l'attribut <code>idClient</code>
 	 * @return l'id du client
 	 */
 	public int getIdClient() {
@@ -94,10 +78,33 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
 	}
 	
 	/**
-	 * 
+     * Getter de l'attribut <code>adresseLivraison</code>
+     * @return le noeud rattaché à la demande de livraison
+     */
+    public Noeud getNoeud() {
+        return this.adresseLivraison;
+    }
+    
+    /**
+     * Getter de l'attribut <code>id</code>
+     * @return l'id de la demande de livraison
+     */
+    public int getId() {
+    	return this.id;
+    }
+    
+    /**
+	 * Getter de l'attribut <code>plageHoraire</code>
 	 * @return la plage horaire de la demande
 	 */
 	public PlageHoraire getPlage(){
 		return plageHoraire;
+	}
+
+	// ----- Méthode(s)
+	@Override
+	public int compareTo(DemandeDeLivraison demande) {
+		return (demande != null && this.id == demande.getId()) ? 
+				0 : this.id - demande.getId();
 	}
 }

@@ -9,7 +9,7 @@ import org.w3c.dom.NodeList;
 import controleur.Controleur;
 
 /**
- * 
+ * Classe correspondant à un noeud géographique de l'application
  */
 public class Noeud implements Comparable<Noeud> {
 	/**
@@ -32,7 +32,9 @@ public class Noeud implements Comparable<Noeud> {
      */
     private Set<Troncon> sortants;
     
+    // ----- Constructeur(s)
     /**
+     * Constructeur de la classe <code>Noeud</code>
      * @param id l'id du noeud
      * @param x la position géographique en x du noeud
      * @param y la position géographique en y du noeud
@@ -45,7 +47,7 @@ public class Noeud implements Comparable<Noeud> {
     }
     
     /**
-     * 
+     * Constructeur de la classe <code>Noeud</code>
      * @param id l'id du noeud
      * @param x la position géographique en x du noeud
      * @param y la position géographique en y du noeud
@@ -56,16 +58,9 @@ public class Noeud implements Comparable<Noeud> {
     	this.sortants = troncons;
     }
     
+    // ----- Getter(s)
     /**
-     * Méthode pour ajouter un troncon sortant au noeud
-     * @param tronconSortant
-     */
-    public void ajouterTronconSortant(Troncon tronconSortant){
-    	sortants.add(tronconSortant);
-    }
-    
-    /**
-     * 
+     * Getter de l'attribut <code>sortants</code>
      * @return les troncons sortants (<code>Troncon</code>) du noeud
      */
     public Set<Troncon> getTronconSortants(){
@@ -81,7 +76,7 @@ public class Noeud implements Comparable<Noeud> {
     }
     
     /**
-     * 
+     * Getter de l'attribut <code>x</code>
      * @return la coordonnée en x du noeud
      */
     public int getX() {
@@ -89,21 +84,30 @@ public class Noeud implements Comparable<Noeud> {
     }
     
     /**
-     * 
+     * Getter de l'attribut <code>y</code>
      * @return la coordonnée en y du noeud
      */
     public int getY() {
     	return this.y;
     }
     
-    
+    // ----- Setter(s)
     /**
-     * 
-     * @param setTroncons
+     * Setter de l'attribut <code>setTroncons</code>
+     * @param setTroncons le nouveau <code>Set</code>
      */
 	public void setSortants(Set<Troncon> setTroncons) {
 		this.sortants = setTroncons;
 	}
+    
+	// ----- Méthode(s)
+    /**
+     * Méthode pour ajouter un troncon sortant au noeud
+     * @param tronconSortant le nouveau <code>Troncon</code> à ajouter au <code>Set</code> de <code>Troncon</code>
+     */
+    public void ajouterTronconSortant(Troncon tronconSortant){
+    	sortants.add(tronconSortant);
+    }
 
 	@Override
 	public int compareTo(Noeud noeud) {

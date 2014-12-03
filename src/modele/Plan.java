@@ -36,6 +36,7 @@ public class Plan {
 	 */
 	private int maxY;
 
+	// ----- Constructeur(s)
 	/**
 	 * Constructeur vide de <code>Plan</code>.
 	 */
@@ -63,7 +64,7 @@ public class Plan {
 		construirePlanAPartirDeDOMXML(racineXML);
 
 	}
-
+	
 	/**
 	 * Constructeur de plan à partir de sets de troncons et de noeuds
 	 * 
@@ -74,8 +75,43 @@ public class Plan {
 		this.toutNoeuds = noeuds;
 		this.toutTroncons = troncons;
 	}
+	
+	// ----- Getter(s)
+	/**
+	 * Getter de l'attribut <code>toutNoeuds</code>
+	 * @return Les noeuds du <code>Plan</code>
+	 */
+	public Set<Noeud> getToutNoeuds() {
+		return this.toutNoeuds;
+	}
 
 	/**
+	 * Getter de l'attribut <code>toutTroncons</code>
+	 * @return Les troncons du <code>Plan</code>
+	 */
+	public Set<Troncon> getToutTroncons() {
+		return this.toutTroncons;
+	}
+	
+	/**
+	 * Getter de l'attribut <code>maxX</code>
+	 * @return la valeur maximale de <code>x</code>
+	 */
+	public int getMaxX() {
+		return maxX;
+	}
+
+	/**
+	 * Getter de l'attribut <code>maxY</code>
+	 * @return la valeur maximale de <code>y</code>
+	 */
+	public int getMaxY() {
+		return maxY;
+	}
+
+	// ----- Méthode(s)
+	/**
+	 * Méthode permettant de récupérer un <code>Noeud</code> par rapport à son id
 	 * @param idNoeud
 	 * @return le noeud ayant comme id <code>idNoeud</code> s'il existe, null
 	 *         sinon
@@ -92,22 +128,6 @@ public class Plan {
 			}
 		}
 		return noeud;
-	}
-
-	/**
-	 * 
-	 * @return Les noeuds du <code>Plan</code>
-	 */
-	public Set<Noeud> getToutNoeuds() {
-		return this.toutNoeuds;
-	}
-
-	/**
-	 * 
-	 * @return Les troncons du <code>Plan</code>
-	 */
-	public Set<Troncon> getToutTroncons() {
-		return this.toutTroncons;
 	}
 
 	/**
@@ -182,6 +202,9 @@ public class Plan {
 		}
 	}
 
+	/**
+	 * Méthode permettant de remplir l'attribut <code>toutTroncons</code>
+	 */
 	private void remplirTousTroncons() {
 
 		for (Noeud t : toutNoeuds) {
@@ -191,12 +214,11 @@ public class Plan {
 	}
 
 	/**
-	 * 
-	 * @param liste
-	 * @return
+	 * Méthode permettant de construire les <code>Troncon</code> grâce à un fichier XML
+	 * @param liste la liste des troncons à créer
+	 * @return le code d'erreur rencontré, s'il y en a un
 	 */
 	public int construireTronconAPartirDeDOMXML(NodeList liste) {
-		// todo : gerer les erreurs de syntaxe dans le fichier XML !
 
 		for (int i = 0; i < liste.getLength(); i++) {
 			Element noeudElement = (Element) liste.item(i);
@@ -255,19 +277,11 @@ public class Plan {
 		return Codes.PARSE_OK;
 	}
 
-	public int getMaxX() {
-		return maxX;
-	}
-
-	public int getMaxY() {
-		return maxY;
-	}
-
 	/**
 	 * Retourne le Noeud avec l'id passé en paramètre s'il existe
 	 * 
-	 * @param id
-	 * @return noeud correspondant
+	 * @param id l'id du <code>Noeud</code> à récupérer
+	 * @return noeud le <code>Noeud</code> correspondant à l'<code>id</code>
 	 */
 	public Noeud getNoeud(int id) {
 		Iterator<Noeud> it = toutNoeuds.iterator();

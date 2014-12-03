@@ -23,7 +23,7 @@ import tsp.TSP;
 import errors.Codes;
 
 /**
- * 
+ * La classe représentant la tournée calculée et à effectuer par le livreur
  */
 public class Tournee {
 
@@ -48,6 +48,7 @@ public class Tournee {
 	 */
 	private Plan planTournee;
 
+	// ----- Constructeur(s)
 	/**
 	 * Constructeur vide de <code>Tournee</code>
 	 */
@@ -59,7 +60,7 @@ public class Tournee {
 	}
 
 	/**
-	 * Constructeur par copie de Tournee
+	 * Constructeur par copie de <code>Tournee</code>
 	 * 
 	 * @param t
 	 */
@@ -69,7 +70,70 @@ public class Tournee {
 		this.entrepot = new DemandeDeLivraison(t.getEntrepot().getNoeud());
 		this.planTournee = new Plan(t.getPlanTournee());
 	}
+	
+	// ----- Getter(s)
+	/**
+	 * Getter de l'attribut <code>itineraires/code>
+	 * @return la liste des <code>Itineraire</code> de la tournée
+	 */
+	public ArrayList<Itineraire> getItineraires() {
+		return this.itineraires;
+	}
 
+	/**
+	 * Getter de l'attribut <code>entrepot</code>
+	 * @return la <code>DemandeDeLivraison</code> correspondant à l'entrepôt
+	 */
+	public DemandeDeLivraison getEntrepot() {
+		return this.entrepot;
+	}
+
+	/**
+	 * Getter de l'attribut <code>plageHoraires</codes>
+	 * @return une liste de <code>PlageHoraire</code>s appartenant à la
+	 *         <code>Tournee</code>
+	 */
+	public ArrayList<PlageHoraire> getPlagesHoraires() {
+		return this.plagesHoraires;
+	}
+
+	/**
+	 * Getter de l'attribut <code>planTournee</code>
+	 * @return le plan de la <code>Tournee</code>
+	 */
+	public Plan getPlanTournee() {
+		return planTournee;
+	}
+	
+	// ----- Setter(s)
+	/**
+	 * Setter de l'attribut <code>plageHoraires</code>
+	 * @param plagesHoraires
+	 *            : liste <b>ordonnée</b> de plages horaires
+	 */
+	public void setPlagesHoraires(ArrayList<PlageHoraire> plagesHoraires) {
+		this.plagesHoraires = plagesHoraires;
+	}
+	
+	/**
+	 * Setter de l'attribut <code>planTournee</code>
+	 * @param planTournee
+	 *            : la <code>Plan</code> de la tournée
+	 */
+	public void setPlanTournee(Plan planTournee) {
+		this.planTournee = planTournee;
+	}
+
+	/**
+	 * Setter de l'attribut <code>entrepot</code>
+	 * @param entrepot
+	 *            : la <code>DemandeDeLivraison</code> représentant l'entrepot
+	 */
+	public void setEntrepot(DemandeDeLivraison entrepot) {
+		this.entrepot = entrepot;
+	}
+
+	// ----- Méthode(s)
 	/**
 	 * Supprime une <code>DemandeDeLivraison</code>
 	 * @param livraison
@@ -113,8 +177,8 @@ public class Tournee {
 
 	/**
 	 * TODO: Not even sure of what it is doing...
-	 * 
-	 * @return la feuille de route editee
+	 * Edite la feuille de route
+	 * @return la feuille de route editée
 	 */
 	public String editerFeuilleRoute() {
 		String ret = "";
@@ -150,8 +214,10 @@ public class Tournee {
 	}
 
 	/**
-	 * @param coordX
-	 * @param coordY
+	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de ses coordonnées
+	 * @param coordX coordonnée sur l'axe des abscisses
+	 * @param coordY coordonnée sur l'axe des ordonnées
+	 * @return le <code>Noeud</code> correspondant, ou null
 	 */
 	public Noeud recupererNoeud(int coordX, int coordY) {
 		Set<Noeud> noeuds = this.planTournee.getToutNoeuds();
@@ -169,17 +235,19 @@ public class Tournee {
 	}
 
 	/**
-	 * 
-	 * @param idNoeud
+	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de son id
+	 * @param idNoeud l'id du <code>Noeud</code> à récupérer
+	 * @return le <code>Noeud</code> correspondant ou null
 	 */
 	public Noeud recupererNoeud(int idNoeud) {
 		return this.planTournee.recupererNoeud(idNoeud);
 	}
 
 	/**
-	 * @param noeudPrecedent
-	 * @param noeudCourant
-	 * @param client
+	 * Méthode permettant d'ajouter une livraison
+	 * @param noeudPrecedent <code>Noeud</code> précédent celui qu'on doit ajouter
+	 * @param noeudCourant <code>Noeud</code> correspondant à la <code>DemandeDeLivraison</code> à ajouter
+	 * @param client l'id du client concerné par la <code>DemandeDeLivraison</code>
 	 */
 	public void ajouterLivraison(Noeud noeudPrecedent, Noeud noeudCourant,
 			int client) {
@@ -207,7 +275,9 @@ public class Tournee {
 	}
 
 	/**
-	 * @param noeudPrecedent
+	 * Méthode permettant de supprimer un itinéraire
+	 * @param noeudPrecedent <code>Noeud</code> d'arrivée de l'<code>Itineraire</code>
+	 * @return la position de l'<code>Itineraire</code> supprimé dans la liste d'<code>Itineraire</code>
 	 */
 	public int effacerItineraire(Noeud noeudPrecedent) {
 		// TODO: tester
@@ -344,9 +414,9 @@ public class Tournee {
 	}
 
 	/**
-	 * 
-	 * @param noeudDOMRacine
-	 * @return
+	 * Méthode permettant de construire les <code>Livraison</code>s à partir d'un élément XML
+	 * @param noeudDOMRacine noeud XML
+	 * @return le code d'erreur généré, s'il y en a une
 	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
 
@@ -423,6 +493,10 @@ public class Tournee {
 		return code;
 	}
 
+	/**
+	 * Méthode permettant de détecter les <code>DemandeDeLivraison</code> qui arrivent en dehors de leur <code>PlageHoraire</code>
+	 * @return la liste des <code>DemandeDeLivraison</code> dont le temps est dépassé
+	 */
 	public List<DemandeDeLivraison> getDemandesTempsDepasse() {
 		ArrayList<DemandeDeLivraison> demandesDepassees = new ArrayList<DemandeDeLivraison>();
 
@@ -466,6 +540,10 @@ public class Tournee {
 		return demandesDepassees;
 	}
 
+	/**
+	 * Permet de tester la liste des plages horaires par rapport à la lecture du XML
+	 * @return le code d'erreur rencontré
+	 */
 	private int testerListePlagesHoraires() {
 
 		int code = Codes.PARSE_OK;
@@ -488,64 +566,6 @@ public class Tournee {
 		plagesHoraires.removeAll(lp);
 
 		return code;
-	}
-
-	/**
-	 * 
-	 * @param planTournee
-	 *            : la <code>Plan</code> de la tournée
-	 */
-	public void setPlanTournee(Plan planTournee) {
-		this.planTournee = planTournee;
-	}
-
-	/**
-	 * 
-	 * @param entrepot
-	 *            : la <code>DemandeDeLivraison</code> représentant l'entrepot
-	 */
-	public void setEntrepot(DemandeDeLivraison entrepot) {
-		this.entrepot = entrepot;
-	}
-
-	/**
-	 * 
-	 * @return la liste des <code>Itineraire</code> de la tournée
-	 */
-	public ArrayList<Itineraire> getItineraires() {
-		return this.itineraires;
-	}
-
-	/**
-	 * @param plagesHoraires
-	 *            : liste <b>ordonnée</b> de plages horaires
-	 */
-	public void setPlagesHoraires(ArrayList<PlageHoraire> plagesHoraires) {
-		this.plagesHoraires = plagesHoraires;
-	}
-
-	/**
-	 * @return la <code>DemandeDeLivraison</code> correspondant à l'entrepôt
-	 */
-	public DemandeDeLivraison getEntrepot() {
-		return this.entrepot;
-	}
-
-	/**
-	 * 
-	 * @return une liste de <code>PlageHoraire</code>s appartenant à la
-	 *         <code>Tournee</code>
-	 */
-	public ArrayList<PlageHoraire> getPlagesHoraires() {
-		return this.plagesHoraires;
-	}
-
-	/**
-	 * 
-	 * @return le plan de la <code>Tournee</code>
-	 */
-	public Plan getPlanTournee() {
-		return planTournee;
 	}
 
 	/**
