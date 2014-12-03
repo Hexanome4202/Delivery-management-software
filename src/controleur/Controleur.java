@@ -6,13 +6,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import modele.DemandeDeLivraison;
+import modele.Itineraire;
 import modele.Noeud;
+import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
+import modele.Troncon;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -30,12 +38,14 @@ import errors.Codes;
  */
 public class Controleur {
 
+
+
 	private Tournee tournee;
 	private VueTournee vueTournee;
 	private Plan plan;
 	private Fenetre fen;
 	private boolean modeTests;
-	
+
 	/**
 	 * Le gestionnaire des commandes de l'application
 	 */
@@ -56,12 +66,19 @@ public class Controleur {
 
 	/**
 	 * Ajouter une nouvelle livraison
-	 * @param client l'id du client
-	 * @param noeud le <code>Noeud</code> pour lequel on souhaite ajouter une <code>DemandeDeLivraison</code>
-	 * @param precedent le <code>Noeud</code> après lequel on souhaite ajouter une <code>DemandeDeLivraison</code>
+	 * 
+	 * @param client
+	 *            l'id du client
+	 * @param noeud
+	 *            le <code>Noeud</code> pour lequel on souhaite ajouter une
+	 *            <code>DemandeDeLivraison</code>
+	 * @param precedent
+	 *            le <code>Noeud</code> après lequel on souhaite ajouter une
+	 *            <code>DemandeDeLivraison</code>
 	 */
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
-		Commande commande = new CommandeAjouterLivraison(tournee, client, courant, precedent);
+		Commande commande = new CommandeAjouterLivraison(tournee, client,
+				courant, precedent);
 		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
@@ -86,9 +103,10 @@ public class Controleur {
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
 		fen.setMessage("Suppression du point de livraison en cours...");
-		
-		Commande commande = new CommandeSupprimerLivraison(tournee, noeudASupprimer);
-		gestionnaire.executerNouvelleCommande(commande);		
+
+		Commande commande = new CommandeSupprimerLivraison(tournee,
+				noeudASupprimer);
+		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
 		fen.afficherPlan();
@@ -161,17 +179,20 @@ public class Controleur {
 		} catch (ParserConfigurationException pce) {
 			System.out.println("Erreur de configuration du parseur DOM");
 			if (!this.modeTests)
-				fen.afficherPopupErreur("Erreur de configuration du parseur DOM!", "Erreur");
-			System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");
+				fen.afficherPopupErreur(
+						"Erreur de configuration du parseur DOM!", "Erreur");
+			System.out
+					.println("lors de l'appel a fabrique.newDocumentBuilder();");
 		} catch (SAXException se) {
 			System.out.println("Erreur lors du parsing du document");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
 			if (!this.modeTests)
-				fen.afficherPopupErreur("Problème de parsing du document xml!", "Erreur");
+				fen.afficherPopupErreur("Problème de parsing du document xml!",
+						"Erreur");
 		} catch (IOException ioe) {
 			System.out.println("Erreur d'entree/sortie");
 			if (!this.modeTests)
-				fen.afficherPopupErreur("Erreur d'entree/sortie!","Erreur");
+				fen.afficherPopupErreur("Erreur d'entree/sortie!", "Erreur");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
 		}
 		return Codes.PARSE_ERROR;
@@ -197,8 +218,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable de la construction du plan à partir d'un element
-	 * xml
+	 * Methode responsable de la construction du plan à partir d'un element xml
 	 * 
 	 * @param planElement
 	 * @return
@@ -215,20 +235,7 @@ public class Controleur {
 	}
 
 	public void undo() {
-		if(gestionnaire.annulerDerniereCommande()){
-			testBoutonsAnnulerRetablir();
-			fen.afficherPlan();
-			fen.afficherDemandesLivraisonsSurPlan();
-			fen.dessinerTournee();
-
-			fen.majMenuHoraire();
-		}else{
-			fen.afficherPopupErreur("Undo n'est pas possible!","Erreur 151");
-		}
-	}
-
-	public void redo() {
-		if(gestionnaire.refaireCommandeAnnulee()){
+		if (gestionnaire.annulerDerniereCommande()) {
 			testBoutonsAnnulerRetablir();
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
@@ -236,7 +243,20 @@ public class Controleur {
 
 			fen.majMenuHoraire();
 		} else {
-			fen.afficherPopupErreur("Redo n'est pas possible!","Erreur 152");
+			fen.afficherPopupErreur("Undo n'est pas possible!", "Erreur 151");
+		}
+	}
+
+	public void redo() {
+		if (gestionnaire.refaireCommandeAnnulee()) {
+			testBoutonsAnnulerRetablir();
+			fen.afficherPlan();
+			fen.afficherDemandesLivraisonsSurPlan();
+			fen.dessinerTournee();
+
+			fen.majMenuHoraire();
+		} else {
+			fen.afficherPopupErreur("Redo n'est pas possible!", "Erreur 152");
 		}
 	}
 
@@ -273,10 +293,9 @@ public class Controleur {
 	public static void main(String[] args) {
 		new Controleur();
 	}
-	
 
 	/**
-	 * 
+	 * Méthode qui s'occupe de la creation du fichier avec les itineraires de la tournee
 	 * @param fichier dont on va realiser la sauvegarde de la tournee
 	 */
 	public void genererFichierImpression(File fichier) {
@@ -291,21 +310,21 @@ public class Controleur {
 			System.err.println("Probleme de creation du fichier d'impression");
 		}
 	}
-	
+
 	/**
-	 * Méthode qui grise ou dégrise les boutons Annuler et Rétablir
-	 * en fonction du gestionnaire
+	 * Méthode qui grise ou dégrise les boutons Annuler et Rétablir en fonction
+	 * du gestionnaire
 	 */
-	public void testBoutonsAnnulerRetablir(){
-		if(gestionnaire.getIndex()>0){
+	public void testBoutonsAnnulerRetablir() {
+		if (gestionnaire.getIndex() > 0) {
 			fen.setBtnAnnulerEnabled(true);
-		}else{
+		} else {
 			fen.setBtnAnnulerEnabled(false);
 		}
-		
-		if(gestionnaire.getIndex() < gestionnaire.getCommandesSize()){
+
+		if (gestionnaire.getIndex() < gestionnaire.getCommandesSize()) {
 			fen.setBtnRetablirEnabled(true);
-		}else{
+		} else {
 			fen.setBtnRetablirEnabled(false);
 		}
 	}
