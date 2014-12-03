@@ -58,9 +58,10 @@ public class Controleur {
 	}
 
 	/**
-	 * @param client
-	 * @param noeud
-	 * @param precedent
+	 * Ajouter une nouvelle livraison
+	 * @param client l'id du client
+	 * @param noeud le <code>Noeud</code> pour lequel on souhaite ajouter une <code>DemandeDeLivraison</code>
+	 * @param precedent le <code>Noeud</code> après lequel on souhaite ajouter une <code>DemandeDeLivraison</code>
 	 */
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
 		this.tournee.ajouterLivraison(precedent, courant, client);
@@ -71,6 +72,9 @@ public class Controleur {
 		fen.majMenuHoraire();
 	}
 
+	/**
+	 * Calcule la tournée
+	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
 		ajouterAListeTournees(tournee);

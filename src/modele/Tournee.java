@@ -182,10 +182,11 @@ public class Tournee {
 		List<Troncon> troncons = Dijkstra.chemin;
 		Itineraire it1 = new Itineraire(this.itineraires.get(pos - 1)
 				.getArrivee(), livraison, troncons);
-		Dijkstra.calculerDijkstra(noeudCourant, this.itineraires.get(pos)
+		int entrepot = pos == this.itineraires.size() ? 0 : pos;
+		Dijkstra.calculerDijkstra(noeudCourant, this.itineraires.get(entrepot)
 				.getDepart().getNoeud(), this.planTournee.getToutNoeuds());
 		troncons = Dijkstra.chemin;
-		Itineraire it2 = new Itineraire(livraison, this.itineraires.get(pos)
+		Itineraire it2 = new Itineraire(livraison, this.itineraires.get(entrepot)
 				.getDepart(), troncons);
 		this.itineraires.add(pos, it1);
 		this.itineraires.add(pos + 1, it2);
@@ -534,7 +535,7 @@ public class Tournee {
 	}
 
 	/**
-	 * 
+	 * Cherche la demande de livraison associée au <code>Noeud</code>
 	 * @param n Le <code>Noeud</code> dont on cherche la <code>DemandeDeLivraison</code>
 	 * @return La <code>DemandeDeLivraison</code> associée au <code>Noeud n</code>
 	 */
