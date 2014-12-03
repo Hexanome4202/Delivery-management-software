@@ -231,6 +231,7 @@ public class Fenetre extends JFrame implements Observer {
 		btnImprimer = new JButton("Imprimer");
 		btnImprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				genererFichierImpression();
 			}
 		});
 		btnImprimer.setEnabled(false);
@@ -340,6 +341,12 @@ public class Fenetre extends JFrame implements Observer {
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
 		
+	    /**
+	     * Creates a simple MouseAdapter binded to an AccordionItem. On mouse Pressed it writes on a textBox the source of event.
+	     * @return {@link MouseAdapter} object.
+	     */
+
+    
 	
 		/*---------------------PLAN------------------------------*/
 		plan = new mxGraph();
@@ -470,6 +477,61 @@ public class Fenetre extends JFrame implements Observer {
 	 */
 	public void majMenuHoraire(){
 		//TODO : Cécilia - trouver un moyen de mettre à jour le menu horaires
+		//horairesPannel.remove(menuHoraires); //remove component from your jpanel in this case i used jpanel
+		horairesPannel.removeAll();
+		horairesPannel.revalidate();
+		horairesPannel.repaint();//repaint a JFrame jframe in this case 
+		
+		
+		AccordionMenu menuHorairesMaj;
+		menuHorairesMaj = new AccordionMenu();
+		menuHorairesMaj.setBackground(Color.white);
+		menuHorairesMaj.setFont(new Font("Arial", Font.PLAIN, 16));
+		menuHorairesMaj.setMenusSize(30);
+		menuHorairesMaj.setMenuBorders(new BevelBorder(BevelBorder.RAISED));
+		menuHorairesMaj.setSelectionColor(Color.lightGray);
+		menuHorairesMaj.setLeafHorizontalAlignment(AccordionItem.LEFT);
+		
+		int iteratorPlage = 1;
+		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
+
+			SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm");
+
+			SimpleDateFormat timeFormatFin = new SimpleDateFormat("H:mm");
+
+			menuHorairesMaj.addNewMenu("menu" + iteratorPlage,
+					timeFormat.format(plage.getHeureDebut()) + "-"
+							+ timeFormatFin.format(plage.getHeureFin()));
+
+			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
+				menuHorairesMaj.addNewLeafTo("menu" + iteratorPlage, ""
+						+ livraison.getNoeud().getId(),
+						String.valueOf(livraison.getIdClient()));
+			}
+			iteratorPlage++;
+		}
+
+		MouseAdapter menuMouseAdapter = new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				AccordionItem item = (AccordionItem) e.getSource();
+				changerPointSelectionne(controleur.getPlan().getNoeud(
+						Integer.parseInt(item.getName())));
+			}
+		};
+
+		for (AccordionLeafItem leaf : menuHorairesMaj.getAllLeafs()) {
+			leaf.addMouseListener(menuMouseAdapter);
+		}
+
+		menuHorairesMaj.calculateAvaiableSpace();
+		menuHorairesMaj.repaint();
+		
+		
+		horairesPannel.add(menuHorairesMaj); //add component to jpanel in this case i used jpanel
+		horairesPannel.revalidate();
+		horairesPannel.repaint();//repaint a JFrame jframe in this case 
 	}
 	
     /**
@@ -487,12 +549,10 @@ public class Fenetre extends JFrame implements Observer {
 					timeFormat.format(plage.getHeureDebut()) + "-"
 							+ timeFormatFin.format(plage.getHeureFin()));
 
-			int iteratorLiv = 1;
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				menuHoraires.addNewLeafTo("menu" + iteratorPlage, ""
 						+ livraison.getNoeud().getId(),
 						String.valueOf(livraison.getIdClient()));
-				iteratorLiv++;
 			}
 			iteratorPlage++;
 		}
@@ -797,6 +857,12 @@ public class Fenetre extends JFrame implements Observer {
 	 */
 	public void activerAjouter(){
 		btnAjouter.setEnabled(true);
+	}
+	
+
+	public void genererFichierImpression(){
+		File f = ouvrirFichier('w');
+		controleur.genererFichierImpression(f);
 	}
 
 }
