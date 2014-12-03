@@ -346,7 +346,7 @@ public class Fenetre extends JFrame implements Observer {
 			{
 				Noeud n = getNoeudA(e.getX(), e.getY());
 				if(n != null){
-					
+					//Si on est dans l'ajout de point de livraison
 					if(noeudAAjouter != null){
 						if(noeudsALivrer.containsKey(n.getId())){
 							controleur.ajouterLivraison(0, noeudAAjouter, n);
@@ -364,6 +364,8 @@ public class Fenetre extends JFrame implements Observer {
 						btnSupprimer.setEnabled(noeudsALivrer.containsKey(n.getId()));
 
 					}
+				}else{
+					changerPointSelectionne(null);
 				}
 			}
 		});
@@ -685,17 +687,20 @@ public class Fenetre extends JFrame implements Observer {
 	 * @param nouvelleSelection
 	 */
 	private void changerPointSelectionne(Noeud nouvelleSelection){		
-		//TODO Changer la couleur des demandes de livraison en fonction de leur plage horaire
+		
+		//On commence par déselectionner l'ancienne sélection
 		if(pointSelectionne != null){
 			int idCouleur = (noeudsALivrer != null && noeudsALivrer.containsKey(pointSelectionne.getId()) ? noeudsALivrer.get(pointSelectionne.getId()) : 0);
 			Object[] cells = {points.get(pointSelectionne.getId())};
 			plan.setCellStyle("fillColor="+couleurRemplissage[idCouleur]+";strokeColor="+couleurBordure[idCouleur], cells);
 		}
-		
-		int idCouleur = (noeudsALivrer != null && noeudsALivrer.containsKey(nouvelleSelection.getId()) ? noeudsALivrer.get(nouvelleSelection.getId()) : 0);
 		pointSelectionne = nouvelleSelection;
-		Object[] cells = {points.get(pointSelectionne.getId())};
-		plan.setCellStyle("strokeColor=red;strokeWidth=3;fillColor="+couleurRemplissage[idCouleur], cells);
+		
+		if(pointSelectionne != null){
+			int idCouleur = (noeudsALivrer != null && noeudsALivrer.containsKey(nouvelleSelection.getId()) ? noeudsALivrer.get(nouvelleSelection.getId()) : 0);
+			Object[] cells = {points.get(pointSelectionne.getId())};
+			plan.setCellStyle("strokeColor=red;strokeWidth=3;fillColor="+couleurRemplissage[idCouleur], cells);
+		}
 	}
 	
 	/**
