@@ -58,6 +58,7 @@ import controleur.Controleur;
  */
 public class Fenetre extends JFrame implements Observer {
 
+	
 	/**
      * Facteur permettant de faire la conversion entre les coordonnées 
      * réelles et les coordonnées d'affichage
@@ -72,7 +73,9 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	
+    private static final long serialVersionUID = 1L;
+    
 	private JFileChooser jFileChooserXML;
 	private Controleur controleur;
 	
@@ -82,11 +85,12 @@ public class Fenetre extends JFrame implements Observer {
     private mxGraphComponent planComponent;
     
     private JButton btnCalculer;
-	private JButton btnModifier;
 	private JButton btnImprimer;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
+	
 	private JMenuItem actionChargerHoraires;
+	private javax.swing.JTextField message;
     
     private static final double RAYON_NOEUD = 10;
     private static final int TOLERANCE = 10;
@@ -120,7 +124,6 @@ public class Fenetre extends JFrame implements Observer {
      * Le point actuellement selectionné
      */
     private Noeud pointSelectionne;
-    
     private Noeud entrepot;
     private Noeud noeudAAjouter = null;
     
@@ -133,85 +136,14 @@ public class Fenetre extends JFrame implements Observer {
      */
     public Fenetre(Controleur c) {
     	this.controleur = c;
-    	
     	setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		/*----------------------------------------------------*/
-		/*--------------------- MENU BAR ---------------------*/
+		/*--------------------- BOUTONS ---------------------*/
 		/*----------------------------------------------------*/
 		
-		JMenuBar menuBar = new JMenuBar();
-		
-		JMenu menuFichier = new JMenu("Fichier");
-		JMenuItem actionQuitter = new JMenuItem("Quitter");
-		JMenu menuEdition = new JMenu("Edition");
-		JMenuItem actionAnnuler = new JMenuItem("Annuler");
-		JMenuItem actionRetablir = new JMenuItem("Rétablir");
-		
-		
-		
-		actionQuitter.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false); //you can't see me!
-				dispose(); //Destroy the JFrame object
-			}
-		});
-		
-		JMenuItem actionChargerPlan = new JMenuItem("Charger le plan");
-		actionChargerHoraires = new JMenuItem("Charger les horaires");
-		actionChargerHoraires.setEnabled(false);
-		
-		actionAnnuler.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				controleur.undo();
-			}
-		});
-		
-		actionRetablir.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controleur.redo();
-			}
-		});
-		
-		
-		actionChargerPlan.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				lireDepuisFichierXML("plan");
-			}
-			
-		});
-		
-		actionChargerHoraires.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				lireDepuisFichierXML("horaires");
-			}
-			
-		});
-		
-		menuFichier.add(actionChargerPlan);
-		menuFichier.add(actionChargerHoraires);
-		menuFichier.add(actionQuitter);
-		menuEdition.add(actionAnnuler);
-		menuEdition.add(actionRetablir);
-		
-		JMenu menuAide = new JMenu("Aide");
-		
-		menuBar.add(menuFichier);
-		menuBar.add(menuEdition);
-		menuBar.add(menuAide);
-		
-		this.setJMenuBar(menuBar);
+		initMenuBar();
 		
 		btnCalculer = new JButton("Calculer");
 		btnCalculer.addActionListener(new ActionListener() {
@@ -221,12 +153,6 @@ public class Fenetre extends JFrame implements Observer {
 		});
 		btnCalculer.setEnabled(false);
 		
-		btnModifier = new JButton("Modifier");
-		btnModifier.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnModifier.setEnabled(false);
 
 		btnImprimer = new JButton("Imprimer");
 		btnImprimer.addActionListener(new ActionListener() {
@@ -243,11 +169,11 @@ public class Fenetre extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent arg0) {
 				noeudAAjouter = pointSelectionne;
 				btnAjouter.setEnabled(false);
+				message.setText("Veuillez sélectionner le noeud de livraison précédent");
 			}
-			
+	
 		});
 		btnAjouter.setEnabled(false);
-		
 		btnSupprimer = new JButton("Supprimer");
 		btnSupprimer.addActionListener(new ActionListener(){
 
@@ -270,12 +196,10 @@ public class Fenetre extends JFrame implements Observer {
 		
 		
 		
-		JLabel planLabel = new JLabel("Plan");
-		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
-		
 		
 		/*---------------------HORAIRES-----------------------*/
 		JLabel horairesLabel = new JLabel("Horaires");
+		message = new javax.swing.JTextField();
 		horairesLabel.setFont(new Font("Arial", Font.BOLD, 24));		
 		
 		horairesPannel = new javax.swing.JPanel();
@@ -295,7 +219,6 @@ public class Fenetre extends JFrame implements Observer {
 		horairesPannel.setBackground(new java.awt.Color(186, 186, 186));
 		horairesPannel.setBorder(javax.swing.BorderFactory
 				.createEtchedBorder(2, Color.black, Color.black));
-				//.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 		horairesPannel.setLayout(new javax.swing.BoxLayout(horairesPannel,
 				javax.swing.BoxLayout.LINE_AXIS));
 		horairesPannel.add(menuHoraires);
@@ -306,7 +229,6 @@ public class Fenetre extends JFrame implements Observer {
 				getContentPane());
 		getContentPane().setLayout(layout);
 		
-		//ContainerGap ajoute une marge
 		layout.setHorizontalGroup(layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(
@@ -320,7 +242,9 @@ public class Fenetre extends JFrame implements Observer {
 														horairesPannel,
 														javax.swing.GroupLayout.Alignment.LEADING,
 														javax.swing.GroupLayout.DEFAULT_SIZE,
-														150, Short.MAX_VALUE))
+														150, Short.MAX_VALUE)
+										)
+										
 								.addContainerGap()));
 		
 		
@@ -335,20 +259,18 @@ public class Fenetre extends JFrame implements Observer {
 										800, Short.MAX_VALUE)
 								.addPreferredGap(
 										javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addContainerGap()));
+								.addContainerGap()
+						));
 
 		pack();
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
 		
-	    /**
-	     * Creates a simple MouseAdapter binded to an AccordionItem. On mouse Pressed it writes on a textBox the source of event.
-	     * @return {@link MouseAdapter} object.
-	     */
 
-    
 	
 		/*---------------------PLAN------------------------------*/
+		JLabel planLabel = new JLabel("Plan");
+		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		plan = new mxGraph();
 		planComponent = new mxGraphComponent(plan);	
 
@@ -400,23 +322,24 @@ public class Fenetre extends JFrame implements Observer {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(planLabel)
-					.addContainerGap())//100, Short.MAX_VALUE))
-					
-					// addComponent => changer taille plan au niveau de la largeur(700)
+					.addContainerGap())
+				
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(20)
 					.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 700, GroupLayout.DEFAULT_SIZE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							//Placement du titre Horaires => 20x20
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(30)//119)
+							.addGap(30)
 							.addComponent(horairesLabel)
-							.addGap(30))//119))
+							.addGap(30))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							//addComponent => changer taille horaires au niveau de la largeur (200)
 							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-							.addContainerGap())))
+							.addContainerGap())
+						.addComponent(message, GroupLayout.DEFAULT_SIZE, 100,
+								390)
+							))
+				
 				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 					.addGap(90)
 					.addComponent(btnCalculer)
@@ -425,10 +348,8 @@ public class Fenetre extends JFrame implements Observer {
 					.addPreferredGap(ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
 					.addComponent(btnSupprimer)
 					.addPreferredGap(ComponentPlacement.RELATED, 450, Short.MAX_VALUE)
-					.addComponent(btnModifier)
-					.addGap(5)
 					.addComponent(btnImprimer)
-					.addGap(80))
+					.addGap(40))
 		);
 		
 		groupLayout.setVerticalGroup(
@@ -445,43 +366,108 @@ public class Fenetre extends JFrame implements Observer {
 					
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						//addComponent => CA NE CHANGE PAS la taille du plan au niveau de la longueur (500)
 						.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
-							//on peut changer la place du label Horaires
-							//addComponent => change taille horaires au niveau de la longueur (650) et le plan !!!!
-							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 650, GroupLayout.DEFAULT_SIZE)))
+							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 650, GroupLayout.DEFAULT_SIZE)
+							.addGap(10)
+							.addComponent(message, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+									GroupLayout.PREFERRED_SIZE)
+							))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(btnImprimer)
-							.addComponent(btnModifier))
 						)
 					.addContainerGap())
 		);
 		
-		
-		
 		pack();
-
 
 		getContentPane().setLayout(groupLayout);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds (0, 0,screenSize.width,screenSize.height);
 
 	}
+    /*----------------------------------------------------*/
+	/*----------------------------------------------------*/
+    
+    /**
+	 * Methode permettant d'initialiser la barre de menu
+	 */
+	public void initMenuBar(){
+		JMenuBar menuBar = new JMenuBar();
+		
+		JMenu menuFichier = new JMenu("Fichier");
+		JMenuItem actionChargerPlan = new JMenuItem("Charger le plan");
+		actionChargerHoraires = new JMenuItem("Charger les horaires");
+		actionChargerHoraires.setEnabled(false);
+		JMenuItem actionQuitter = new JMenuItem("Quitter");
 	
+		JMenu menuEdition = new JMenu("Edition");
+		JMenuItem actionAnnuler = new JMenuItem("Annuler");
+		JMenuItem actionRetablir = new JMenuItem("Rétablir");
+		
+		JMenu menuAide = new JMenu("Aide");
+		
+		actionChargerPlan.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lireDepuisFichierXML("plan");
+			}
+		});
+		
+		actionChargerHoraires.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lireDepuisFichierXML("horaires");
+			}
+		});
+		
+		actionQuitter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false); //you can't see me!
+				dispose(); //Destroy the JFrame object
+			}
+		});
+		
+		actionAnnuler.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controleur.undo();
+			}
+		});
+		
+		actionRetablir.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controleur.redo();
+			}
+		});
+		
+		
+		menuFichier.add(actionChargerPlan);
+		menuFichier.add(actionChargerHoraires);
+		menuFichier.add(actionQuitter);
+		menuEdition.add(actionAnnuler);
+		menuEdition.add(actionRetablir);
+		
+		
+		menuBar.add(menuFichier);
+		menuBar.add(menuEdition);
+		menuBar.add(menuAide);
+		
+		this.setJMenuBar(menuBar);
+	}
+    
 	/**
 	 * Met à jour le menu horaires
 	 */
 	public void majMenuHoraire(){
-		//TODO : Cécilia - trouver un moyen de mettre à jour le menu horaires
-		//horairesPannel.remove(menuHoraires); //remove component from your jpanel in this case i used jpanel
+		
 		horairesPannel.removeAll();
 		horairesPannel.revalidate();
-		horairesPannel.repaint();//repaint a JFrame jframe in this case 
-		
+		horairesPannel.repaint();
 		
 		AccordionMenu menuHorairesMaj;
 		menuHorairesMaj = new AccordionMenu();
@@ -528,11 +514,11 @@ public class Fenetre extends JFrame implements Observer {
 		menuHorairesMaj.calculateAvaiableSpace();
 		menuHorairesMaj.repaint();
 		
-		
-		horairesPannel.add(menuHorairesMaj); //add component to jpanel in this case i used jpanel
+		horairesPannel.add(menuHorairesMaj);
 		horairesPannel.revalidate();
-		horairesPannel.repaint();//repaint a JFrame jframe in this case 
+		horairesPannel.repaint();
 	}
+	
 	
     /**
      * Crée le menu contenant les demandes de livraisons classées par Plage Horaire
@@ -859,10 +845,14 @@ public class Fenetre extends JFrame implements Observer {
 		btnAjouter.setEnabled(true);
 	}
 	
-
+	/**
+	 * Methode permettant de générer le fichier d'impression
+	 */
 	public void genererFichierImpression(){
 		File f = ouvrirFichier('w');
 		controleur.genererFichierImpression(f);
 	}
+	
+	
 
 }
