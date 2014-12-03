@@ -70,6 +70,7 @@ public class Controleur {
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
+		fen.setBtnAnnulerEnabled(true);
 	}
 
 	/**
@@ -91,6 +92,7 @@ public class Controleur {
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
+		fen.setBtnAnnulerEnabled(true);
 	}
 
 	/**
@@ -224,6 +226,7 @@ public class Controleur {
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
+			fen.setBtnRetablirEnabled(true);
 		} else {
 			JOptionPane.showMessageDialog(null, "Undo n'est pas possible!",
 					"Erreur 151", JOptionPane.ERROR_MESSAGE);
