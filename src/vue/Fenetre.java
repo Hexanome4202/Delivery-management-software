@@ -326,7 +326,12 @@ public class Fenetre extends JFrame implements Observer {
 				
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(20)
-					.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 700, GroupLayout.DEFAULT_SIZE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 700, GroupLayout.DEFAULT_SIZE)
+						.addGap(30)
+						.addComponent(message, GroupLayout.DEFAULT_SIZE, 700,1040)
+						)
+					
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(30)
@@ -336,8 +341,7 @@ public class Fenetre extends JFrame implements Observer {
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
 							.addContainerGap())
-						.addComponent(message, GroupLayout.DEFAULT_SIZE, 100,
-								390)
+						
 							))
 				
 				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
@@ -366,13 +370,18 @@ public class Fenetre extends JFrame implements Observer {
 					
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(planComponent, GroupLayout.DEFAULT_SIZE, 600, GroupLayout.DEFAULT_SIZE)
+								.addComponent(message, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+									GroupLayout.PREFERRED_SIZE)
+								.addGap(10)
+								)
+						
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(horairesPannel, GroupLayout.DEFAULT_SIZE, 650, GroupLayout.DEFAULT_SIZE)
 							.addGap(10)
-							.addComponent(message, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-									GroupLayout.PREFERRED_SIZE)
 							))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
