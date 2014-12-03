@@ -26,6 +26,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import commande.Commande;
+import commande.CommandeAjouterLivraison;
+import commande.CommandeSupprimerLivraison;
+import commande.GestionnaireDeCommandes;
 import vue.Fenetre;
 import vue.VueTournee;
 import errors.Codes;
@@ -42,6 +46,11 @@ public class Controleur {
 	private ArrayList<Tournee> listeTournees;
 	private Integer indexTourneeAct;
 	private boolean modeTests;
+	
+	/**
+	 * Le gestionnaire des commandes de l'application
+	 */
+	private GestionnaireDeCommandes gestionnaire;
 
 	/**
 	 * Constructeur par défaut de la classe <code>Controleur</code>
@@ -55,6 +64,7 @@ public class Controleur {
 		this.fen = new Fenetre(this);
 		this.fen.setVisible(true);
 		this.modeTests = false;
+		this.gestionnaire = new GestionnaireDeCommandes();
 	}
 
 	/**
@@ -63,8 +73,10 @@ public class Controleur {
 	 * @param precedent
 	 */
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
-		this.tournee.ajouterLivraison(precedent, courant, client);
-		ajouterAListeTournees(tournee);
+		Commande commande = new CommandeAjouterLivraison(tournee, client, courant, precedent);
+		gestionnaire.executerNouvelleCommande(commande);
+		//this.tournee.ajouterLivraison(precedent, courant, client);
+		//ajouterAListeTournees(tournee);
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
@@ -81,7 +93,9 @@ public class Controleur {
 	 * @param livraison
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
-		this.tournee.supprimerLivraison(noeudASupprimer);
+		Commande commande = new CommandeSupprimerLivraison(tournee, noeudASupprimer);
+		gestionnaire.executerNouvelleCommande(commande);
+		//this.tournee.supprimerLivraison(noeudASupprimer);
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
@@ -209,34 +223,52 @@ public class Controleur {
 
 	public void undo() {
 
-		int index = indexTourneeAct - 1;
-
-		if (index >= 0) {
-			this.tournee = listeTournees.get(index);
-			indexTourneeAct = index;
+		if(gestionnaire.annulerDerniereCommande()){
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
-		} else {
+		}else{
 			JOptionPane.showMessageDialog(null, "Undo n'est pas possible!",
 					"Erreur 151", JOptionPane.ERROR_MESSAGE);
 		}
+		
+//		int index = indexTourneeAct - 1;
+//
+//		if (index >= 0) {
+//			this.tournee = listeTournees.get(index);
+//			indexTourneeAct = index;
+//			fen.afficherPlan();
+//			fen.afficherDemandesLivraisonsSurPlan();
+//			fen.dessinerTournee();
+//		} else {
+//			JOptionPane.showMessageDialog(null, "Undo n'est pas possible!",
+//					"Erreur 151", JOptionPane.ERROR_MESSAGE);
+//		}
 	}
 
 	public void redo() {
 
-		int index = indexTourneeAct + 1;
-
-		if (index < listeTournees.size()) {
-			this.tournee = listeTournees.get(index);
-			indexTourneeAct = index;
+		if(gestionnaire.refaireCommandeAnnulee()){
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
-		} else {
+		}else{
 			JOptionPane.showMessageDialog(null, "Redo n'est pas possible!",
 					"Erreur 152", JOptionPane.ERROR_MESSAGE);
 		}
+		
+//		int index = indexTourneeAct + 1;
+//
+//		if (index < listeTournees.size()) {
+//			this.tournee = listeTournees.get(index);
+//			indexTourneeAct = index;
+//			fen.afficherPlan();
+//			fen.afficherDemandesLivraisonsSurPlan();
+//			fen.dessinerTournee();
+//		} else {
+//			JOptionPane.showMessageDialog(null, "Redo n'est pas possible!",
+//					"Erreur 152", JOptionPane.ERROR_MESSAGE);
+//		}
 	}
 
 	public void ajouterAListeTournees(Tournee tournee) {

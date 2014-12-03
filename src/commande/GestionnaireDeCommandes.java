@@ -36,7 +36,7 @@ public class GestionnaireDeCommandes {
 	 */
 	public boolean annulerDerniereCommande(){
 		if(indexCommandeActuelle > 0){
-			commandes.get(indexCommandeActuelle).annuler();
+			commandes.get(indexCommandeActuelle-1).annuler();
 			indexCommandeActuelle--;
 			return true;
 		}
@@ -50,7 +50,7 @@ public class GestionnaireDeCommandes {
 	public boolean refaireCommandeAnnulee(){
 		if(indexCommandeActuelle < commandes.size()){
 			indexCommandeActuelle++;
-			commandes.get(indexCommandeActuelle).executer();
+			commandes.get(indexCommandeActuelle-1).executer();
 			return true;
 		}
 		return false;

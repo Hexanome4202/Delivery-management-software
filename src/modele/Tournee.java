@@ -552,4 +552,22 @@ public class Tournee {
 		System.out.println("nope");
 		return demande;
 	}
+	
+	/**
+	 * Méthode qui retourne le noeud précédent d'une demande de livraison
+	 * @param demande : la demande de livraison
+	 * @return : le noeud précédent 
+	 */
+	public Noeud getNoeudPrecedent(DemandeDeLivraison demande){
+		if(itineraires != null){
+			Iterator<Itineraire> it = itineraires.iterator();
+			while(it.hasNext()){
+				Itineraire itineraire = it.next();
+				if(itineraire.getArrivee() == demande){
+					return itineraire.getDepart().getNoeud();
+				}
+			}
+		}
+		return null;
+	}
 }
