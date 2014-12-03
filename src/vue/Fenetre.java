@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
@@ -137,6 +138,7 @@ public class Fenetre extends JFrame implements Observer {
 		/*---------------------HORAIRES-----------------------*/
 		JLabel horairesLabel = new JLabel("Horaires");
 		message = new javax.swing.JTextField();
+		message.setEditable(false);
 		horairesLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
 		horairesPannel = new javax.swing.JPanel();
@@ -955,6 +957,10 @@ public class Fenetre extends JFrame implements Observer {
 	 */
 	public void setBtnRetablirEnabled(boolean valeur){
 		actionRetablir.setEnabled(valeur);
+	}
+	
+	public void afficherPopupErreur(String message, String title){
+		JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 }
