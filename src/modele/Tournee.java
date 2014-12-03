@@ -71,6 +71,7 @@ public class Tournee {
 	}
 
 	/**
+	 * Supprime une <code>DemandeDeLivraison</code>
 	 * @param livraison
 	 */
 	public boolean supprimerLivraison(DemandeDeLivraison livraison) {

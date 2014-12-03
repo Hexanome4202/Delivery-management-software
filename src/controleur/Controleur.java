@@ -6,22 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import modele.DemandeDeLivraison;
-import modele.Itineraire;
 import modele.Noeud;
 import modele.Plan;
 import modele.Tournee;
-import modele.Troncon;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -78,6 +69,8 @@ public class Controleur {
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
+		fen.setBtnAnnulerEnabled(true);
+		fen.setMessage("");
 	}
 
 	/**
@@ -102,6 +95,7 @@ public class Controleur {
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
+		fen.setBtnAnnulerEnabled(true);
 	}
 
 	/**
@@ -167,22 +161,17 @@ public class Controleur {
 		} catch (ParserConfigurationException pce) {
 			System.out.println("Erreur de configuration du parseur DOM");
 			if (!this.modeTests)
-				JOptionPane.showMessageDialog(null,
-						"Erreur de configuration du parseur DOM!", "Erreur",
-						JOptionPane.ERROR_MESSAGE);
+				fen.afficherPopupErreur("Erreur de configuration du parseur DOM!", "Erreur");
 			System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");
 		} catch (SAXException se) {
 			System.out.println("Erreur lors du parsing du document");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
 			if (!this.modeTests)
-				JOptionPane.showMessageDialog(null,
-						"PB de parsing du document xml!", "Erreur",
-						JOptionPane.ERROR_MESSAGE);
+				fen.afficherPopupErreur("Problème de parsing du document xml!", "Erreur");
 		} catch (IOException ioe) {
 			System.out.println("Erreur d'entree/sortie");
 			if (!this.modeTests)
-				JOptionPane.showMessageDialog(null, "Erreur d'entree/sortie!",
-						"Erreur", JOptionPane.ERROR_MESSAGE);
+				fen.afficherPopupErreur("Erreur d'entree/sortie!","Erreur");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
 		}
 		return Codes.PARSE_ERROR;
@@ -231,10 +220,10 @@ public class Controleur {
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
+
 			fen.majMenuHoraire();
 		}else{
-			JOptionPane.showMessageDialog(null, "Undo n'est pas possible!",
-					"Erreur 151", JOptionPane.ERROR_MESSAGE);
+			fen.afficherPopupErreur("Undo n'est pas possible!","Erreur 151");
 		}
 	}
 
@@ -244,10 +233,10 @@ public class Controleur {
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
+
 			fen.majMenuHoraire();
-		}else{
-			JOptionPane.showMessageDialog(null, "Redo n'est pas possible!",
-					"Erreur 152", JOptionPane.ERROR_MESSAGE);
+		} else {
+			fen.afficherPopupErreur("Redo n'est pas possible!","Erreur 152");
 		}
 	}
 
