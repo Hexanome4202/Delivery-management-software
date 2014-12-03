@@ -197,7 +197,7 @@ public class ControleurTest {
 		c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		
-		assertEquals(Codes.PARSE_ERROR,c.gererFichier(new File("XML/errors/livraisonsEntrepotFaux.xml"), "horaires"));
+		assertEquals(Codes.ERREUR_306,c.gererFichier(new File("XML/errors/livraisonsEntrepotFaux.xml"), "horaires"));
 	}
 
 	/**

@@ -114,6 +114,7 @@ public class Controleur {
 			DocumentBuilder constructeur = DocumentBuilderFactory.newInstance()
 					.newDocumentBuilder();
 			// lecture du contenu d'un fichier XML avec DOM
+			constructeur.setErrorHandler(null);
 			Document document = constructeur.parse(xml);
 			Element racine = document.getDocumentElement();
 
@@ -148,8 +149,7 @@ public class Controleur {
 				JOptionPane.showMessageDialog(null,
 						"Erreur de configuration du parseur DOM!", "Erreur",
 						JOptionPane.ERROR_MESSAGE);
-			System.out
-					.println("lors de l'appel a fabrique.newDocumentBuilder();");
+			System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");
 		} catch (SAXException se) {
 			System.out.println("Erreur lors du parsing du document");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
