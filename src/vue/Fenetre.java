@@ -92,6 +92,12 @@ public class Fenetre extends JFrame implements Observer {
      */
     private HashMap<Integer, Integer> noeudsALivrer;
     
+    /**
+     * L'id des demandes de livraison qui ne pouront pas être livrés
+     * dans la plage horaire demandée.
+     */
+    private Set<Integer> demandesTempsDepasse;
+    
     private final String[] couleurRemplissage = {"#a7a7a7", "#4407a6", "#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f"};
     private final String[] couleurBordure = {"#838383", "#2d0968", "#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828"};
     
@@ -561,7 +567,6 @@ public class Fenetre extends JFrame implements Observer {
 				
 				if(noeudsTraverses.containsKey(key)){
 					noeudsTraverses.put(key, noeudsTraverses.get(key)+1);
-					System.out.println(key+" : "+noeudsTraverses.get(key)+" fois");
 				}else{
 					noeudsTraverses.put(key, 1);
 				}
@@ -569,6 +574,26 @@ public class Fenetre extends JFrame implements Observer {
 				noeudPrecedent = troncon.getNoeudFin().getId();
 			}
 			tourneeDessinee = true;
+		}
+		
+		afficherDemandesTempsDepasse();
+	}
+	
+	/**
+	 * Méthode permettant de mettre en évidence sur l'affichage
+	 * les points de livraisons qui ne pourront pas être livrés
+	 * dans la plage horaire demandée
+	 */
+	private void afficherDemandesTempsDepasse(){
+		Iterator<DemandeDeLivraison> it = controleur.getTournee().getDemandesTempsDepasse().iterator();
+		while(it.hasNext()){
+			int noeud = it.next().getNoeud().getId();
+			System.out.println(""+noeud);
+			demandesTempsDepasse.add(noeud);
+			int numPlage = noeudsALivrer.get(noeud);
+			Object[] cells = {points.get(noeud)};
+			plan.setCellStyle("strokeWidth=2;fillColor=red;strokeColor="+couleurBordure[numPlage], cells);
+			
 		}
 	}
 
@@ -728,7 +753,6 @@ public class Fenetre extends JFrame implements Observer {
 			
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				int noeud = livraison.getNoeud().getId();
-				System.out.println(""+noeud);
 				noeudsALivrer.put(noeud, numPlage);
 				Object[] cells = {points.get(noeud)};
 				plan.setCellStyle("fillColor="+couleurRemplissage[numPlage]+";strokeColor="+couleurBordure[numPlage], cells);
