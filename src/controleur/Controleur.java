@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -280,10 +282,11 @@ public class Controleur {
 		new Controleur();
 	}
 	
-	/*la liste des livraisons à faire et, pour chacune de ces livraisons, l’adresse de livraison, les
-heures prévues d’arrivée et de départ, l’itinéraire à suivre pour rejoindre cette livraison depuis la livraison
-précédente ou depuis le dépôt, et les coordonnées d’une personne à contacter en cas de problème.*/
 
+	/**
+	 * 
+	 * @param fichier dont on va realiser la sauvegarde de la tournee
+	 */
 	public void genererFichierImpression(File fichier) {
 		try {
 
@@ -300,16 +303,17 @@ précédente ou depuis le dépôt, et les coordonnées d’une personne à conta
 					tempsSortie = (double) dDepart.getPlage()
 							.getHeureDebut().getHours()*60;
 				}
-					tempsPourLivrer = it.getTemps();
+					tempsPourLivrer = it.getTemps()/60 + 15;
 					int tempsArriveH = (int) ((tempsSortie + tempsPourLivrer)/60);
-					int tempsArriveM = (int) ((tempsSortie + tempsPourLivrer)/60);
+					int tempsArriveM = (int) ((tempsSortie + tempsPourLivrer)%60);
+					NumberFormat formatter = new DecimalFormat("00");
 				String descLivraison="Livraison: "+dArrive.getId();
 				if(descLivraison.equals("Livraison: -1")){descLivraison="Retour Entrepot";}
 				
 				w.write(descLivraison+"\n");
 				w.write("\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
 						+ "," + dArrive.getNoeud().getY() + ")"+"\n");
-				w.write("\tHeure d'arrivé prevue: " + tempsArriveH+":"+tempsArriveM+"\n");
+				w.write("\tHeure d'arrivé prevue: " + formatter.format(tempsArriveH)+":"+formatter.format(tempsArriveM)+"\n");
 				for(Troncon t : it.getTronconsItineraire()){
 					w.write("\t\t" + t.getNomRue() + ": ("+t.getNoeudFin().getX()+","+t.getNoeudFin().getY()+")\n");
 				}
