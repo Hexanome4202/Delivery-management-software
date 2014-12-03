@@ -229,6 +229,7 @@ public class Fenetre extends JFrame implements Observer {
 		btnImprimer = new JButton("Imprimer");
 		btnImprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				genererFichierImpression();
 			}
 		});
 		btnImprimer.setEnabled(false);
@@ -789,6 +790,11 @@ public class Fenetre extends JFrame implements Observer {
 	 */
 	public void activerAjouter(){
 		btnAjouter.setEnabled(true);
+	}
+	
+	public void genererFichierImpression(){
+		File f = ouvrirFichier('w');
+		controleur.genererFichierImpression(f);
 	}
 
 }

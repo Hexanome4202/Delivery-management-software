@@ -288,11 +288,11 @@ public class Controleur {
 				w.write("Debut: " + p.getHeureDebut().getHours()+"\n");
 				w.write("Fin: " + p.getHeureFin().getHours()+"\n");
 				for (DemandeDeLivraison d : p.getDemandeLivraison()) {
-					w.write("Identifiant de la Demande: " + d.getId()+"\n");
-					w.write("Identifiant du client: " + d.getIdClient()+"\n");
-					w.write("Adresse de la Demande -  identifiant:"
+					w.write("\tIdentifiant de la Demande: " + d.getId()+"\n");
+					w.write("\tIdentifiant du client: " + d.getIdClient()+"\n");
+					w.write("\tAdresse de la Demande -  identifiant:"
 							+ d.getNoeud().getId() + " (" + d.getNoeud().getX()
-							+ "," + d.getNoeud().getY() + ")");
+							+ "," + d.getNoeud().getY() + ")"+"\n");
 					
 				}
 			}
