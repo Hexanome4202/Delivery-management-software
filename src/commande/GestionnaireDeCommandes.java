@@ -55,4 +55,12 @@ public class GestionnaireDeCommandes {
 		}
 		return false;
 	}
+	
+	public int getIndex(){
+		return indexCommandeActuelle;
+	}
+
+	public int getCommandesSize() {
+		return commandes.size();
+	}
 }

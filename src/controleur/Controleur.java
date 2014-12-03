@@ -43,8 +43,6 @@ public class Controleur {
 	private VueTournee vueTournee;
 	private Plan plan;
 	private Fenetre fen;
-	private ArrayList<Tournee> listeTournees;
-	private Integer indexTourneeAct;
 	private boolean modeTests;
 	
 	/**
@@ -59,8 +57,6 @@ public class Controleur {
 		tournee = new Tournee();
 		vueTournee = new VueTournee(null);
 		plan = new Plan();
-		listeTournees = new ArrayList<Tournee>();
-		indexTourneeAct = -1;
 		this.fen = new Fenetre(this);
 		this.fen.setVisible(true);
 		this.modeTests = false;
@@ -76,8 +72,8 @@ public class Controleur {
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
 		Commande commande = new CommandeAjouterLivraison(tournee, client, courant, precedent);
 		gestionnaire.executerNouvelleCommande(commande);
-		//this.tournee.ajouterLivraison(precedent, courant, client);
-		//ajouterAListeTournees(tournee);
+		testBoutonsAnnulerRetablir();
+
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
@@ -89,7 +85,6 @@ public class Controleur {
 	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
-		ajouterAListeTournees(tournee);
 		fen.dessinerTournee();
 	}
 
@@ -100,10 +95,9 @@ public class Controleur {
 		fen.setMessage("Suppression du point de livraison en cours...");
 		
 		Commande commande = new CommandeSupprimerLivraison(tournee, noeudASupprimer);
-		gestionnaire.executerNouvelleCommande(commande);
-		
-		//this.tournee.supprimerLivraison(noeudASupprimer);
-		
+		gestionnaire.executerNouvelleCommande(commande);		
+		testBoutonsAnnulerRetablir();
+
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
@@ -232,61 +226,29 @@ public class Controleur {
 	}
 
 	public void undo() {
-
 		if(gestionnaire.annulerDerniereCommande()){
+			testBoutonsAnnulerRetablir();
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
+			fen.majMenuHoraire();
 		}else{
 			JOptionPane.showMessageDialog(null, "Undo n'est pas possible!",
 					"Erreur 151", JOptionPane.ERROR_MESSAGE);
 		}
-		
-//		int index = indexTourneeAct - 1;
-//
-//		if (index >= 0) {
-//			this.tournee = listeTournees.get(index);
-//			indexTourneeAct = index;
-//			fen.afficherPlan();
-//			fen.afficherDemandesLivraisonsSurPlan();
-//			fen.dessinerTournee();
-//		} else {
-//			JOptionPane.showMessageDialog(null, "Undo n'est pas possible!",
-//					"Erreur 151", JOptionPane.ERROR_MESSAGE);
-//		}
 	}
 
 	public void redo() {
-
 		if(gestionnaire.refaireCommandeAnnulee()){
+			testBoutonsAnnulerRetablir();
 			fen.afficherPlan();
 			fen.afficherDemandesLivraisonsSurPlan();
 			fen.dessinerTournee();
+			fen.majMenuHoraire();
 		}else{
 			JOptionPane.showMessageDialog(null, "Redo n'est pas possible!",
 					"Erreur 152", JOptionPane.ERROR_MESSAGE);
 		}
-		
-//		int index = indexTourneeAct + 1;
-//
-//		if (index < listeTournees.size()) {
-//			this.tournee = listeTournees.get(index);
-//			indexTourneeAct = index;
-//			fen.afficherPlan();
-//			fen.afficherDemandesLivraisonsSurPlan();
-//			fen.dessinerTournee();
-//		} else {
-//			JOptionPane.showMessageDialog(null, "Redo n'est pas possible!",
-//					"Erreur 152", JOptionPane.ERROR_MESSAGE);
-//		}
-	}
-
-	public void ajouterAListeTournees(Tournee tournee) {
-		for (int i = indexTourneeAct + 1; i < listeTournees.size(); i++) {
-			listeTournees.remove(i);
-		}
-		listeTournees.add(new Tournee(tournee));
-		indexTourneeAct++;
 	}
 
 	/**
@@ -340,5 +302,22 @@ public class Controleur {
 			System.err.println("Probleme de creation du fichier d'impression");
 		}
 	}
-
+	
+	/**
+	 * Méthode qui grise ou dégrise les boutons Annuler et Rétablir
+	 * en fonction du gestionnaire
+	 */
+	public void testBoutonsAnnulerRetablir(){
+		if(gestionnaire.getIndex()>0){
+			fen.setBtnAnnulerEnabled(true);
+		}else{
+			fen.setBtnAnnulerEnabled(false);
+		}
+		
+		if(gestionnaire.getIndex() < gestionnaire.getCommandesSize()){
+			fen.setBtnRetablirEnabled(true);
+		}else{
+			fen.setBtnRetablirEnabled(false);
+		}
+	}
 }
