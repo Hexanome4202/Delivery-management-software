@@ -446,8 +446,11 @@ public class Fenetre extends JFrame implements Observer {
 		actionQuitter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false); // you can't see me!
-				dispose(); // Destroy the JFrame object
+				int dialogueConfirmation = JOptionPane.showConfirmDialog (null, "Voulez-vous vraiment quitter?","Quitter",JOptionPane.YES_NO_OPTION);
+				if(dialogueConfirmation == JOptionPane.YES_OPTION){
+					setVisible(false); // you can't see me!
+					dispose(); // Destroy the JFrame object
+				}
 			}
 		});
 
