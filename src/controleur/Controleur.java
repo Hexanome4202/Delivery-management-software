@@ -85,6 +85,7 @@ public class Controleur {
 	 * @param livraison
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
+		fen.setMessage("Suppression du point de livraison en cours...");
 		this.tournee.supprimerLivraison(noeudASupprimer);
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
@@ -108,7 +109,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour le traitement du fichier xml
+	 * Methode responsable du traitement du fichier xml
 	 * 
 	 * @param xml
 	 *            le fichier xml que l'on veut traiter
@@ -134,6 +135,7 @@ public class Controleur {
 					fen.majMenuHoraire();
 					fen.afficherDemandesLivraisonsSurPlan();
 					fen.activerCalculItineraire();
+					fen.setMessage("");
 				}
 				// todo : traiter les erreurs
 			} else if (typeFichier.equals("plan")) {
@@ -142,6 +144,7 @@ public class Controleur {
 					if (!this.modeTests) {
 						fen.afficherPlan();
 						fen.activerChargementHoraires();
+						fen.setMessage("");
 					}
 				}
 			}
@@ -175,7 +178,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour la construction des livraisons à partir d'un
+	 * Methode responsable de la construction des livraisons à partir d'un
 	 * element xml
 	 * 
 	 * @param livraisonsElement
@@ -194,7 +197,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour la construction du plan à partir d'un element
+	 * Methode responsable de la construction du plan à partir d'un element
 	 * xml
 	 * 
 	 * @param planElement
