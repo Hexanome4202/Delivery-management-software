@@ -579,6 +579,9 @@ public class Fenetre extends JFrame implements Observer {
      * Méthode permettant de dessiner la tournée
      */
 	public void dessinerTournee() {
+		noeudAAjouter = null;
+		pointSelectionne = null;
+		
 		Tournee tournee = controleur.getTournee();
 		Object parent = plan.getDefaultParent();
 		
@@ -705,7 +708,10 @@ public class Fenetre extends JFrame implements Observer {
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
 	 */
 	public void afficherPlan(){
-
+		demandesTempsDepasse = new HashSet<Integer>();
+		noeudAAjouter = null;
+		pointSelectionne = null;
+		tourneeDessinee = false;
 		
 		Set<Noeud> noeuds = controleur.getPlan().getToutNoeuds();
 		points= new HashMap<Integer, Object>();

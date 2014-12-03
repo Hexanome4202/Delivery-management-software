@@ -143,7 +143,7 @@ public class Tournee {
 
 	/**
 	 * 
-	 * @param noeud
+	 * @param idNoeud
 	 */
 	public Noeud recupererNoeud(int idNoeud) {
 		return this.planTournee.recupererNoeud(idNoeud);
