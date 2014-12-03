@@ -1,7 +1,13 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -241,8 +247,20 @@ public class TourneeTest {
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
 		
 		c.getTournee().calculerTournee();
-		assertEquals("0 : DDL-1 --> DDL1 (154.3846153846154min)\n\tDe 2 vers 1\n1 : DDL1 --> DDL2 (154.3846153846154min)\n\tDe 1 vers 3\n2 : DDL2 --> DDL3 (154.3846153846154min)\n\tDe 3 vers 2\n3 : DDL3 --> DDL-1 (0.0min)"
-				, c.editerFeuilleRoute());
+		try(BufferedReader br = new BufferedReader(new FileReader("feuilleTest.txt"))) {
+	        StringBuilder sb = new StringBuilder();
+	        String line = br.readLine();
+
+	        while (line != null) {
+	            sb.append(line);
+	            sb.append(System.lineSeparator());
+	            line = br.readLine();
+	        }
+	        String everything = sb.toString();
+	        assertTrue(everything.equals(c.editerFeuilleRoute()));
+	    } catch (IOException e) {
+			fail("Erreur dans la lecture du fichier de test");
+		}
 	}
 	
 	@Test
