@@ -43,6 +43,7 @@ import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionLeafItem;
 import b4.advancedgui.menu.AccordionMenu;
 
+import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
@@ -578,6 +579,7 @@ public class Fenetre extends JFrame implements Observer {
 		}
 		
 		afficherDemandesTempsDepasse();
+		btnImprimer.setEnabled(true);
 	}
 	
 	/**
@@ -588,13 +590,12 @@ public class Fenetre extends JFrame implements Observer {
 	private void afficherDemandesTempsDepasse(){
 		Iterator<DemandeDeLivraison> it = controleur.getTournee().getDemandesTempsDepasse().iterator();
 		while(it.hasNext()){
-			int noeud = it.next().getNoeud().getId();
-			System.out.println(""+noeud);
-			demandesTempsDepasse.add(noeud);
-			int numPlage = noeudsALivrer.get(noeud);
-			Object[] cells = {points.get(noeud)};
-			plan.setCellStyle("strokeWidth=2;fillColor=red;strokeColor="+couleurBordure[numPlage], cells);
-			
+			Noeud noeud = it.next().getNoeud();
+			demandesTempsDepasse.add(noeud.getId());
+			int numPlage = noeudsALivrer.get(noeud.getId());
+			Object[] cells = {points.get(noeud.getId())};
+			plan.setCellStyle("shape=triangle;strokeWidth=2;fillColor=red;strokeColor="+couleurBordure[numPlage], cells);
+
 		}
 	}
 
