@@ -38,6 +38,7 @@ import modele.DemandeDeLivraison;
 import modele.Itineraire;
 import modele.Noeud;
 import modele.PlageHoraire;
+import modele.Plan;
 import modele.Tournee;
 import modele.Troncon;
 import b4.advancedgui.menu.AccordionItem;
@@ -112,6 +113,8 @@ public class Fenetre extends JFrame implements Observer {
 	 * La liste des points affichés sur le plan
 	 */
 	private HashMap<Integer, Object> points;
+	
+	Set<Noeud> tousNoeuds = new HashSet<Noeud>();
 
 	/**
 	 * Le point actuellement selectionné
@@ -150,7 +153,7 @@ public class Fenetre extends JFrame implements Observer {
 		menuHoraires.setMenuBorders(new BevelBorder(BevelBorder.RAISED));
 		menuHoraires.setSelectionColor(Color.lightGray);
 		menuHoraires.setLeafHorizontalAlignment(AccordionItem.LEFT);
-		creerMenuHoraires();
+		//creerMenuHoraires();
 
 		horairesPannel.add(menuHoraires);
 
@@ -520,7 +523,7 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * Met à jour le menu horaires
 	 */
-	public void majMenuHoraire() {
+	public void majMenuHoraire(ArrayList<PlageHoraire> plagesHoraires) {
 
 		horairesPannel.removeAll();
 		horairesPannel.revalidate();
@@ -536,7 +539,7 @@ public class Fenetre extends JFrame implements Observer {
 		menuHorairesMaj.setLeafHorizontalAlignment(AccordionItem.LEFT);
 
 		int iteratorPlage = 1;
-		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
+		for (PlageHoraire plage : plagesHoraires) {
 
 			SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm");
 
@@ -580,9 +583,9 @@ public class Fenetre extends JFrame implements Observer {
 	 * Crée le menu contenant les demandes de livraisons classées par Plage
 	 * Horaire
 	 */
-	public void creerMenuHoraires() {
+	public void creerMenuHoraires(ArrayList<PlageHoraire> plagesHoraires) {
 		int iteratorPlage = 1;
-		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
+		for (PlageHoraire plage : plagesHoraires) {
 
 			SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm");
 
@@ -635,12 +638,13 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * Méthode permettant de dessiner la tournée
 	 */
-	public void dessinerTournee() {
+	public void dessinerTournee(Tournee tournee) {
 		noeudAAjouter = null;
 		pointSelectionne = null;
 		btnCalculer.setEnabled(false);
+		
+		List<DemandeDeLivraison> demandesTempsDepasse = tournee.getDemandesTempsDepasse();
 
-		Tournee tournee = controleur.getTournee();
 		Object parent = plan.getDefaultParent();
 
 		int noeudPrecedent = entrepot.getId();
@@ -650,7 +654,7 @@ public class Fenetre extends JFrame implements Observer {
 
 		HashMap<String, Integer> noeudsTraverses = new HashMap<String, Integer>();
 
-		afficherDemandesTempsDepasse();
+		afficherDemandesTempsDepasse(demandesTempsDepasse);
 
 		while (it.hasNext()) {
 			Itineraire itineraire = it.next();
@@ -700,18 +704,17 @@ public class Fenetre extends JFrame implements Observer {
 	 * Méthode permettant de mettre en évidence sur l'affichage les points de
 	 * livraisons qui ne pourront pas être livrés dans la plage horaire demandée
 	 */
-	private void afficherDemandesTempsDepasse() {
-		if (demandesTempsDepasse == null) {
-			demandesTempsDepasse = new HashSet<Integer>();
-			Iterator<DemandeDeLivraison> it = controleur.getTournee()
-					.getDemandesTempsDepasse().iterator();
+	private void afficherDemandesTempsDepasse(List<DemandeDeLivraison> demandesTempsDepasse) {
+		if (this.demandesTempsDepasse == null) {
+			this.demandesTempsDepasse = new HashSet<Integer>();
+			Iterator<DemandeDeLivraison> it = demandesTempsDepasse.iterator();
 			while (it.hasNext()) {
 				Noeud noeud = it.next().getNoeud();
-				demandesTempsDepasse.add(noeud.getId());
+				this.demandesTempsDepasse.add(noeud.getId());
 			}
 		}
 
-		for (Integer idNoeud : demandesTempsDepasse) {
+		for (Integer idNoeud : this.demandesTempsDepasse) {
 			int numPlage = noeudsALivrer.get(idNoeud);
 			Object[] cells = { points.get(idNoeud) };
 			plan.setCellStyle(
@@ -767,25 +770,20 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
 	 */
-	public void afficherPlan() {
+	public void afficherPlan(Set<Noeud> noeuds) {
+		tousNoeuds = noeuds;
+		
 		demandesTempsDepasse = new HashSet<Integer>();
 		noeudAAjouter = null;
 		pointSelectionne = null;
 		tourneeDessinee = false;
 
-		Set<Noeud> noeuds = controleur.getPlan().getToutNoeuds();
 		points = new HashMap<Integer, Object>();
 		Iterator<Noeud> it = noeuds.iterator();
 
 		Object parent = plan.getDefaultParent();
 		plan.getModel().beginUpdate();
 		plan.removeCells(plan.getChildCells(parent));
-
-		// facteur de mise à l'échelle
-		hY = (planComponent.getSize().getHeight() - 20)
-				/ controleur.getPlan().getMaxY();
-		hX = (planComponent.getSize().getWidth() - 20)
-				/ controleur.getPlan().getMaxX();
 
 		// On commence par placer les points
 		while (it.hasNext()) {
@@ -817,6 +815,18 @@ public class Fenetre extends JFrame implements Observer {
 		plan.getModel().endUpdate();
 
 	}
+	
+	public void afficherPlan(Plan plan){
+		// facteur de mise à l'échelle
+		hY = (planComponent.getSize().getHeight() - 20)
+				/ plan.getMaxY();
+		hX = (planComponent.getSize().getWidth() - 20)
+				/ plan.getMaxY();
+		
+		afficherPlan(plan.getToutNoeuds());
+	}
+	
+	
 
 	/**
 	 * Méthode renvoyant le noeud aux coordonnées passées en paramètre
@@ -831,8 +841,7 @@ public class Fenetre extends JFrame implements Observer {
 		if (points == null)
 			return null;
 		else {
-			Iterator<Noeud> it = controleur.getPlan().getToutNoeuds()
-					.iterator();
+			Iterator<Noeud> it = tousNoeuds.iterator();
 			while (it.hasNext()) {
 				Noeud n = it.next();
 				double nX = n.getX() * hX;
@@ -880,14 +889,14 @@ public class Fenetre extends JFrame implements Observer {
 	 * Méthode permettant d'afficher d'une couleur différente les demandes de
 	 * livraison sur le plan
 	 */
-	public void afficherDemandesLivraisonsSurPlan() {
+	public void afficherDemandesLivraisonsSurPlan(Tournee tournee) {
 		noeudsALivrer = new HashMap<Integer, Integer>();
 
 		// On réaffiche le plan proprement, sans point de livraison
-		afficherPlan();
+		afficherPlan(tousNoeuds);
 
-		if (controleur.getTournee().getEntrepot() != null) {
-			entrepot = controleur.getTournee().getEntrepot().getNoeud();
+		if (tournee.getEntrepot() != null) {
+			entrepot = tournee.getEntrepot().getNoeud();
 
 			plan.insertVertex(plan.getDefaultParent(), "", "",
 					hX * entrepot.getX(), hY * entrepot.getY(),
@@ -896,14 +905,16 @@ public class Fenetre extends JFrame implements Observer {
 		}
 
 		int numPlage = 1;
-		for (PlageHoraire plage : controleur.getTournee().getPlagesHoraires()) {
+		for (PlageHoraire plage : tournee.getPlagesHoraires()) {
 
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				int noeud = livraison.getNoeud().getId();
-				noeudsALivrer.put(noeud, numPlage);
-				Object[] cells = { points.get(noeud) };
-				plan.setCellStyle("fillColor=" + couleurRemplissage[numPlage]
-						+ ";strokeColor=" + couleurBordure[numPlage], cells);
+				if(points.containsKey(noeud)){
+					Object[] cells = { points.get(noeud) };
+					plan.setCellStyle("fillColor=" + couleurRemplissage[numPlage]
+							+ ";strokeColor=" + couleurBordure[numPlage], cells);
+					noeudsALivrer.put(noeud, numPlage);
+				}
 			}
 			numPlage++;
 		}
@@ -962,5 +973,17 @@ public class Fenetre extends JFrame implements Observer {
 	public void afficherPopupErreur(String message, String title){
 		JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
 	}
+	
+	/**
+	 * Méthode appelant toutes les méthodes permettant de 
+	 * redessiner complètement le plan
+	 */
+	public void majTotale(Set<Noeud> noeuds, Tournee tournee){
+		afficherPlan(noeuds);
+		afficherDemandesLivraisonsSurPlan(tournee);
+		dessinerTournee(tournee);
+		majMenuHoraire(tournee.getPlagesHoraires());
+	}
+
 
 }

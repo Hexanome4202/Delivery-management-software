@@ -65,10 +65,7 @@ public class Controleur {
 		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
-		fen.afficherPlan();
-		fen.afficherDemandesLivraisonsSurPlan();
-		fen.dessinerTournee();
-		fen.majMenuHoraire();
+		fen.majTotale(plan.getToutNoeuds(), tournee);
 		fen.setBtnAnnulerEnabled(true);
 		fen.setMessage("");
 	}
@@ -78,7 +75,7 @@ public class Controleur {
 	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
-		fen.dessinerTournee();
+		fen.dessinerTournee(tournee);
 	}
 
 	/**
@@ -91,10 +88,7 @@ public class Controleur {
 		gestionnaire.executerNouvelleCommande(commande);		
 		testBoutonsAnnulerRetablir();
 
-		fen.afficherPlan();
-		fen.afficherDemandesLivraisonsSurPlan();
-		fen.dessinerTournee();
-		fen.majMenuHoraire();
+		fen.majTotale(plan.getToutNoeuds(), tournee);;
 		fen.setBtnAnnulerEnabled(true);
 	}
 
@@ -137,8 +131,8 @@ public class Controleur {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
 					// TODO: display
 					System.out.println("fini");
-					fen.majMenuHoraire();
-					fen.afficherDemandesLivraisonsSurPlan();
+					fen.majMenuHoraire(tournee.getPlagesHoraires());
+					fen.afficherDemandesLivraisonsSurPlan(tournee);
 					fen.activerCalculItineraire();
 					fen.setMessage("");
 				}
@@ -147,7 +141,7 @@ public class Controleur {
 				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
 					if (!this.modeTests) {
-						fen.afficherPlan();
+						fen.afficherPlan(plan);
 						fen.activerChargementHoraires();
 						fen.setMessage("");
 					}
@@ -217,11 +211,7 @@ public class Controleur {
 	public void undo() {
 		if(gestionnaire.annulerDerniereCommande()){
 			testBoutonsAnnulerRetablir();
-			fen.afficherPlan();
-			fen.afficherDemandesLivraisonsSurPlan();
-			fen.dessinerTournee();
-
-			fen.majMenuHoraire();
+			fen.majTotale(plan.getToutNoeuds(), tournee);
 		}else{
 			fen.afficherPopupErreur("Undo n'est pas possible!","Erreur 151");
 		}
@@ -230,11 +220,7 @@ public class Controleur {
 	public void redo() {
 		if(gestionnaire.refaireCommandeAnnulee()){
 			testBoutonsAnnulerRetablir();
-			fen.afficherPlan();
-			fen.afficherDemandesLivraisonsSurPlan();
-			fen.dessinerTournee();
-
-			fen.majMenuHoraire();
+			fen.majTotale(plan.getToutNoeuds(), tournee);
 		} else {
 			fen.afficherPopupErreur("Redo n'est pas possible!","Erreur 152");
 		}
