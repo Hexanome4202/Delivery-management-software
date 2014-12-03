@@ -329,6 +329,7 @@ public class Tournee {
 		if (liste.getLength() != 1) {
 			return Codes.ERREUR_306;
 		}
+		try{
 		Element adresseElement = (Element) liste.item(0);
 		int idAdresseEntrepot = Integer.parseInt(adresseElement
 				.getAttribute("adresse"));
@@ -338,6 +339,9 @@ public class Tournee {
 		if (noeudEntrepot != null) {
 			this.entrepot = new DemandeDeLivraison(noeudEntrepot);
 		} else {
+			return Codes.ERREUR_306;
+		}
+		}catch(NumberFormatException e){
 			return Codes.ERREUR_306;
 		}
 

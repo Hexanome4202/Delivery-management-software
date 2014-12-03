@@ -118,8 +118,8 @@ public class PlageHoraire {
 							noeud, idClient, this);
 					demandesLivraisonPlage.add(nouvelleDemande);
 				} else {
-					demandesLivraisonPlage.clear();
-					return Codes.ERREUR_305;
+					//demandesLivraisonPlage.clear();
+					code= Codes.ERREUR_305;
 				}
 			} catch (NumberFormatException e) {
 				code=Codes.ERREUR_308;
