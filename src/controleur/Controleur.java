@@ -68,9 +68,10 @@ public class Controleur {
 	}
 
 	/**
-	 * @param client
-	 * @param noeud
-	 * @param precedent
+	 * Ajouter une nouvelle livraison
+	 * @param client l'id du client
+	 * @param noeud le <code>Noeud</code> pour lequel on souhaite ajouter une <code>DemandeDeLivraison</code>
+	 * @param precedent le <code>Noeud</code> après lequel on souhaite ajouter une <code>DemandeDeLivraison</code>
 	 */
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
 		Commande commande = new CommandeAjouterLivraison(tournee, client, courant, precedent);
@@ -83,6 +84,9 @@ public class Controleur {
 		fen.majMenuHoraire();
 	}
 
+	/**
+	 * Calcule la tournée
+	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
 		ajouterAListeTournees(tournee);
@@ -93,9 +97,13 @@ public class Controleur {
 	 * @param livraison
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
+		fen.setMessage("Suppression du point de livraison en cours...");
+		
 		Commande commande = new CommandeSupprimerLivraison(tournee, noeudASupprimer);
 		gestionnaire.executerNouvelleCommande(commande);
+		
 		//this.tournee.supprimerLivraison(noeudASupprimer);
+		
 		fen.afficherPlan();
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
@@ -118,7 +126,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour le traitement du fichier xml
+	 * Methode responsable du traitement du fichier xml
 	 * 
 	 * @param xml
 	 *            le fichier xml que l'on veut traiter
@@ -144,6 +152,7 @@ public class Controleur {
 					fen.majMenuHoraire();
 					fen.afficherDemandesLivraisonsSurPlan();
 					fen.activerCalculItineraire();
+					fen.setMessage("");
 				}
 				// todo : traiter les erreurs
 			} else if (typeFichier.equals("plan")) {
@@ -152,6 +161,7 @@ public class Controleur {
 					if (!this.modeTests) {
 						fen.afficherPlan();
 						fen.activerChargementHoraires();
+						fen.setMessage("");
 					}
 				}
 			}
@@ -185,7 +195,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour la construction des livraisons à partir d'un
+	 * Methode responsable de la construction des livraisons à partir d'un
 	 * element xml
 	 * 
 	 * @param livraisonsElement
@@ -204,7 +214,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable pour la construction du plan à partir d'un element
+	 * Methode responsable de la construction du plan à partir d'un element
 	 * xml
 	 * 
 	 * @param planElement
@@ -324,33 +334,7 @@ public class Controleur {
 			FileOutputStream is = new FileOutputStream(fichier);
 			OutputStreamWriter osw = new OutputStreamWriter(is);
 			Writer w = new BufferedWriter(osw);
-			for (Itineraire it : tournee.getItineraires()) {
-				
-				DemandeDeLivraison dDepart = it.getDepart();
-				DemandeDeLivraison dArrive = it.getArrivee();
-				Double tempsPourLivrer=0.0;
-				Double tempsSortie=0.0;
-				if (it.getDepart().getId()!=-1) {
-					tempsSortie = (double) dDepart.getPlage()
-							.getHeureDebut().getHours()*60;
-				}
-					tempsPourLivrer = it.getTemps()/60 + 15;
-					int tempsArriveH = (int) ((tempsSortie + tempsPourLivrer)/60);
-					int tempsArriveM = (int) ((tempsSortie + tempsPourLivrer)%60);
-					NumberFormat formatter = new DecimalFormat("00");
-				String descLivraison="Livraison: "+dArrive.getId();
-				if(descLivraison.equals("Livraison: -1")){descLivraison="Retour Entrepot";}
-				
-				w.write(descLivraison+"\n");
-				w.write("\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
-						+ "," + dArrive.getNoeud().getY() + ")"+"\n");
-				w.write("\tHeure d'arrivé prevue: " + formatter.format(tempsArriveH)+":"+formatter.format(tempsArriveM)+"\n");
-				for(Troncon t : it.getTronconsItineraire()){
-					w.write("\t\t" + t.getNomRue() + ": ("+t.getNoeudFin().getX()+","+t.getNoeudFin().getY()+")\n");
-				}
-				w.write("\tIdentifiant du client à contacter en cas de problème: " + dArrive.getIdClient());
-				w.write("\n");
-			}
+			w.write(this.editerFeuilleRoute());
 			w.close();
 		} catch (IOException e) {
 			System.err.println("Probleme de creation du fichier d'impression");

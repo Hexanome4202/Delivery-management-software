@@ -1,5 +1,7 @@
 ﻿package modele;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -115,21 +117,32 @@ public class Tournee {
 	 */
 	public String editerFeuilleRoute() {
 		String ret = "";
-		Itineraire itineraire;
-		List<Troncon> troncons;
-		Noeud n = this.entrepot.getNoeud();
-
-		for (int i = 0; i < this.itineraires.size(); ++i) {
-			itineraire = this.itineraires.get(i);
-			ret += i + " : DDL" + itineraire.getDepart().getId() + " --> DDL"
-					+ itineraire.getArrivee().getId() + " ("
-					+ itineraire.getTemps() + "min)\n";
-			troncons = itineraire.getTronconsItineraire();
-			for (Troncon t : troncons) {
-				ret += "\tDe " + n.getId() + " vers " + t.getNoeudFin().getId()
-						+ "\n";
-				n = t.getNoeudFin();
+		for (Itineraire it : this.getItineraires()) {
+			
+			DemandeDeLivraison dDepart = it.getDepart();
+			DemandeDeLivraison dArrive = it.getArrivee();
+			Double tempsPourLivrer=0.0;
+			Double tempsSortie=0.0;
+			if (it.getDepart().getId()!=-1) {
+				tempsSortie = (double) dDepart.getPlage()
+						.getHeureDebut().getHours()*60;
 			}
+				tempsPourLivrer = it.getTemps()/60 + 15;
+				int tempsArriveH = (int) ((tempsSortie + tempsPourLivrer)/60);
+				int tempsArriveM = (int) ((tempsSortie + tempsPourLivrer)%60);
+				NumberFormat formatter = new DecimalFormat("00");
+			String descLivraison="Livraison: "+dArrive.getId();
+			if(descLivraison.equals("Livraison: -1")){descLivraison="Retour Entrepot";}
+			
+			ret += descLivraison+"\n";
+			ret += "\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
+					+ "," + dArrive.getNoeud().getY() + ")"+"\n";
+			ret += "\tHeure d'arrivé prevue: " + formatter.format(tempsArriveH)+":"+formatter.format(tempsArriveM)+"\n";
+			for(Troncon t : it.getTronconsItineraire()){
+				ret += "\t\t" + t.getNomRue() + ": ("+t.getNoeudFin().getX()+","+t.getNoeudFin().getY()+")\n";
+			}
+			ret += "\tIdentifiant du client à contacter en cas de problème: " + dArrive.getIdClient();
+			ret += "\n";
 		}
 
 		return ret;
@@ -182,10 +195,11 @@ public class Tournee {
 		List<Troncon> troncons = Dijkstra.chemin;
 		Itineraire it1 = new Itineraire(this.itineraires.get(pos - 1)
 				.getArrivee(), livraison, troncons);
-		Dijkstra.calculerDijkstra(noeudCourant, this.itineraires.get(pos)
+		int entrepot = pos == this.itineraires.size() ? 0 : pos;
+		Dijkstra.calculerDijkstra(noeudCourant, this.itineraires.get(entrepot)
 				.getDepart().getNoeud(), this.planTournee.getToutNoeuds());
 		troncons = Dijkstra.chemin;
-		Itineraire it2 = new Itineraire(livraison, this.itineraires.get(pos)
+		Itineraire it2 = new Itineraire(livraison, this.itineraires.get(entrepot)
 				.getDepart(), troncons);
 		this.itineraires.add(pos, it1);
 		this.itineraires.add(pos + 1, it2);
@@ -534,7 +548,7 @@ public class Tournee {
 	}
 
 	/**
-	 * 
+	 * Cherche la demande de livraison associée au <code>Noeud</code>
 	 * @param n Le <code>Noeud</code> dont on cherche la <code>DemandeDeLivraison</code>
 	 * @return La <code>DemandeDeLivraison</code> associée au <code>Noeud n</code>
 	 */

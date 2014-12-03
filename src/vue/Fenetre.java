@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
 
@@ -75,9 +76,11 @@ public class Fenetre extends JFrame implements Observer {
 	private JButton btnImprimer;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
+	JMenuItem actionAnnuler;
+	JMenuItem actionRetablir;
 
 	private JMenuItem actionChargerHoraires;
-	private javax.swing.JTextField message;
+	private JTextField message;
 
 	private static final double RAYON_NOEUD = 10;
 	private static final int TOLERANCE = 10;
@@ -406,8 +409,10 @@ public class Fenetre extends JFrame implements Observer {
 		JMenuItem actionQuitter = new JMenuItem("Quitter");
 
 		JMenu menuEdition = new JMenu("Edition");
-		JMenuItem actionAnnuler = new JMenuItem("Annuler");
-		JMenuItem actionRetablir = new JMenuItem("Rétablir");
+		actionAnnuler = new JMenuItem("Annuler");
+		actionRetablir = new JMenuItem("Rétablir");
+		actionAnnuler.setEnabled(false);
+		actionRetablir.setEnabled(false);
 
 		JMenu menuAide = new JMenu("Aide");
 
@@ -631,6 +636,7 @@ public class Fenetre extends JFrame implements Observer {
 	public void dessinerTournee() {
 		noeudAAjouter = null;
 		pointSelectionne = null;
+		btnCalculer.setEnabled(false);
 
 		Tournee tournee = controleur.getTournee();
 		Object parent = plan.getDefaultParent();
@@ -722,6 +728,7 @@ public class Fenetre extends JFrame implements Observer {
 	public void lireDepuisFichierXML(String typeFichier) {
 		File xml = ouvrirFichier('o');
 		if (xml != null) {
+			setMessage("Chargement du fichier en cours...");
 			this.controleur.gererFichier(xml, typeFichier);
 		}
 	}
@@ -927,6 +934,27 @@ public class Fenetre extends JFrame implements Observer {
 	public void genererFichierImpression() {
 		File f = ouvrirFichier('w');
 		controleur.genererFichierImpression(f);
+	}
+	
+	public void setMessage(String message){
+		this.message.setText(message);
+		System.out.println(message);
+	}
+	
+	/**
+	 * Permet d'activer ou désactiver le bouton Annuler
+	 * @param valeur
+	 */
+	public void setBtnAnnulerEnabled(boolean valeur){
+		actionAnnuler.setEnabled(valeur);
+	}
+	
+	/**
+	 * Permet d'activer ou désactiver le bouton Annuler
+	 * @param valeur
+	 */
+	public void setBtnRetablirEnabled(boolean valeur){
+		actionRetablir.setEnabled(valeur);
 	}
 
 }
