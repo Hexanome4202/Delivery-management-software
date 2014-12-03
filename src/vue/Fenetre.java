@@ -83,12 +83,7 @@ public class Fenetre extends JFrame implements Observer {
 	private JButton btnImprimer;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
-<<<<<<< HEAD
-	JMenuItem actionChargerHoraires;
-	
-=======
 	private JMenuItem actionChargerHoraires;
->>>>>>> FETCH_HEAD
     
     private static final double RAYON_NOEUD = 10;
     private static final int TOLERANCE = 10;
