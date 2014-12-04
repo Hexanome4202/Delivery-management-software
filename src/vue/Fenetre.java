@@ -54,7 +54,7 @@ import controleur.Controleur;
 /**
  * 
  */
-public class Fenetre extends JFrame implements Observer {
+public class Fenetre extends JFrame {
 	
 	
 	private VuePlan vuePlan;
@@ -161,7 +161,6 @@ public class Fenetre extends JFrame implements Observer {
 		
 		vuePlan = new VuePlan();
 
-		//TODO revoir le mouseListener
 		vuePlan.getGraphControl().addMouseListener(new MouseAdapter() {
 
 					public void mouseReleased(MouseEvent e) {
@@ -588,13 +587,6 @@ public class Fenetre extends JFrame implements Observer {
 
 
 	/**
-	 * @param demandes
-	 */
-	public void creerVuesDemandeDeLivraison(List<DemandeDeLivraison> demandes) {
-		// TODO implement here
-	}
-
-	/**
 	 * Methode permettant de lire un fichier XML pour l'importer
 	 * @param typeFichier
 	 */
@@ -636,10 +628,6 @@ public class Fenetre extends JFrame implements Observer {
 		return null;
 	}
 
-	
-	public void update(Observable arg0, Object arg1) {
-		//TODO compléter ou supprimer
-	}
 
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
