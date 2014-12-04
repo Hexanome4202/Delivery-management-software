@@ -425,6 +425,7 @@ public class Fenetre extends JFrame {
 		menuFichier.add(actionQuitter);
 		menuEdition.add(actionAnnuler);
 		menuEdition.add(actionRetablir);
+		menuAide.add(actionHelp);
 
 		menuBar.add(menuFichier);
 		menuBar.add(menuEdition);
