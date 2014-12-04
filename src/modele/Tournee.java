@@ -527,43 +527,33 @@ public class Tournee {
 	 * Méthode permettant de détecter les <code>DemandeDeLivraison</code> qui arrivent en dehors de leur <code>PlageHoraire</code>
 	 * @return la liste des <code>DemandeDeLivraison</code> dont le temps est dépassé
 	 */
-	public List<DemandeDeLivraison> getDemandesTempsDepasse() {
+	public List<DemandeDeLivraison> getDemandesTempsDepasse(){
 		ArrayList<DemandeDeLivraison> demandesDepassees = new ArrayList<DemandeDeLivraison>();
-
+		
 		GregorianCalendar dateLivreur = new GregorianCalendar();
-		dateLivreur.setTime(itineraires.get(0).getArrivee().getPlage()
-				.getHeureDebut());
-
+		dateLivreur.setTime(itineraires.get(0).getArrivee().getPlage().getHeureDebut());
+	
 		Iterator<Itineraire> it = itineraires.iterator();
-		while (it.hasNext()) {
+		while(it.hasNext()){
 			Itineraire itineraire = it.next();
-
+				
 			DemandeDeLivraison demande = itineraire.getArrivee();
-			if (demande.getId() != -1) {
+			if(demande.getId() != -1){
 				PlageHoraire plage = demande.getPlage();
 				Date tempsFin = plage.getHeureFin();
 				Date tempsDebut = plage.getHeureDebut();
+				
 				dateLivreur.add(Calendar.SECOND, (int) itineraire.getTemps());
-
-				if (dateLivreur.getTime().compareTo(tempsFin) <= 0) {
-					if (dateLivreur.getTime().compareTo(tempsDebut) < 0) {
+				
+				if(dateLivreur.getTime().compareTo(tempsFin) <= 0){
+					if(dateLivreur.getTime().compareTo(tempsDebut) < 0){
 						dateLivreur.setTime(tempsDebut);
 					}
-					dateLivreur.add(Calendar.MINUTE, TEMPS_REPOS);
-				} else {
-
-					dateLivreur.add(GregorianCalendar.SECOND,
-							(int) itineraire.getTemps());
-
-					if (dateLivreur.getTime().compareTo(tempsFin) <= 0) {
-						if (dateLivreur.getTime().compareTo(tempsDebut) < 0) {
-							dateLivreur.setTime(tempsDebut);
-						}
-						dateLivreur.add(GregorianCalendar.MINUTE, TEMPS_REPOS);
-					} else {
-						demandesDepassees.add(demande);
-						dateLivreur.add(GregorianCalendar.MINUTE, TEMPS_REPOS);
-					}
+					dateLivreur.add(Calendar.MINUTE, 10);
+				}
+				else{
+					demandesDepassees.add(demande);
+					dateLivreur.add(Calendar.MINUTE, 10);
 				}
 			}
 		}
