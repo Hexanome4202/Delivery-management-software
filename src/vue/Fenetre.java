@@ -640,7 +640,7 @@ public class Fenetre extends JFrame {
 		}
 		return null;
 	}
-
+dsfdf
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
 	 * @param noeuds
@@ -656,6 +656,7 @@ public class Fenetre extends JFrame {
 	public void afficherPlan(Plan plan){
 		vuePlan.calculeFacteurEchelle(plan.getMaxX(), plan.getMaxY());		
 		afficherPlan(plan.getToutNoeuds());
+		btnCalculer.setEnabled(false);
 	}
 	
 	/**
