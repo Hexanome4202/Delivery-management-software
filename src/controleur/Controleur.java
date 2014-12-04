@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,26 +14,19 @@ import javax.xml.parsers.ParserConfigurationException;
 import modele.Noeud;
 import modele.Plan;
 import modele.Tournee;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import vue.Fenetre;
 import vue.VueTournee;
-
-import commande.Commande;
-import commande.CommandeAjouterLivraison;
-import commande.CommandeSupprimerLivraison;
-import commande.GestionnaireDeCommandes;
 import erreurs.Codes;
 
 /**
  * 
  */
 public class Controleur {
-
-
-
 	/**
 	 * La <code>Tournee</code> calculée à partir du <code>Plan</code> et des <code>DemandeDeLivraison</code>
 	 */

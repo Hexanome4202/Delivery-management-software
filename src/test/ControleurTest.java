@@ -226,4 +226,29 @@ public class ControleurTest {
 		List<DemandeDeLivraison> demandes = new ArrayList<DemandeDeLivraison>(c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison());
 		assertTrue(demandes.get(0).compareTo(demande)==0);
 	}
+	
+	/**
+	 * Méthode qui teste les méthodes <code>undo()</code> et <code>redo()</code>
+	 */
+	@Test
+	public void testUndo(){
+		Controleur c = new Controleur();
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
+		c.calculerTournee();
+		c.ajouterLivraison(15, c.getPlan().getNoeud(4), c.getPlan().getNoeud(1));
+		assertEquals(5,c.getTournee().getItineraires().size());
+		c.undo();
+		assertEquals(4,c.getTournee().getItineraires().size());
+		c.redo();
+		assertEquals(5,c.getTournee().getItineraires().size());
+		c.undo();
+		
+		c.supprimerLivraison(c.getPlan().getNoeud(1));
+		assertEquals(3,c.getTournee().getItineraires().size());
+		c.undo();
+		assertEquals(4,c.getTournee().getItineraires().size());
+		c.redo();
+		assertEquals(3,c.getTournee().getItineraires().size());
+	}
 }
