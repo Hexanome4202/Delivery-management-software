@@ -66,6 +66,7 @@ public class Controleur {
 		vueTournee = new VueTournee(null);
 		plan = new Plan();
 		this.fen = new Fenetre(this);
+		this.fen.setTitle("Préparation et supervision des livraisons");
 		this.fen.setVisible(true);
 		this.modeTests = false;
 		this.gestionnaire = new GestionnaireDeCommandes();
@@ -141,7 +142,7 @@ public class Controleur {
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
 		fen.setMessage("Suppression du point de livraison en cours...");
-
+	
 		Commande commande = new CommandeSupprimerLivraison(tournee,
 				noeudASupprimer);
 		gestionnaire.executerNouvelleCommande(commande);
