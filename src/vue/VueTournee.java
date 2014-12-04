@@ -84,11 +84,11 @@ public class VueTournee {
 	public void setTournee(Tournee tournee){
 		if(tournee != null){
 			
-			//On remet tous les noeuds en gris
+			/*//On remet tous les noeuds en gris
 			Set<Integer> cles = vuesDemandeDeLivraison.keySet();
 			for (Integer cle : cles) {
 				vueNoeuds.get(cle).setColors(0);
-			}
+			}*/
 			
 			vuesDemandeDeLivraison.clear();
 			

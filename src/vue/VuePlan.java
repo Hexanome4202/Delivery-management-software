@@ -110,6 +110,7 @@ public class VuePlan extends mxGraphComponent{
     	calculeFacteurEchelle(plan.getMaxX(), plan.getMaxY());
     	vueNoeuds.clear();
     	vueTroncons.clear();
+    	vueNoeuds.clear();
 
 		for (Noeud noeud : plan.getToutNoeuds()) {
 			vueNoeuds.put(noeud.getId(), 

@@ -686,7 +686,6 @@ public class Fenetre extends JFrame {
 	 */
 	public void majTotale(Plan plan, Tournee tournee){
 		vuePlan.setPlan(plan);
-		vuePlan.afficherPlan();
 		vuePlan.afficherDemandesLivraisons(tournee);
 		dessinerTournee(tournee);
 		majMenuHoraire(tournee.getPlagesHoraires());
