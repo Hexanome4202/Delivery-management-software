@@ -12,10 +12,10 @@ import java.util.Set;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import errors.Codes;
+import erreurs.Codes;
 
 /**
- * 
+ * Classe correspondant à une plage horaire de livraison
  */
 public class PlageHoraire {
 
@@ -34,6 +34,7 @@ public class PlageHoraire {
 	 */
 	private Set<DemandeDeLivraison> demandesLivraisonPlage;
 
+	// ----- Constructeur(s)
 	/**
 	 * Constructeur de la classe <code>PlageHoraire</code>
 	 * 
@@ -63,8 +64,61 @@ public class PlageHoraire {
 		this.demandesLivraisonPlage = demandes;
 	}
 
+	// ----- Getter(s)
 	/**
+	 * Getter de l'attribut <code>heureDebut</code>
+	 * @return l'heure de début de la <code>PlageHoraire</code>
+	 */
+	public Date getHeureDebut() {
+		return this.heureDebut;
+	}
+
+	/**
+	 * Getter de l'attribut <code>heureFin</code>
 	 * 
+	 * @return l'heure de fin de la <code>PlageHoraire</code>
+	 */
+	public Date getHeureFin() {
+		return this.heureFin;
+	}
+	
+	/**
+	 * Getter de l'attribut <code>demandesLivraisonPlage</code>
+	 * @return
+	 */
+	public Set<DemandeDeLivraison> getDemandeLivraison() {
+		return demandesLivraisonPlage;
+	}
+
+	// ----- Setter(s)
+	/**
+	 * Setter(s) de l'attribut <code>demandeLivraisonPlage</codes>
+	 * @param demandes
+	 */
+	public void setDemandesDeLivraison(Set<DemandeDeLivraison> demandes) {
+		this.demandesLivraisonPlage = demandes;
+	}
+	
+	// ----- Méthode(s)
+	/**
+	 * Méthode permettant de récupérer tous les noeuds de la <code>PlageHoraire</code>
+	 * @return les noeuds correspondants aux demandes de livraisons de la plage
+	 *         horaire
+	 */
+	public ArrayList<Noeud> getNoeuds() {
+		ArrayList<Noeud> noeuds = new ArrayList<Noeud>();
+		DemandeDeLivraison demande = null;
+		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage
+				.iterator();
+		while (it.hasNext()) {
+			demande = it.next();
+			noeuds.add(demande.getNoeud());
+		}
+		return noeuds;
+	}
+	
+	/**
+	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de son id
 	 * @param id
 	 *            Id du noeud que l'on souhaite trouver.
 	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>,
@@ -129,54 +183,5 @@ public class PlageHoraire {
 		}
 
 		return code;
-	}
-
-	/**
-	 * @return les noeuds correspondants aux demandes de livraisons de la plage
-	 *         horaire
-	 */
-	public ArrayList<Noeud> getNoeuds() {
-		ArrayList<Noeud> noeuds = new ArrayList<Noeud>();
-		DemandeDeLivraison demande = null;
-		Iterator<DemandeDeLivraison> it = this.demandesLivraisonPlage
-				.iterator();
-		while (it.hasNext()) {
-			demande = it.next();
-			noeuds.add(demande.getNoeud());
-		}
-		return noeuds;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Set<DemandeDeLivraison> getDemandeLivraison() {
-		return demandesLivraisonPlage;
-	}
-
-	/**
-	 * 
-	 * @param demandes
-	 */
-	public void setDemandesDeLivraison(Set<DemandeDeLivraison> demandes) {
-		this.demandesLivraisonPlage = demandes;
-	}
-
-	/**
-	 * 
-	 * @return l'heure de début de la <code>PlageHoraire</code>
-	 */
-	public Date getHeureDebut() {
-		return this.heureDebut;
-	}
-
-	/**
-	 * l'heure de fin de la <code>PlageHoraire</code>
-	 * 
-	 * @return
-	 */
-	public Date getHeureFin() {
-		return this.heureFin;
-	}
+	}	
 }

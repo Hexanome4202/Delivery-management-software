@@ -17,13 +17,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import vue.Fenetre;
+import vue.VueTournee;
+
 import commande.Commande;
 import commande.CommandeAjouterLivraison;
 import commande.CommandeSupprimerLivraison;
 import commande.GestionnaireDeCommandes;
-import vue.Fenetre;
-import vue.VueTournee;
-import errors.Codes;
+import erreurs.Codes;
 
 /**
  * 
@@ -32,10 +33,29 @@ public class Controleur {
 
 
 
+	/**
+	 * La <code>Tournee</code> calculée à partir du <code>Plan</code> et des <code>DemandeDeLivraison</code>
+	 */
 	private Tournee tournee;
+	
+	/**
+	 * La vue correspondant à la <code>Tournee</code> calculée
+	 */
 	private VueTournee vueTournee;
+	
+	/**
+	 * Le <code>Plan</code> contenant les <code>Noeud</code>s ainsi que les <code>Troncon</code>s
+	 */
 	private Plan plan;
+	
+	/**
+	 * La <code>Fenetre</code>, c'est à dire l'IHM
+	 */
 	private Fenetre fen;
+	
+	/**
+	 * Booléen permettant d'activier/désactiver le mode de test afin d'éviter l'affichage des IHMs durant les tests
+	 */
 	private boolean modeTests;
 
 	/**
@@ -43,6 +63,7 @@ public class Controleur {
 	 */
 	private GestionnaireDeCommandes gestionnaire;
 
+	// ----- Constructeur(s)
 	/**
 	 * Constructeur par défaut de la classe <code>Controleur</code>
 	 */
@@ -56,6 +77,39 @@ public class Controleur {
 		this.gestionnaire = new GestionnaireDeCommandes();
 	}
 
+	// ----- Getter(s)
+	/**
+	 * Getter de l'attribut <code>plan</code>
+	 * @return le <code>Plan</code>
+	 */
+	public Plan getPlan() {
+		return this.plan;
+	}
+
+	/**
+	 * Getter de l'attribut <code>tournee</code>
+	 * @return la <code>Tournee</code>
+	 */
+	public Tournee getTournee() {
+		return this.tournee;
+	}
+	
+	// ----- Setter(s)
+	/**
+	 * Permet de lancer les tests sans obtenir de pop-up qui doit être fermée à
+	 * la main
+	 * 
+	 * @param val
+	 */
+	public void setModeTest(boolean val) {
+		this.modeTests = val;
+		if (val)
+			this.fen.setVisible(false);
+		else
+			this.fen.setVisible(false);
+	}
+	
+	// ----- Méthode(s)
 	/**
 	 * Ajouter une nouvelle livraison
 	 * 
@@ -74,23 +128,22 @@ public class Controleur {
 		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
-		fen.afficherPlan();
-		fen.afficherDemandesLivraisonsSurPlan();
-		fen.dessinerTournee();
-		fen.majMenuHoraire();
+		fen.majTotale(plan.getToutNoeuds(), tournee);
+		fen.setBtnAnnulerEnabled(true);
 		fen.setMessage("");
 	}
 
 	/**
-	 * Calcule la tournée
+	 * Calcule la tournée correspondant au <code>Plan</code> ainsi qu'aux <code>DemandeDeLivraison</code>s
 	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
-		fen.dessinerTournee();
+		fen.dessinerTournee(tournee);
 	}
 
 	/**
-	 * @param livraison
+	 * Supprime une <code>DemandeDeLivraison</code> à partir de son <code>Noeud</code>
+	 * @param noeudASupprimer le <code>Noeud</code> correspondant à la <code>DemandeDeLivraison</code> à supprimer
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
 		fen.setMessage("Suppression du point de livraison en cours...");
@@ -100,25 +153,16 @@ public class Controleur {
 		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
-		fen.afficherPlan();
-		fen.afficherDemandesLivraisonsSurPlan();
-		fen.dessinerTournee();
-		fen.majMenuHoraire();
+		fen.majTotale(plan.getToutNoeuds(), tournee);;
+		fen.setBtnAnnulerEnabled(true);
 	}
 
 	/**
-	 * @return un object de type <code>String</code> contenant la feuille editee
+	 * Permet d'éditer la feuille de route
+	 * @return un object de type <code>String</code> contenant la feuille éditée
 	 */
 	public String editerFeuilleRoute() {
 		return this.tournee.editerFeuilleRoute();
-	}
-
-	/**
-	 * @param x
-	 * @param y
-	 */
-	public void planClique(int x, int y) {
-		// TODO implement here
 	}
 
 	/**
@@ -143,27 +187,30 @@ public class Controleur {
 			if (typeFichier.equals("horaires")) {
 				if (racine.getNodeName().equals("JourneeType")) {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
-					// TODO: display
-					System.out.println("fini");
-					fen.majMenuHoraire();
-					fen.afficherDemandesLivraisonsSurPlan();
+					fen.majMenuHoraire(tournee.getPlagesHoraires());
+					fen.afficherDemandesLivraisonsSurPlan(tournee);
 					fen.activerCalculItineraire();
 					fen.setMessage("");
+				}  else {
+					resultatConstruction = Codes.PARSE_ERROR;
 				}
-				// todo : traiter les erreurs
 			} else if (typeFichier.equals("plan")) {
 				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
 					if (!this.modeTests) {
-						fen.afficherPlan();
+						fen.afficherPlan(plan);
 						fen.activerChargementHoraires();
 						fen.setMessage("");
 					}
+				}  else {
+					resultatConstruction = Codes.PARSE_ERROR;
 				}
 			}
 
-			if (!this.modeTests)
+			if (!this.modeTests) {
 				Codes.afficherErreurs(resultatConstruction);
+				this.fen.setMessage("");
+			}
 			return resultatConstruction;
 
 		} catch (ParserConfigurationException pce) {
@@ -224,60 +271,28 @@ public class Controleur {
 		return Codes.PARSE_OK;
 	}
 
+	/**
+	 * Méthode permettant d'annuler une <code>Commande</code>
+	 */
 	public void undo() {
 		if (gestionnaire.annulerDerniereCommande()) {
 			testBoutonsAnnulerRetablir();
-			fen.afficherPlan();
-			fen.afficherDemandesLivraisonsSurPlan();
-			fen.dessinerTournee();
-
-			fen.majMenuHoraire();
-		} else {
-			fen.afficherPopupErreur("Undo n'est pas possible!", "Erreur 151");
+			fen.majTotale(plan.getToutNoeuds(), tournee);
+		}else{
+			fen.afficherPopupErreur("Undo n'est pas possible!","Erreur 151");
 		}
 	}
 
+	/**
+	 * Méthode permettant de rétablir l'exécution d'une <code>commande</code>
+	 */
 	public void redo() {
 		if (gestionnaire.refaireCommandeAnnulee()) {
 			testBoutonsAnnulerRetablir();
-			fen.afficherPlan();
-			fen.afficherDemandesLivraisonsSurPlan();
-			fen.dessinerTournee();
-
-			fen.majMenuHoraire();
+			fen.majTotale(plan.getToutNoeuds(), tournee);
 		} else {
 			fen.afficherPopupErreur("Redo n'est pas possible!", "Erreur 152");
 		}
-	}
-
-	/**
-	 * 
-	 * @return le <code>Plan</code>
-	 */
-	public Plan getPlan() {
-		return this.plan;
-	}
-
-	/**
-	 * 
-	 * @return la <code>Tournee</code>
-	 */
-	public Tournee getTournee() {
-		return this.tournee;
-	}
-
-	/**
-	 * Permet de lancer les tests sans obtenir de pop-up qui doit être fermée à
-	 * la main
-	 * 
-	 * @param val
-	 */
-	public void setModeTest(boolean val) {
-		this.modeTests = val;
-		if (val)
-			this.fen.setVisible(false);
-		else
-			this.fen.setVisible(false);
 	}
 
 	public static void main(String[] args) {
@@ -285,8 +300,9 @@ public class Controleur {
 	}
 
 	/**
-	 * Méthode qui s'occupe de la creation du fichier avec les itineraires de la tournee
-	 * @param fichier dont on va realiser la sauvegarde de la tournee
+	 * Permet d'enregistrer la feuille de route dans un fichier texte
+	 * @param fichier
+	 *            dont on va realiser la sauvegarde de la tournee
 	 */
 	public void genererFichierImpression(File fichier) {
 		try {

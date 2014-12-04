@@ -35,6 +35,7 @@ public class GraphTournee implements Graph{
 	 */
 	private ArrayList<ArrayList<Integer>> succ;
 	
+	// ----- Constructeur(s)
 	/**
 	 * Constucteur d'un graphe de tournée
 	 */

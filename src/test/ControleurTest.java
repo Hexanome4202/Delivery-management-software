@@ -16,7 +16,7 @@ import modele.Troncon;
 import org.junit.Test;
 
 import controleur.Controleur;
-import errors.Codes;
+import erreurs.Codes;
 
 public class ControleurTest {
 

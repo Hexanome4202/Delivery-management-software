@@ -1,7 +1,10 @@
-package errors;
+package erreurs;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Classe contenant les codes d'erreur de l'application ainsi qu'une fonction gérant l'affichage des erreurs
+ */
 public class Codes {
 	/**
 	 * 
@@ -53,6 +56,9 @@ public class Codes {
 	 */
 	public static void afficherErreurs(int code) {
 		switch (code) {
+			case Codes.PARSE_ERROR:
+				JOptionPane.showMessageDialog(null,"Le fichier n'est pas valide.","Erreur de parsage",JOptionPane.ERROR_MESSAGE);
+				break;
 			case Codes.ERREUR_301:
 				JOptionPane.showMessageDialog(null,"Noeud destination du tronçon n'existe pas ou vide!","Erreur 301",JOptionPane.ERROR_MESSAGE);
 				break;
