@@ -55,75 +55,31 @@ import controleur.Controleur;
  * 
  */
 public class Fenetre extends JFrame implements Observer {
+	
 
-	/**
-	 * Facteur permettant de faire la conversion entre les coordonnées réelles
-	 * et les coordonnées d'affichage
-	 */
-	private static int facteurCoordonnees;
 
 	private VueTournee vueTournee;
+	
+	private VuePlan vuePlan;
 
 	private static final long serialVersionUID = 1L;
 
-	private JFileChooser jFileChooserXML;
 	private Controleur controleur;
-
-	private AccordionMenu menuHoraires;
-	private javax.swing.JPanel horairesPannel;
-	private mxGraph plan;
-	private mxGraphComponent planComponent;
 
 	private JButton btnCalculer;
 	private JButton btnImprimer;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
-	JMenuItem actionAnnuler;
-	JMenuItem actionRetablir;
-
+	private JMenuItem actionAnnuler;
+	private JMenuItem actionRetablir;
 	private JMenuItem actionChargerHoraires;
-	private JTextField message;
-
-	private static final double RAYON_NOEUD = 10;
-	private static final int TOLERANCE = 10;
-
-	/**
-	 * L'id des noeuds à livrer associé au numéro de plage horaire
-	 */
-	private HashMap<Integer, Integer> noeudsALivrer;
-
-	/**
-	 * L'id des demandes de livraison qui ne pouront pas être livrés dans la
-	 * plage horaire demandée.
-	 */
-	private Set<Integer> demandesTempsDepasse;
-
-	private final String[] couleurRemplissage = { "#a7a7a7", "#4407a6",
-			"#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f" };
-	private final String[] couleurBordure = { "#838383", "#2d0968", "#0d7412",
-			"#b3560b", "#511155", "#0f5f6d", "#522828" };
-
-	/**
-	 * Facteurs de mise à l'échelle pour l'affichage sur le plan
-	 */
-	private double hY;
-	private double hX;
-
-	/**
-	 * La liste des points affichés sur le plan
-	 */
-	private HashMap<Integer, Object> points;
 	
-	Set<Noeud> tousNoeuds = new HashSet<Noeud>();
+	private javax.swing.JPanel horairesPannel;
+	private AccordionMenu menuHoraires;
+	
+	private JFileChooser jFileChooserXML;
 
-	/**
-	 * Le point actuellement selectionné
-	 */
-	private Noeud pointSelectionne;
-	private Noeud entrepot;
-	private Noeud noeudAAjouter = null;
-
-	private boolean tourneeDessinee = false;
+	private JTextField message;
 
 	private String repertoireActuel;
 
@@ -205,61 +161,47 @@ public class Fenetre extends JFrame implements Observer {
 		/*---------------------PLAN------------------------------*/
 		JLabel planLabel = new JLabel("Plan");
 		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
-		plan = new mxGraph();
-		planComponent = new mxGraphComponent(plan);
+		
+		vuePlan = new VuePlan();
 
-		plan.setAllowDanglingEdges(false);
-		plan.setCellsBendable(false);
-		plan.setCellsDisconnectable(false);
-		plan.setCellsMovable(false);
-		plan.setCellsResizable(false);
-		plan.setCellsEditable(false);
-		planComponent.setConnectable(false);
+		//TODO revoir le mouseListener
+		vuePlan.getGraphControl().addMouseListener(new MouseAdapter() {
 
-		planComponent.getGraphControl().addMouseListener(new MouseAdapter() {
-
-			public void mouseReleased(MouseEvent e) {
-				Noeud n = getNoeudA(e.getX(), e.getY());
-				if (n != null) {
-					// Si on est dans l'ajout de point de livraison
-					if (noeudAAjouter != null) {
-						if (noeudsALivrer.containsKey(n.getId())) {
-							String idClient = JOptionPane.showInputDialog(null,"Veuillez saisir le numero du client:", null);
-							int id=Integer.parseInt(idClient);
-							try {
-								if (id>=0) {
-									controleur.ajouterLivraison(id,
-											noeudAAjouter, n);
-								}else{
-									JOptionPane.showMessageDialog(null,"L'identifiant doit être positif!","Erreur",JOptionPane.ERROR_MESSAGE);
+					public void mouseReleased(MouseEvent e) {
+						Noeud n = vuePlan.getNoeudA(e.getX(), e.getY());
+						if (n != null) {
+							// Si on est dans l'ajout de point de livraison
+							if(vuePlan.doitAjouterPoint(n)){
+								int idClient=Integer.parseInt(
+										JOptionPane.showInputDialog(Fenetre.this,"Veuillez saisir le numero du client:", null));
+								try {
+									if (idClient>=0) {
+										controleur.ajouterLivraison(idClient,
+												vuePlan.getNoeudAAjouter(), n);
+									}else{
+										JOptionPane.showMessageDialog(Fenetre.this,"L'identifiant doit être positif!","Erreur",JOptionPane.ERROR_MESSAGE);
+									}
+								} catch (NumberFormatException e1) {
+									JOptionPane.showMessageDialog(Fenetre.this,"Erreur de saisie!","Erreur",JOptionPane.ERROR_MESSAGE);
 								}
-							} catch (NumberFormatException e1) {
-								JOptionPane.showMessageDialog(null,"Erreur de saisie!","Erreur",JOptionPane.ERROR_MESSAGE);
+								
+							}else {
+
+								vuePlan.changerPointSelectionne(n);
+
+								btnAjouter.setEnabled(vuePlan.etatBtnAjouter(n));
+
+								btnSupprimer.setEnabled(vuePlan.etatBtnSupprimer(n));
+
 							}
-							noeudAAjouter = null;
-						}
-					} else {
-
-						changerPointSelectionne(n);
-						if (!tourneeDessinee || n == entrepot
-								|| noeudsALivrer.containsKey(n.getId())) {
+						} else {
+							vuePlan.changerPointSelectionne(null);
 							btnAjouter.setEnabled(false);
-						} else if (entrepot != null && n != entrepot
-								&& !noeudsALivrer.containsKey(n.getId())) {
-							btnAjouter.setEnabled(true);
+							btnSupprimer.setEnabled(false);
 						}
-
-						btnSupprimer.setEnabled(tourneeDessinee
-								&& noeudsALivrer.containsKey(n.getId()));
-
 					}
-				} else {
-					changerPointSelectionne(null);
-					btnAjouter.setEnabled(false);
-					btnSupprimer.setEnabled(false);
-				}
-			}
-		});
+				});
+		
 
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 
@@ -281,7 +223,7 @@ public class Fenetre extends JFrame implements Observer {
 														.createParallelGroup(
 																Alignment.LEADING)
 														.addComponent(
-																planComponent,
+																vuePlan,
 																GroupLayout.DEFAULT_SIZE,
 																700,
 																GroupLayout.DEFAULT_SIZE)
@@ -367,7 +309,7 @@ public class Fenetre extends JFrame implements Observer {
 																		.addPreferredGap(
 																				ComponentPlacement.RELATED)
 																		.addComponent(
-																				planComponent,
+																				vuePlan,
 																				GroupLayout.DEFAULT_SIZE,
 																				600,
 																				GroupLayout.DEFAULT_SIZE)
@@ -509,7 +451,7 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				noeudAAjouter = pointSelectionne;
+				vuePlan.setNoeudAAjouter();
 				btnAjouter.setEnabled(false);
 				message.setText("Veuillez sélectionner le noeud de livraison précédent");
 			}
@@ -521,8 +463,9 @@ public class Fenetre extends JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (noeudsALivrer.containsKey(pointSelectionne.getId())) {
-					controleur.supprimerLivraison(pointSelectionne);
+				Noeud noeudASupprimer = vuePlan.getNoeudLivraisonSelectionne();
+				if (noeudASupprimer != null) {
+					controleur.supprimerLivraison(noeudASupprimer);
 				} else {
 					// TODO remplacer ça par un affichage graphique
 					System.out.println("Rien à supprimer");
@@ -576,7 +519,7 @@ public class Fenetre extends JFrame implements Observer {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				AccordionItem item = (AccordionItem) e.getSource();
-				changerPointSelectionne(controleur.getPlan().getNoeud(
+				vuePlan.changerPointSelectionne(controleur.getPlan().getNoeud(
 						Integer.parseInt(item.getName())));
 			}
 		};
@@ -622,7 +565,7 @@ public class Fenetre extends JFrame implements Observer {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				AccordionItem item = (AccordionItem) e.getSource();
-				changerPointSelectionne(controleur.getPlan().getNoeud(
+				vuePlan.changerPointSelectionne(controleur.getPlan().getNoeud(
 						Integer.parseInt(item.getName())));
 			}
 		};
@@ -653,89 +596,11 @@ public class Fenetre extends JFrame implements Observer {
 	 * Méthode permettant de dessiner la tournée
 	 */
 	public void dessinerTournee(Tournee tournee) {
-		noeudAAjouter = null;
-		pointSelectionne = null;
 		btnCalculer.setEnabled(false);
-		
-		List<DemandeDeLivraison> demandesTempsDepasse = tournee.getDemandesTempsDepasse();
-
-		Object parent = plan.getDefaultParent();
-
-		int noeudPrecedent = entrepot.getId();
-
-		ArrayList<Itineraire> itineraires = tournee.getItineraires();
-		Iterator<Itineraire> it = itineraires.iterator();
-
-		HashMap<String, Integer> noeudsTraverses = new HashMap<String, Integer>();
-
-		afficherDemandesTempsDepasse(demandesTempsDepasse);
-
-		while (it.hasNext()) {
-			Itineraire itineraire = it.next();
-			int idHoraire = 1;
-			try {
-				idHoraire = noeudsALivrer.get(itineraire.getDepart().getNoeud()
-						.getId());
-			} catch (Exception e) {
-			}
-			String color = couleurBordure[idHoraire];
-
-			Iterator<Troncon> troncons = itineraire.getTronconsItineraire()
-					.iterator();
-			while (troncons.hasNext()) {
-				Troncon troncon = troncons.next();
-				String key = ""
-						+ Math.max(noeudPrecedent, troncon.getNoeudFin()
-								.getId())
-						+ "-"
-						+ Math.min(troncon.getNoeudFin().getId(),
-								noeudPrecedent);
-
-				String edgeStyle = (noeudsTraverses.containsKey(key)) ? "edgeStyle=elbowEdgeStyle;elbow=horizontal;"
-						+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;"
-						+ mxConstants.STYLE_ROUNDED + "=1;"
-						: "";
-
-				plan.insertEdge(parent, null, "", points.get(noeudPrecedent),
-						points.get(troncon.getNoeudFin().getId()), edgeStyle
-								+ "strokeWidth=2;strokeColor=" + color);
-
-				if (noeudsTraverses.containsKey(key)) {
-					noeudsTraverses.put(key, noeudsTraverses.get(key) + 1);
-				} else {
-					noeudsTraverses.put(key, 1);
-				}
-
-				noeudPrecedent = troncon.getNoeudFin().getId();
-			}
-			tourneeDessinee = true;
-		}
-
 		btnImprimer.setEnabled(true);
+		vuePlan.dessinerTournee(tournee);
 	}
 
-	/**
-	 * Méthode permettant de mettre en évidence sur l'affichage les points de
-	 * livraisons qui ne pourront pas être livrés dans la plage horaire demandée
-	 */
-	private void afficherDemandesTempsDepasse(List<DemandeDeLivraison> demandesTempsDepasse) {
-		if (this.demandesTempsDepasse == null) {
-			this.demandesTempsDepasse = new HashSet<Integer>();
-			Iterator<DemandeDeLivraison> it = demandesTempsDepasse.iterator();
-			while (it.hasNext()) {
-				Noeud noeud = it.next().getNoeud();
-				this.demandesTempsDepasse.add(noeud.getId());
-			}
-		}
-
-		for (Integer idNoeud : this.demandesTempsDepasse) {
-			int numPlage = noeudsALivrer.get(idNoeud);
-			Object[] cells = { points.get(idNoeud) };
-			plan.setCellStyle(
-					"shape=triangle;strokeWidth=2;fillColor=red;strokeColor="
-							+ couleurBordure[numPlage], cells);
-		}
-	}
 
 	/**
 	 * @param demandes
@@ -785,154 +650,30 @@ public class Fenetre extends JFrame implements Observer {
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
 	 */
 	public void afficherPlan(Set<Noeud> noeuds) {
-		tousNoeuds = noeuds;
-		
-		demandesTempsDepasse = new HashSet<Integer>();
-		noeudAAjouter = null;
-		pointSelectionne = null;
-		tourneeDessinee = false;
-
-		points = new HashMap<Integer, Object>();
-		Iterator<Noeud> it = noeuds.iterator();
-
-		Object parent = plan.getDefaultParent();
-		plan.getModel().beginUpdate();
-		plan.removeCells(plan.getChildCells(parent));
-
-		// On commence par placer les points
-		while (it.hasNext()) {
-			Noeud noeudCourant = it.next();
-			double x = noeudCourant.getX();
-			double y = noeudCourant.getY();
-			points.put(noeudCourant.getId(), plan.insertVertex(parent, "", "",
-					hX * x, hY * y, RAYON_NOEUD, RAYON_NOEUD, "fillColor="
-							+ couleurRemplissage[0] + ";strokeColor="
-							+ couleurBordure[0]));
-		}
-
-		// Puis on trace les tronçons
-		it = noeuds.iterator();
-		while (it.hasNext()) {
-			Noeud noeudCourant = it.next();
-
-			Iterator<Troncon> itTroncons = noeudCourant.getTronconSortants()
-					.iterator();
-			while (itTroncons.hasNext()) {
-				plan.insertEdge(parent, null, "",
-						points.get(noeudCourant.getId()),
-						points.get(itTroncons.next().getNoeudFin().getId()),
-						"strokeColor=" + couleurRemplissage[0]);
-			}
-
-		}
-
-		plan.getModel().endUpdate();
-
+		vuePlan.afficherPlan(noeuds);
 	}
 	
 	public void afficherPlan(Plan plan){
-		// facteur de mise à l'échelle
-		hY = (planComponent.getSize().getHeight() - 20)
-				/ plan.getMaxY();
-		hX = (planComponent.getSize().getWidth() - 20)
-				/ plan.getMaxY();
-		
+		vuePlan.calculeFacteurEchelle(plan.getMaxX(), plan.getMaxY());		
 		afficherPlan(plan.getToutNoeuds());
 	}
 	
+	public void afficherDemandesLivraisons(Tournee tournee){
+		vuePlan.afficherDemandesLivraisons(tournee);
+	}
+	
+	/**
+	 * Méthode appelant toutes les méthodes permettant de 
+	 * redessiner complètement le plan
+	 */
+	public void majTotale(Set<Noeud> noeuds, Tournee tournee){
+		afficherPlan(noeuds);
+		vuePlan.afficherDemandesLivraisons(tournee);
+		dessinerTournee(tournee);
+		majMenuHoraire(tournee.getPlagesHoraires());
+	}
 	
 
-	/**
-	 * Méthode renvoyant le noeud aux coordonnées passées en paramètre
-	 * 
-	 * @param x
-	 *            abscisse du point à tester
-	 * @param y
-	 *            ordonnée du point à tester
-	 * @return le noeud à ces coordonnées s'il existe
-	 */
-	private Noeud getNoeudA(int x, int y) {
-		if (points == null)
-			return null;
-		else {
-			Iterator<Noeud> it = tousNoeuds.iterator();
-			while (it.hasNext()) {
-				Noeud n = it.next();
-				double nX = n.getX() * hX;
-				double nY = n.getY() * hY;
-				if ((x > nX - TOLERANCE && x < nX + TOLERANCE)
-						&& (y > nY - TOLERANCE && y < nY + TOLERANCE)) {
-					return n;
-				}
-			}
-		}
-		return null;
-
-	}
-
-	/**
-	 * Change le point selectionné sur l'affichage : Déselectionne le point qui
-	 * était selectionné jusque là, et sélectionne le nouveau
-	 * 
-	 * @param nouvelleSelection
-	 */
-	private void changerPointSelectionne(Noeud nouvelleSelection) {
-
-		// On commence par déselectionner l'ancienne sélection
-		if (pointSelectionne != null) {
-			int idCouleur = (noeudsALivrer != null
-					&& noeudsALivrer.containsKey(pointSelectionne.getId()) ? noeudsALivrer
-					.get(pointSelectionne.getId()) : 0);
-			Object[] cells = { points.get(pointSelectionne.getId()) };
-			plan.setCellStyle("fillColor=" + couleurRemplissage[idCouleur]
-					+ ";strokeColor=" + couleurBordure[idCouleur], cells);
-		}
-		pointSelectionne = nouvelleSelection;
-
-		if (pointSelectionne != null) {
-			int idCouleur = (noeudsALivrer != null
-					&& noeudsALivrer.containsKey(nouvelleSelection.getId()) ? noeudsALivrer
-					.get(nouvelleSelection.getId()) : 0);
-			Object[] cells = { points.get(pointSelectionne.getId()) };
-			plan.setCellStyle("strokeColor=red;strokeWidth=3;fillColor="
-					+ couleurRemplissage[idCouleur], cells);
-		}
-	}
-
-	/**
-	 * Méthode permettant d'afficher d'une couleur différente les demandes de
-	 * livraison sur le plan
-	 */
-	public void afficherDemandesLivraisonsSurPlan(Tournee tournee) {
-		noeudsALivrer = new HashMap<Integer, Integer>();
-
-		// On réaffiche le plan proprement, sans point de livraison
-		afficherPlan(tousNoeuds);
-
-		if (tournee.getEntrepot() != null) {
-			entrepot = tournee.getEntrepot().getNoeud();
-
-			plan.insertVertex(plan.getDefaultParent(), "", "",
-					hX * entrepot.getX(), hY * entrepot.getY(),
-					RAYON_NOEUD + 6, RAYON_NOEUD + 6,
-					"shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow");
-		}
-
-		int numPlage = 1;
-		for (PlageHoraire plage : tournee.getPlagesHoraires()) {
-
-			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
-				int noeud = livraison.getNoeud().getId();
-				if(points.containsKey(noeud)){
-					Object[] cells = { points.get(noeud) };
-					plan.setCellStyle("fillColor=" + couleurRemplissage[numPlage]
-							+ ";strokeColor=" + couleurBordure[numPlage], cells);
-					noeudsALivrer.put(noeud, numPlage);
-				}
-			}
-			numPlage++;
-		}
-	}
 
 	/**
 	 * Methode permettant d'activer le bouton Charger les Horaires
@@ -988,16 +729,7 @@ public class Fenetre extends JFrame implements Observer {
 		JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
 	}
 	
-	/**
-	 * Méthode appelant toutes les méthodes permettant de 
-	 * redessiner complètement le plan
-	 */
-	public void majTotale(Set<Noeud> noeuds, Tournee tournee){
-		afficherPlan(noeuds);
-		afficherDemandesLivraisonsSurPlan(tournee);
-		dessinerTournee(tournee);
-		majMenuHoraire(tournee.getPlagesHoraires());
-	}
+
 
 
 }

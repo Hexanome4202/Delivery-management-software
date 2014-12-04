@@ -192,7 +192,7 @@ public class Controleur {
 					// TODO: display
 					System.out.println("fini");
 					fen.majMenuHoraire(tournee.getPlagesHoraires());
-					fen.afficherDemandesLivraisonsSurPlan(tournee);
+					fen.afficherDemandesLivraisons(tournee);
 					fen.activerCalculItineraire();
 					fen.setMessage("");
 				}
