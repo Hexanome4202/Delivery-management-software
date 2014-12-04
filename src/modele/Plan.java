@@ -131,15 +131,13 @@ public class Plan {
 	}
 
 	/**
-	 * 
+	 * Méthode qui construit un <code>Plan</code> à partir d'un élément XML
 	 * @param noeudDOMRacine
 	 *            element xml
-	 * @return
+	 * @return un code d'erreur spécifique ou 
+	 * PARSE_OK si aucune erreur n'est détectée
 	 */
 	public int construirePlanAPartirDeDOMXML(Element noeudDOMRacine) {
-		// TODO : gerer les erreurs de syntaxe dans le fichier XML
-		// lecture des attributs
-
 		// creation des Noeuds;
 		String tag = "Noeud";
 		NodeList liste = noeudDOMRacine.getElementsByTagName(tag);
