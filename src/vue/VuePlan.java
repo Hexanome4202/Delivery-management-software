@@ -324,6 +324,9 @@ public class VuePlan extends mxGraphComponent{
 	 */
 	public void resetDessinTournee(){
 		tourneeDessinee = false;
+		if(vueTournee != null){
+			vueTournee.reset(graph);
+		}
 	}
 
 }

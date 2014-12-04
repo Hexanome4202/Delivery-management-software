@@ -74,14 +74,7 @@ public class VueTournee {
 	}
 	
 	public void setTournee(Tournee tournee){
-		if(tournee != null){
-			
-			/*//On remet tous les noeuds en gris
-			Set<Integer> cles = vuesDemandeDeLivraison.keySet();
-			for (Integer cle : cles) {
-				vueNoeuds.get(cle).setColors(0);
-			}*/
-			
+		if(tournee != null){			
 			vuesDemandeDeLivraison.clear();
 			
 			chargerVuesDemandeDeLivraison(tournee);
@@ -184,9 +177,23 @@ public class VueTournee {
 
 	/**
 	 * 
-	 * @return
+	 * @return tournee
 	 */
 	public Tournee getTournee() {
 		return this.tournee;
+	}
+	
+	/**
+	 * Méthode permettant de supprimer toutes les demandes livraison et compagnie
+	 */
+	public void reset(mxGraph graph){
+		//On remet tous les noeuds en gris
+		Set<Integer> cles = vuesDemandeDeLivraison.keySet();
+		for (Integer cle : cles) {
+			vueNoeuds.get(cle).setColors(0);
+			vueNoeuds.get(cle).afficher(graph);
+		}
+		
+		vuesDemandeDeLivraison.clear();
 	}
 }

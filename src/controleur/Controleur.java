@@ -183,11 +183,12 @@ public class Controleur {
 			if (typeFichier.equals("horaires")) {
 				if (racine.getNodeName().equals("JourneeType")) {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
+					fen.resetDessinTournee();
 					fen.majMenuHoraire(tournee.getPlagesHoraires());
 					fen.afficherDemandesLivraisons(tournee);
 					fen.activerCalculItineraire();
 					fen.setMessage("");
-					fen.resetDessinTournee();
+					
 				}  else {
 					resultatConstruction = Codes.PARSE_ERROR;
 				}
@@ -195,11 +196,11 @@ public class Controleur {
 				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
 					if (!this.modeTests) {
+						fen.resetDessinTournee();
 						fen.afficherPlan(plan);
 						fen.activerChargementHoraires();
 						fen.setMessage("");
 						fen.majMenuHoraire(tournee.getPlagesHoraires());
-						fen.resetDessinTournee();
 					}
 				}  else {
 					resultatConstruction = Codes.PARSE_ERROR;
