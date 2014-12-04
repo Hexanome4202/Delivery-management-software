@@ -72,6 +72,7 @@ public class Controleur {
 		plan = new Plan();
 		this.fen = new Fenetre(this);
 		this.fen.setVisible(true);
+		this.fen.setTitle("Préparation et supervision des livraisons");
 		this.modeTests = false;
 		this.gestionnaire = new GestionnaireDeCommandes();
 	}
