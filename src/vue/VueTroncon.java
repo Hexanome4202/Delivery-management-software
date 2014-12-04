@@ -1,5 +1,6 @@
 package vue;
 
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
 /**
@@ -72,7 +73,9 @@ public class VueTroncon {
 		graph.insertEdge(graph.getDefaultParent(), null, "",
 				depart.getPoint(),
 				arrivee.getPoint(),
-				"strokeColor=" + couleur+";strokeWidth="+epaisseur);
+				"strokeColor=" + couleur+";strokeWidth="+epaisseur + ";edgeStyle=elbowEdgeStyle;elbow=horizontal;"
+						+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;"
+						+ mxConstants.STYLE_ROUNDED + "=1;");
 	}
 
 

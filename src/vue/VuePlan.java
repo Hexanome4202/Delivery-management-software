@@ -165,7 +165,7 @@ public class VuePlan extends mxGraphComponent{
 		VueEntrepot vueEntrepot = new VueEntrepot(vueTournee.getTournee().getEntrepot(), hX, hY);
 		vueEntrepot.afficher(graph);
 		vueNoeuds.put(entrepot.getId(), vueEntrepot);
-		vueTournee.setTournee(tournee);
+		vueTournee.setTournee(vueTournee.getTournee());
 		vueTournee.afficher(graph);
 		
 		System.out.println("On dessine la tournée");
