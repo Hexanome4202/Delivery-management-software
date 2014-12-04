@@ -6,21 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import modele.DemandeDeLivraison;
-import modele.Itineraire;
 import modele.Noeud;
-import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
-import modele.Troncon;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -86,7 +78,6 @@ public class Controleur {
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
-		fen.setBtnAnnulerEnabled(true);
 		fen.setMessage("");
 	}
 
@@ -113,7 +104,6 @@ public class Controleur {
 		fen.afficherDemandesLivraisonsSurPlan();
 		fen.dessinerTournee();
 		fen.majMenuHoraire();
-		fen.setBtnAnnulerEnabled(true);
 	}
 
 	/**
