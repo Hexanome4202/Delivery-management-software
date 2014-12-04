@@ -22,8 +22,6 @@ public class ControleurTest {
 
 	@Test
 	public void testGererFichierPlan() {
-		// TODO: debug toutTroncons (Plan)
-		// TODO: Gérer tous les cas identifiés dans les CUs
 		Controleur c = new Controleur();
 		c.gererFichier(new File("XML/testPlan.xml"), "plan");
 		
@@ -106,7 +104,6 @@ public class ControleurTest {
 	
 	@Test
 	public void testGererFichierLivraisons() {
-		// TODO: gérer tous les cas identifiés dans les CUs
 		Controleur c = new Controleur();
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
@@ -179,7 +176,6 @@ public class ControleurTest {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		//TODO sensé ignorer seulement la plage horaire fautive
 		assertEquals("Liste de plages horaires pas de la bonne taille...",1,c.getTournee().getPlagesHoraires().size());
 		assertEquals("Il ne reste pas la bonne plage horaire...",plage.getHeureDebut(),c.getTournee().getPlagesHoraires().get(0).getHeureDebut());
 		assertEquals("Il ne reste pas la bonne plage horaire...",plage.getHeureFin(),c.getTournee().getPlagesHoraires().get(0).getHeureFin());
@@ -224,14 +220,35 @@ public class ControleurTest {
 		c.gererFichier(new File("XML/errors/livraisonsLivraisonInvalide.xml"), "horaires");
 		
 		DemandeDeLivraison demande = new DemandeDeLivraison(1, c.getPlan().getNoeud(3), 621, null);
-		//TODO sensé ignorer seulement la livraison fautive
 		assertEquals(1,c.getTournee().getPlagesHoraires().size());
 		assertEquals(1,c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison().size());
 
-		//Object[] demandes = c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison().toArray();
-		//assertTrue(((DemandeDeLivraison)demandes[0]).compareTo(demande)==0);
-
 		List<DemandeDeLivraison> demandes = new ArrayList<DemandeDeLivraison>(c.getTournee().getPlagesHoraires().get(0).getDemandeLivraison());
 		assertTrue(demandes.get(0).compareTo(demande)==0);
+	}
+	
+	/**
+	 * Méthode qui teste les méthodes <code>undo()</code> et <code>redo()</code>
+	 */
+	@Test
+	public void testUndo(){
+		Controleur c = new Controleur();
+		c.gererFichier(new File("XML/plan2.xml"), "plan");
+		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
+		c.calculerTournee();
+		c.ajouterLivraison(15, c.getPlan().getNoeud(4), c.getPlan().getNoeud(1));
+		assertEquals(5,c.getTournee().getItineraires().size());
+		c.undo();
+		assertEquals(4,c.getTournee().getItineraires().size());
+		c.redo();
+		assertEquals(5,c.getTournee().getItineraires().size());
+		c.undo();
+		
+		c.supprimerLivraison(c.getPlan().getNoeud(1));
+		assertEquals(3,c.getTournee().getItineraires().size());
+		c.undo();
+		assertEquals(4,c.getTournee().getItineraires().size());
+		c.redo();
+		assertEquals(3,c.getTournee().getItineraires().size());
 	}
 }

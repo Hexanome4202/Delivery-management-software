@@ -131,15 +131,13 @@ public class Plan {
 	}
 
 	/**
-	 * 
+	 * Méthode qui construit un <code>Plan</code> à partir d'un élément XML
 	 * @param noeudDOMRacine
 	 *            element xml
-	 * @return
+	 * @return un code d'erreur spécifique ou 
+	 * PARSE_OK si aucune erreur n'est détectée
 	 */
 	public int construirePlanAPartirDeDOMXML(Element noeudDOMRacine) {
-		// TODO : gerer les erreurs de syntaxe dans le fichier XML
-		// lecture des attributs
-
 		// creation des Noeuds;
 		String tag = "Noeud";
 		NodeList liste = noeudDOMRacine.getElementsByTagName(tag);
@@ -224,7 +222,6 @@ public class Plan {
 			String tag = "LeTronconSortant";
 			NodeList listeNoeud = noeudElement.getElementsByTagName(tag);
 			Set<Troncon> setTroncons = new HashSet<Troncon>();
-			Boolean bool = true; // je sais pas si on a besoin
 			for (int j = 0; j < listeNoeud.getLength(); j++) {
 				Element tronconElement = (Element) listeNoeud.item(j);
 				String nomRue = tronconElement.getAttribute("nomRue");
@@ -248,9 +245,7 @@ public class Plan {
 
 						Troncon troncon = new Troncon(vitesse, longueur,
 								nomRue, noeudFin);
-						bool = setTroncons.add(troncon);
-						// TODO: afficher erreur si bool false (je crois que
-						// c'est pas necessaire)
+						setTroncons.add(troncon);
 					} else {
 						return Codes.ERREUR_302;
 					}

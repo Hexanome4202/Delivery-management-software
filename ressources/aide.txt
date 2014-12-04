@@ -1,0 +1,9 @@
+Pour pouvoir utiliser pleinement notre application, vous devez :
+1. Charger un plan à partir d'un fichier XML approprié et en cliquant sur "Ficher" puis "Charger le plan"
+2. Charger des livraisons compatibles avec ce plan, toujours à partir d'un fichier XML approprié, en cliquant sur "Fichier" puis "Charger les horaires"
+3. Appuyez sur le bouton "Calculer" pour calculer la tournée à effectuer
+
+Il vous est ensuite possible de :
+- Ajouter une livraison en cliquant sur un noeud non affecté à une livraison, puis sur le bouton "Ajouter" et enfin sur un noeud de livraison.
+- Supprimer un noeud de livraison en cliquant dessus puis sur le bouton "Supprimer".
+- Imprimer le feuille de route en appuyant sur le bouton "Imprimer".

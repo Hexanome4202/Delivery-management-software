@@ -70,6 +70,7 @@ public class Fenetre extends JFrame {
 	private JMenuItem actionAnnuler;
 	private JMenuItem actionRetablir;
 	private JMenuItem actionChargerHoraires;
+	private JMenuItem actionHelp;
 	
 	private javax.swing.JPanel horairesPannel;
 	private AccordionMenu menuHoraires;
@@ -367,7 +368,27 @@ public class Fenetre extends JFrame {
 		actionAnnuler.setEnabled(false);
 		actionRetablir.setEnabled(false);
 
-		JMenu menuAide = new JMenu("Aide");
+		JMenu menuAide = new JMenu("?");
+		actionHelp = new JMenuItem("Aide");
+		actionHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String message = "";
+				try(BufferedReader br = new BufferedReader(new FileReader("ressources/aide.txt"))) {
+			        StringBuilder sb = new StringBuilder();
+			        String line = br.readLine();
+
+			        while (line != null) {
+			            sb.append(line);
+			            sb.append(System.lineSeparator());
+			            line = br.readLine();
+			        }
+			        message = sb.toString();
+			        JOptionPane.showMessageDialog(null, message, "Aide", JOptionPane.INFORMATION_MESSAGE);
+			    } catch (IOException e1) {
+				}
+			}
+		});
 
 		actionChargerPlan.addActionListener(new ActionListener() {
 			@Override
@@ -417,6 +438,8 @@ public class Fenetre extends JFrame {
 		menuBar.add(menuFichier);
 		menuBar.add(menuEdition);
 		menuBar.add(menuAide);
+		
+		menuAide.add(actionHelp);
 
 		this.setJMenuBar(menuBar);
 	}
@@ -504,8 +527,9 @@ public class Fenetre extends JFrame {
 
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				menuHorairesMaj.addNewLeafTo("menu" + iteratorPlage, ""
-						+ livraison.getNoeud().getId(),
-						String.valueOf(livraison.getIdClient()));
+						+ livraison.getNoeud().getId(),"Client "+
+						String.valueOf(livraison.getIdClient()) +
+						" -> Livraison n°" + String.valueOf(livraison.getId()));
 			}
 			iteratorPlage++;
 		}
@@ -626,6 +650,14 @@ public class Fenetre extends JFrame {
 		}
 		return null;
 	}
+
+	/**
+	 * Affiche le plan à partir des données préalablement chargées depuis un XML
+	 * @param noeuds
+	 */
+	public void afficherPlan(Set<Noeud> noeuds) {
+		vuePlan.afficherPlan(noeuds);
+	}
 	
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
@@ -689,9 +721,12 @@ public class Fenetre extends JFrame {
 		controleur.genererFichierImpression(f);
 	}
 	
+	/**
+	 * Setter de l'attribut <code>Message</code>
+	 * @param message Message à afficher
+	 */
 	public void setMessage(String message){
 		this.message.setText(message);
-		System.out.println(message);
 	}
 	
 	/**
@@ -718,8 +753,4 @@ public class Fenetre extends JFrame {
 	public void afficherPopupErreur(String message, String titre){
 		JOptionPane.showMessageDialog(this, message, titre, JOptionPane.ERROR_MESSAGE);
 	}
-	
-
-
-
 }

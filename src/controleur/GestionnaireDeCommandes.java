@@ -1,4 +1,4 @@
-package commande;
+package controleur;
 
 import java.util.ArrayList;
 import java.util.List;

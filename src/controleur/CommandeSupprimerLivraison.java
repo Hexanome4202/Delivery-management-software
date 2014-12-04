@@ -1,4 +1,4 @@
-package commande;
+package controleur;
 
 import modele.DemandeDeLivraison;
 import modele.Noeud;
