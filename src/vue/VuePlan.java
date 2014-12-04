@@ -167,11 +167,15 @@ public class VuePlan extends mxGraphComponent{
     /**
 	 * Méthode permettant de dessiner la tournée
 	 */
-	public void dessinerTournee(Tournee tournee) {
+	public void dessinerTournee() {
 		noeudAAjouter = null;
 		noeudSelectionne = null;
 		
 		tourneeDessinee = true;		
+		entrepot = vueTournee.getTournee().getEntrepot().getNoeud();
+		VueEntrepot vueEntrepot = new VueEntrepot(vueTournee.getTournee().getEntrepot(), hX, hY);
+		vueEntrepot.afficher(graph);
+		vueNoeuds.put(entrepot.getId(), vueEntrepot);
 		vueTournee.setTournee(tournee);
 		vueTournee.afficher(graph);
 		

@@ -136,6 +136,10 @@ public class VueTournee {
 		}
 	}
 	
+	/**
+	 * Afficher le graphe
+	 * @param graph le graphe à afficher
+	 */
 	public void afficher(mxGraph graph){
 		if(tournee.getItineraires() != null){
 
@@ -179,8 +183,19 @@ public class VueTournee {
 		return vuesDemandeDeLivraison.containsKey(idNoeud);
 	}
 	
+	/**
+	 * 
+	 * @param idNoeud
+	 */
 	public void supprimerDemandeDeLivraison(int idNoeud){
 		vueNoeuds.get(idNoeud).setColors(0);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public Tournee getTournee() {
+		return this.tournee;
+	}
 }
