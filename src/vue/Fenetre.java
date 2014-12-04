@@ -652,6 +652,9 @@ public class Fenetre extends JFrame {
 	 */
 	public void afficherPlan(Set<Noeud> noeuds) {
 		vuePlan.afficherPlan();
+		btnAjouter.setEnabled(false);
+		btnSupprimer.setEnabled(false);
+		btnCalculer.setEnabled(false);
 	}
 	
 	/**
