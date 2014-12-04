@@ -172,10 +172,6 @@ public class VuePlan extends mxGraphComponent{
 		noeudSelectionne = null;
 		
 		tourneeDessinee = true;		
-		entrepot = tournee.getEntrepot().getNoeud();
-		VueEntrepot vueEntrepot = new VueEntrepot(tournee.getEntrepot(), hX, hY);
-		vueEntrepot.afficher(graph);
-		vueNoeuds.put(entrepot.getId(), vueEntrepot);
 		vueTournee.setTournee(tournee);
 		vueTournee.afficher(graph);
 		

@@ -6,6 +6,8 @@ import modele.DemandeDeLivraison;
 import modele.Noeud;
 
 public class VueEntrepot extends VueDemandeDeLivraison {
+	
+	private final int TAILLE = 15;
 
 	/**
 	 * @param noeud
@@ -16,19 +18,17 @@ public class VueEntrepot extends VueDemandeDeLivraison {
 	 */
 	public VueEntrepot(DemandeDeLivraison entrepot, double hX, double hY) {
 		super(entrepot, hX, hY, "yellow", "black");
+		modifierForme("shape=ellipse;"
+				, TAILLE);
 		System.out.println("Création Entrepot");
-	}
-
-	/* (non-Javadoc)
-	 * @see vue.VueNoeud#afficher(com.mxgraph.view.mxGraph)
+	}	
+	
+	/**
+	 * Renvoie la taille de la VueEntrepot
+	 * @return
 	 */
-	@Override
-	public void afficher(mxGraph graph) {
-		System.out.println("Affichage Entrepot");
-		super.afficher(graph,
-				"shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow");
+	public int getTaille(){
+		return TAILLE;
 	}
-	
-	
 
 }

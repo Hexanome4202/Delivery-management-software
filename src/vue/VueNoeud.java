@@ -21,9 +21,10 @@ public class VueNoeud {
 		"#b3560b", "#511155", "#0f5f6d", "#522828" };
 	
 	/**
-	 * Constante contenant le rayon du point représentant le noeud
+	 * Le rayon du point représentant le noeud
+	 * Vaut 10 par défaut, mais peut être modifié si besoin
 	 */
-	private final double RAYON_NOEUD = 10;
+	private double rayonNoeud = 10;
 	
 	/**
 	 * Le noeud à afficher
@@ -55,7 +56,10 @@ public class VueNoeud {
 	 */
 	private String couleurBordure;
 
-	
+	/**
+	 * Une String contenant un évenuel style pour le noeud
+	 */
+	private String style = null;
     
     /**
 	 * @param noeud
@@ -97,8 +101,10 @@ public class VueNoeud {
 	 */
 	public void afficher(mxGraph graph, String style ){
 		point = graph.insertVertex(graph.getDefaultParent(), "", "",
-				 x, y, RAYON_NOEUD, RAYON_NOEUD, 
+				 x, y, rayonNoeud, rayonNoeud, 
 				style);
+		
+		System.out.println("STYLE "+style);
     }
 	
 	/**
@@ -106,9 +112,13 @@ public class VueNoeud {
 	 * @param graph
 	 */
 	public void afficher(mxGraph graph){
-		afficher(graph, 
-				"fillColor=" + couleurRemplissage + 
-				";strokeColor=" + getCouleurBordure());
+		if(style == null || style!=""){
+			afficher(graph, 
+					"fillColor=" + couleurRemplissage + 
+					";strokeColor=" + getCouleurBordure());
+		}else{
+			afficher(graph, style);
+		}
 	}
 
     /**
@@ -143,8 +153,8 @@ public class VueNoeud {
 	 * @return boolean
 	 */
 	public boolean estLa(int x, int y){
-		return ((x > this.x - RAYON_NOEUD && x < this.x + RAYON_NOEUD)
-				&& (y > this.y - RAYON_NOEUD && y < this.y + RAYON_NOEUD));
+		return ((x > this.x - rayonNoeud && x < this.x + rayonNoeud)
+				&& (y > this.y - rayonNoeud && y < this.y + rayonNoeud));
 	}
 
 	/**
@@ -179,6 +189,24 @@ public class VueNoeud {
 		this.couleurRemplissage = COULEUR_REMPLISSAGE[numPlage];
 		this.couleurBordure = COULEUR_BORDURE[numPlage];
 		
+	}
+	
+	/**
+	 * Méthode permettant de modifier la forme d'une VueNoeud
+	 * @param style le style à lui appliquer
+	 * @param taille la taille qu'on veut lui donner
+	 */
+	public void modifierForme(String style, int taille){
+		this.style = style;
+		this.rayonNoeud = taille;
+	}
+	
+	/**
+	 * Renvoie le style spécifique de la VueNoeud
+	 * @return le style
+	 */
+	public String getStyle(){
+		return style;
 	}
     
 
