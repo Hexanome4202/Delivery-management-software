@@ -633,8 +633,13 @@ public class Fenetre extends JFrame {
 		// Note: source for ExampleFileFilter can be found in FileChooserDemo,
 		// under the demo/jfc directory in the JDK.
 		ExampleFileFilter filter = new ExampleFileFilter();
-		filter.addExtension("xml");
-		filter.setDescription("Fichier XML");
+		if(mode == 'o') {
+			filter.addExtension("xml");
+			filter.setDescription("Fichier XML");
+		} else if(mode == 'w') {
+			filter.addExtension("txt");
+			filter.setDescription("Fichier texte");
+		}
 		jFileChooserXML.setFileFilter(filter);
 		jFileChooserXML.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int returnVal;
@@ -720,7 +725,9 @@ public class Fenetre extends JFrame {
 	 */
 	public void genererFichierImpression() {
 		File f = ouvrirFichier('w');
-		controleur.genererFichierImpression(f);
+		if(f != null) {
+			controleur.genererFichierImpression(f);
+		}
 	}
 	
 	/**
