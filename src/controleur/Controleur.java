@@ -189,14 +189,13 @@ public class Controleur {
 			if (typeFichier.equals("horaires")) {
 				if (racine.getNodeName().equals("JourneeType")) {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
-					// TODO: display
-					System.out.println("fini");
 					fen.majMenuHoraire(tournee.getPlagesHoraires());
 					fen.afficherDemandesLivraisonsSurPlan(tournee);
 					fen.activerCalculItineraire();
 					fen.setMessage("");
+				}  else {
+					resultatConstruction = Codes.PARSE_ERROR;
 				}
-				// todo : traiter les erreurs
 			} else if (typeFichier.equals("plan")) {
 				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
@@ -205,11 +204,15 @@ public class Controleur {
 						fen.activerChargementHoraires();
 						fen.setMessage("");
 					}
+				}  else {
+					resultatConstruction = Codes.PARSE_ERROR;
 				}
 			}
 
-			if (!this.modeTests)
+			if (!this.modeTests) {
 				Codes.afficherErreurs(resultatConstruction);
+				this.fen.setMessage("");
+			}
 			return resultatConstruction;
 
 		} catch (ParserConfigurationException pce) {
