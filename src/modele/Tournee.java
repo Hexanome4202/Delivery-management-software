@@ -538,6 +538,9 @@ public class Tournee {
 	 * @return la liste des <code>DemandeDeLivraison</code> dont le temps est dépassé
 	 */
 	public List<DemandeDeLivraison> getDemandesTempsDepasse() {
+		if(itineraires == null || itineraires.size() < 1){
+			return null;
+		}
 		ArrayList<DemandeDeLivraison> demandesDepassees = new ArrayList<DemandeDeLivraison>();
 
 		GregorianCalendar dateLivreur = new GregorianCalendar();

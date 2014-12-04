@@ -641,6 +641,7 @@ public class Fenetre extends JFrame {
 	 * @param tournee
 	 */
 	public void afficherDemandesLivraisons(Tournee tournee){
+		vuePlan.setTournee(tournee);
 		vuePlan.afficherDemandesLivraisons(tournee);
 	}
 	

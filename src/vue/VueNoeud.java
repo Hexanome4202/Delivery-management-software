@@ -11,6 +11,14 @@ import modele.Noeud;
  * 
  */
 public class VueNoeud {
+	/**
+	 * Constantes contenant les couleurs de remplissage et de bordure 
+	 * des points de livraison en fonction de leur plage horaire
+	 */
+	public final static String[] COULEUR_REMPLISSAGE = { "#a7a7a7", "#4407a6",
+		"#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f" };
+	public final static String[] COULEUR_BORDURE = { "#838383", "#2d0968", "#0d7412",
+		"#b3560b", "#511155", "#0f5f6d", "#522828" };
 	
 	/**
 	 * Constante contenant le rayon du point représentant le noeud
@@ -65,6 +73,22 @@ public class VueNoeud {
 		this.couleurRemplissage = couleurRemplissage;
 		this.couleurBordure = couleurBordure;
 	}
+	
+	
+
+	/**
+	 * Constructeur de VueNoeud, ne prenant pas de couleur en paramètre
+	 * Par défaut, la couleur sera alors le gris des points du plan
+	 * @param noeud
+	 * @param x
+	 * @param y
+	 * @param point
+	 */
+	public VueNoeud(Noeud noeud, double x, double y) {
+		this(noeud, x, y, COULEUR_REMPLISSAGE[0], COULEUR_REMPLISSAGE[0]);
+	}
+
+
 
 	/**
 	 * Méthode permettant d'afficher le noeud
@@ -83,15 +107,22 @@ public class VueNoeud {
 	 */
 	public void afficher(mxGraph graph){
 		afficher(graph, 
-				"fillColor=" + couleurRemplissage +
-				";strokeColor=" + couleurBordure);
+				"fillColor=" + couleurRemplissage + 
+				";strokeColor=" + getCouleurBordure());
 	}
 
     /**
-     * 
+     * Met à jour l'affichage pour montrer que le noeud est sélectionné
      */
-    public void surbrillance() {
-        // TODO implement here
+    public void selectionner() {
+        
+    }
+    
+    /**
+     * Désélectionne le noeud
+     */
+    public void deselectionner(){
+    	
     }
 
 	/**
@@ -118,7 +149,15 @@ public class VueNoeud {
 	public Noeud getNoeud() {
 		return noeud;
 	}
-	
+
+
+
+	/**
+	 * @return the couleurBordure
+	 */
+	public String getCouleurBordure() {
+		return couleurBordure;
+	}
 	
     
 

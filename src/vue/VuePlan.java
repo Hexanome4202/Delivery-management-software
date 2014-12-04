@@ -29,17 +29,6 @@ import modele.Troncon;
 public class VuePlan extends mxGraphComponent{
 	
 	/**
-	 * Constantes contenant les couleurs de remplissage et de bordure 
-	 * des points de livraison en fonction de leur plage horaire
-	 */
-	public static final String[] COULEUR_REMPLISSAGE = { "#a7a7a7", "#4407a6",
-			"#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f" };
-	public static final String[] COULEUR_BORDURE = { "#838383", "#2d0968", "#0d7412",
-			"#b3560b", "#511155", "#0f5f6d", "#522828" };
-	
-
-	
-	/**
 	 * Facteurs de mise à l'échelle pour l'affichage sur le plan
 	 */
 	private double hY;
@@ -76,6 +65,8 @@ public class VuePlan extends mxGraphComponent{
 	 */
 	private Set<VueTroncon> vueTroncons;
 	
+	private VueTournee vueTournee;
+	
 	/**
 	 * L'id des noeuds à livrer associé au numéro de plage horaire
 	 */
@@ -86,11 +77,6 @@ public class VuePlan extends mxGraphComponent{
 	 * plage horaire demandée.
 	 */
 	private Set<Integer> demandesTempsDepasse;	
-	
-	/**
-	 * 
-	 */
-	private Controleur controleur;
 
     /**
      * 
@@ -115,15 +101,14 @@ public class VuePlan extends mxGraphComponent{
 
 		for (Noeud noeud : plan.getToutNoeuds()) {
 			vueNoeuds.put(noeud.getId(), 
-					new VueNoeud(noeud, hX, hY, COULEUR_REMPLISSAGE[0], COULEUR_BORDURE[0]));
+					new VueNoeud(noeud, hX, hY));
 		}
 		
 		for (Noeud noeud : plan.getToutNoeuds()) {
 			for (Troncon troncon : noeud.getTronconSortants()) {
 				vueTroncons.add(new VueTroncon(
 						vueNoeuds.get(noeud.getId()), 
-						vueNoeuds.get(troncon.getNoeudFin().getId()), 
-						COULEUR_REMPLISSAGE[0]));
+						vueNoeuds.get(troncon.getNoeudFin().getId())));
 			}
 			
 		}
@@ -149,7 +134,6 @@ public class VuePlan extends mxGraphComponent{
      */
     public void setNoeudAAjouter(){
     	noeudAAjouter = noeudSelectionne;
-    	System.out.println(noeudAAjouter + " == " + noeudSelectionne);
     }
     
     /**
@@ -172,82 +156,12 @@ public class VuePlan extends mxGraphComponent{
 	public void dessinerTournee(Tournee tournee) {
 		noeudAAjouter = null;
 		noeudSelectionne = null;
+
+		vueTournee.afficher(graph);
 		
-		List<DemandeDeLivraison> demandesTempsDepasse = tournee.getDemandesTempsDepasse();
-
-		Object parent = graph.getDefaultParent();
-
-		int noeudPrecedent = entrepot.getId();
-
-		ArrayList<Itineraire> itineraires = tournee.getItineraires();
-		Iterator<Itineraire> it = itineraires.iterator();
-
-		HashMap<String, Integer> noeudsTraverses = new HashMap<String, Integer>();
-
-		afficherDemandesTempsDepasse(demandesTempsDepasse);
-
-		while (it.hasNext()) {
-			Itineraire itineraire = it.next();
-			int idHoraire = 1;
-			try {
-				idHoraire = noeudsALivrer.get(itineraire.getDepart().getNoeud()
-						.getId());
-			} catch (Exception e) {
-			}
-			String color = COULEUR_BORDURE[idHoraire];
-
-			Iterator<Troncon> troncons = itineraire.getTronconsItineraire()
-					.iterator();
-			while (troncons.hasNext()) {
-				Troncon troncon = troncons.next();
-				String key = ""
-						+ Math.max(noeudPrecedent, troncon.getNoeudFin().getId())
-						+ "-"
-						+ Math.min(troncon.getNoeudFin().getId(), noeudPrecedent);
-
-				String edgeStyle = (noeudsTraverses.containsKey(key)) ? "edgeStyle=elbowEdgeStyle;elbow=horizontal;"
-						+ "exitX=0.5;exitY=1;exitPerimeter=1;entryX=0;entryY=0;entryPerimeter=1;"
-						+ mxConstants.STYLE_ROUNDED + "=1;"
-						: "";
-
-				graph.insertEdge(parent, null, "", vueNoeuds.get(noeudPrecedent).getPoint(),
-						vueNoeuds.get(troncon.getNoeudFin().getId()).getPoint(), edgeStyle
-								+ "strokeWidth=2;strokeColor=" + color);
-
-				if (noeudsTraverses.containsKey(key)) {
-					noeudsTraverses.put(key, noeudsTraverses.get(key) + 1);
-				} else {
-					noeudsTraverses.put(key, 1);
-				}
-
-				noeudPrecedent = troncon.getNoeudFin().getId();
-			}
-			tourneeDessinee = true;
-		}
+		System.out.println("On dessine la tournée");
 	}
 	
-	/**
-	 * Méthode permettant de mettre en évidence sur l'affichage les points de
-	 * livraisons qui ne pourront pas être livrés dans la plage horaire demandée
-	 */
-	public void afficherDemandesTempsDepasse(List<DemandeDeLivraison> demandesTempsDepasse) {
-		if (this.demandesTempsDepasse == null) {
-			this.demandesTempsDepasse = new HashSet<Integer>();
-			Iterator<DemandeDeLivraison> it = demandesTempsDepasse.iterator();
-			while (it.hasNext()) {
-				Noeud noeud = it.next().getNoeud();
-				this.demandesTempsDepasse.add(noeud.getId());
-			}
-		}
-
-		for (Integer idNoeud : this.demandesTempsDepasse) {
-			int numPlage = noeudsALivrer.get(idNoeud);
-			graph.setCellStyle(
-					"shape=triangle;strokeWidth=2;fillColor=red;strokeColor="
-							+ COULEUR_BORDURE[numPlage], 
-					new Object[] { vueNoeuds.get(idNoeud).getPoint() });
-		}
-	}
 	
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
@@ -259,9 +173,9 @@ public class VuePlan extends mxGraphComponent{
 		graph.removeCells(graph.getChildCells(graph.getDefaultParent()));
 
 		//On affiche d'abord tous les points
-		Set<Integer> cles = vueNoeuds.keySet();
-		for (Integer cle : cles) {
-			vueNoeuds.get(cle).afficher(graph);
+		Set<Integer> idNoeuds = vueNoeuds.keySet();
+		for (Integer idNoeud : idNoeuds) {
+			vueNoeuds.get(idNoeud).afficher(graph);
 		}
 		
 		for (VueTroncon vueTroncon : vueTroncons) {
@@ -269,7 +183,9 @@ public class VuePlan extends mxGraphComponent{
 		}
 
 		graph.getModel().endUpdate();
-
+		
+		System.out.println("On affiche le plan!");
+	
 	}
 	
 	/**
@@ -315,7 +231,8 @@ public class VuePlan extends mxGraphComponent{
 	 * @param nouvelleSelection
 	 */
 	public void changerPointSelectionne(Noeud nouvelleSelection) {
-
+		//TODO rendre possible la sélection de nouveau
+		/*
 		// On commence par déselectionner l'ancienne sélection
 		if (noeudSelectionne != null) {
 			int idCouleur = (noeudsALivrer != null
@@ -335,6 +252,7 @@ public class VuePlan extends mxGraphComponent{
 			graph.setCellStyle("strokeColor=red;strokeWidth=3;fillColor="
 					+ COULEUR_REMPLISSAGE[idCouleur], cells);
 		}
+		*/
 	}
 	
 	/**
@@ -346,29 +264,20 @@ public class VuePlan extends mxGraphComponent{
 
 		// On réaffiche le plan proprement, sans point de livraison
 		afficherPlan();
-
-		if (tournee.getEntrepot() != null) {
-			entrepot = tournee.getEntrepot().getNoeud();
-
-			vueNoeuds.put(entrepot.getId(), new VueEntrepot(entrepot, hX, hY));
-		}
-
-		int numPlage = 1;
-		for (PlageHoraire plage : tournee.getPlagesHoraires()) {
-
-			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
-				int noeud = livraison.getNoeud().getId();
-				if(vueNoeuds.containsKey(noeud)){
-					graph.setCellStyle("fillColor=" + COULEUR_REMPLISSAGE[numPlage]
-							+ ";strokeColor=" + COULEUR_BORDURE[numPlage],
-							new Object[] { vueNoeuds.get(noeud).getPoint() });
-					noeudsALivrer.put(noeud, numPlage);
-				}
-			}
-			numPlage++;
-		}
+		vueTournee.afficher(graph);
+		
+		System.out.println("On affiche les demandes de livraison");
+		
 	}
 	
+	
+	/**
+	 * @param vueTournee
+	 */
+	public void setTournee(Tournee tournee) {
+		this.vueTournee = new VueTournee(tournee, hX, hY, vueNoeuds);
+	}
+
 	/**
 	 * Méthode permettant de savoir si on doit ajouter un point ou non.
 	 * 

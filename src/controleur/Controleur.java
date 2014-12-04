@@ -69,7 +69,6 @@ public class Controleur {
 	 */
 	public Controleur() {
 		tournee = new Tournee();
-		vueTournee = new VueTournee(null);
 		plan = new Plan();
 		this.fen = new Fenetre(this);
 		this.fen.setVisible(true);

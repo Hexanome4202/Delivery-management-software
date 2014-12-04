@@ -2,6 +2,8 @@ package vue;
 
 import java.awt.Graphics;
 import java.awt.Shape;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -10,79 +12,147 @@ import javax.swing.text.Element;
 import javax.swing.text.Position.Bias;
 import javax.swing.text.View;
 
+import com.mxgraph.view.mxGraph;
+
 import modele.DemandeDeLivraison;
+import modele.Itineraire;
 import modele.Noeud;
+import modele.PlageHoraire;
+import modele.Tournee;
 
 /**
  * 
  */
-public class VueTournee extends View {
-
-
-    public VueTournee(Element elem) {
-		super(elem);
-		// TODO Auto-generated constructor stub
-	}
+public class VueTournee {
 
 	/**
-     * 
-     */
-    private Set<VueItineraire> vuesItineraire;
+	 * Liste des vues DemandeDeLivraison associées à l'id du noeud correspondant
+	 */
+	private HashMap<Integer, VueDemandeDeLivraison> vuesDemandeDeLivraison;
+	
+	/**
+	 * Liste des vuesItineraires
+	 */
+	private Set<VueItineraire> vuesItineraires;
+	
+	/**
+	 * La vue de l'entrepot
+	 */
+	private VueEntrepot vueEntrepot;
+	
+	/**
+	 * La tournée
+	 */
+	private Tournee tournee;
+	
+	/**
+	 * La liste des vueNoeuds associées à l'id du noeud, 
+	 * nécessaire pour tracer les tronçons
+	 */
+	HashMap<Integer, VueNoeud> vueNoeuds;
+	
+	/**
+	 * Facteurs de mise à l'échelle pour l'affichage sur le plan
+	 */
+	private double hY;
+	private double hX;
+	
 
-    /**
-     * 
-     */
-    private Set<VueDemandeDeLivraison> vuesDemandesDeLivraison;
-
-    /**
-     * 
-     */
-    private VuePlan vuePlan;
-
-    /**
-     * @param noeud
-     */
-    public void surbrillanceNoeud(Noeud noeud) {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    public void dessiner() {
-        // TODO implement here
-    }
-
-    /**
-     * @param demandes
-     */
-    public void creerVuesDemandeDeLivraison(List<DemandeDeLivraison> demandes) {
-        // TODO implement here
-    }
-
-	@Override
-	public float getPreferredSpan(int axis) {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * @param tournee
+	 */
+	public VueTournee(Tournee tournee, double hX, double hY, HashMap<Integer, VueNoeud> vueNoeuds) {
+		this.vueNoeuds = vueNoeuds;
+		vuesDemandeDeLivraison = new HashMap<Integer, VueDemandeDeLivraison>();
+		
+		this.hX = hX;
+		this.hY = hY;
+		
+		if(tournee != null){
+			this.tournee = tournee;
+			
+			if(tournee.getEntrepot() != null){
+				vueEntrepot = new VueEntrepot(tournee.getEntrepot(), hX, hY);
+			}
+		}
+		
+		chargerVuesDemandeDeLivraison(tournee);
 	}
-
-	@Override
-	public void paint(Graphics g, Shape allocation) {
-		// TODO Auto-generated method stub
+	
+	public void setTournee(Tournee tournee){
+		if(tournee != null){
+			this.tournee = tournee;
+			
+			if(tournee.getEntrepot() != null){
+				vueEntrepot = new VueEntrepot(tournee.getEntrepot(), hX, hY);
+			}
+			
+			int idPremierNoeud = vueEntrepot.getNoeud().getId();
+			
+			for (Itineraire itineraire : tournee.getItineraires()) {
+				String couleur = VueNoeud.COULEUR_BORDURE[vuesDemandeDeLivraison.get(idPremierNoeud).getNumPlage()];
+				vuesItineraires.add(
+						new VueItineraire(itineraire, vueNoeuds, idPremierNoeud, couleur));
+			}
+		}
+		
+		chargerVuesDemandeDeLivraison(tournee);
+			
 		
 	}
-
-	@Override
-	public Shape modelToView(int pos, Shape a, Bias b)
-			throws BadLocationException {
-		// TODO Auto-generated method stub
-		return null;
+	
+	private void chargerVuesDemandeDeLivraison(Tournee tournee){
+		int numPlage = 1;
+		for (PlageHoraire plage : tournee.getPlagesHoraires()) {
+			
+			for (DemandeDeLivraison demandeDeLivraison : plage.getDemandeLivraison()) {
+				VueDemandeDeLivraison vueDemande = new VueDemandeDeLivraison(demandeDeLivraison, hX, hY, numPlage);
+				if(tournee.getDemandesTempsDepasse()!= null && tournee.getDemandesTempsDepasse().contains(demandeDeLivraison)){
+					vueDemande.setTempsDepasse(true);
+				}
+				vuesDemandeDeLivraison.put(demandeDeLivraison.getNoeud().getId(), 
+						vueDemande);
+			}
+			numPlage ++;
+		}
 	}
-
-	@Override
-	public int viewToModel(float x, float y, Shape a, Bias[] biasReturn) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
+	public void afficher(mxGraph graph){
+		System.out.println("VueTournée 163 : on devrait afficher");
+		if(tournee.getItineraires() != null){
+			System.out.println("VueTournée 163 : On affiche les demandes de livraison IF");
+			//On indique aux DemandesDeLivraison au Temps Dépassé qu'elles le sont
+			if(tournee.getDemandesTempsDepasse()!= null){
+				for (DemandeDeLivraison demande : tournee.getDemandesTempsDepasse()) {
+					try{
+						vuesDemandeDeLivraison.get(demande.getNoeud().getId()).setTempsDepasse(true);
+					}catch(Exception e){ }
+				}
+			}
+			
+			//On affiche les demandes de livraison
+			Set<Integer> cles = vuesDemandeDeLivraison.keySet();
+			for (Integer cle : cles) {
+				System.out.println("Et une demande");
+				vuesDemandeDeLivraison.get(cle).afficher(graph);
+			}
+			
+			if(vuesItineraires != null){
+			
+				int idPremierNoeud = vueEntrepot.getNoeud().getId();
+				//puis on affiche l'itinéraire
+				for (VueItineraire vueItineraire : vuesItineraires) {
+					vueItineraire.afficher(graph);
+				}
+			}
+		}else{
+			System.out.println("VueTournée 163 : On affiche les demandes de livraison ELSE");
+			//On affiche seulement les demandes de livraison si la tournée n'est pas calculée
+			Set<Integer> cles = vuesDemandeDeLivraison.keySet();
+			for (Integer cle : cles) {
+				vuesDemandeDeLivraison.get(cle).afficher(graph);
+			}
+		}
+ 	}
 
 }

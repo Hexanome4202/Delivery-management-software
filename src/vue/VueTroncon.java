@@ -41,6 +41,15 @@ public class VueTroncon {
 		this.couleur = couleur;
 	}
 	
+	/**
+	 * @param depart
+	 * @param arrivee
+	 * @param couleur
+	 */
+	public VueTroncon(VueNoeud depart, VueNoeud arrivee) {
+		this(depart, arrivee, VueNoeud.COULEUR_REMPLISSAGE[0]);
+	}
+	
 	
 
 	/**
