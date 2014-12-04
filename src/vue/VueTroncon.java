@@ -1,7 +1,5 @@
 package vue;
 
-import java.util.*;
-
 import com.mxgraph.view.mxGraph;
 
 /**

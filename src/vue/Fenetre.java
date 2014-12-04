@@ -14,12 +14,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import javax.swing.GroupLayout;
@@ -38,19 +32,13 @@ import javax.swing.border.BevelBorder;
 
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
-import modele.Itineraire;
 import modele.Noeud;
 import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
-import modele.Troncon;
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionLeafItem;
 import b4.advancedgui.menu.AccordionMenu;
-
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.view.mxGraph;
 
 import controleur.Controleur;
 

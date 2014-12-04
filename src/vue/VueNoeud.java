@@ -1,8 +1,5 @@
 package vue;
 
-import java.util.*;
-
-import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
 
 import modele.Noeud;

@@ -1,23 +1,13 @@
 package vue;
 
-import java.awt.Graphics;
-import java.awt.Shape;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
-import javax.swing.text.Position.Bias;
-import javax.swing.text.View;
 
 import com.mxgraph.view.mxGraph;
 
 import modele.DemandeDeLivraison;
 import modele.Itineraire;
-import modele.Noeud;
 import modele.PlageHoraire;
 import modele.Tournee;
 
@@ -156,8 +146,7 @@ public class VueTournee {
 				vuesDemandeDeLivraison.get(cle).afficher(graph, vueNoeuds.get(cle).getPoint());
 			}
 			
-			if(vuesItineraires != null && vueEntrepot!=null){			
-				int idPremierNoeud = vueEntrepot.getNoeud().getId();
+			if(vuesItineraires != null && vueEntrepot!=null){
 				//puis on affiche l'itinéraire
 				for (VueItineraire vueItineraire : vuesItineraires) {
 					vueItineraire.afficher(graph);

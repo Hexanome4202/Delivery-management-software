@@ -3,7 +3,6 @@ package vue;
 import com.mxgraph.view.mxGraph;
 
 import modele.DemandeDeLivraison;
-import modele.Noeud;
 
 /**
  * 
@@ -89,6 +88,13 @@ public class VueDemandeDeLivraison extends VueNoeud{
 	public int getNumPlage() {
 		return numPlage;
 	}	
+	
+	/**
+	 * @return la <code>DemandeDeLivraison</code>
+	 */
+	public DemandeDeLivraison getDemandeDeLivraison() {
+		return this.demandeDeLivraison;
+	}
 	
 	
 

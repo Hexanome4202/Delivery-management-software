@@ -5,7 +5,6 @@ import java.util.*;
 import com.mxgraph.view.mxGraph;
 
 import modele.Itineraire;
-import modele.Noeud;
 import modele.Troncon;
 
 /**
@@ -14,24 +13,15 @@ import modele.Troncon;
 public class VueItineraire {
 	
 	/**
-	 * L'itinéraire
+	 * <code>Set</code> de <code>Troncon</code>
 	 */
-	private Itineraire itineraire;
-	
 	private Set<VueTroncon> vuesTroncons;
-	
-	/**
-	 * La couleur de l'itinéraire
-	 */
-	private String couleur;
 	
     /**
 	 * @param itineraire
 	 * @param couleur
 	 */
 	public VueItineraire(Itineraire itineraire, HashMap<Integer, VueNoeud> vueNoeuds, int idPremierNoeud, String couleur) {
-		this.itineraire = itineraire;
-		this.couleur = couleur;
 		vuesTroncons = new HashSet<VueTroncon>();
 		
 		VueNoeud noeudPrecedent = vueNoeuds.get(idPremierNoeud);

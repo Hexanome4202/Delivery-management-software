@@ -1,24 +1,13 @@
 package vue;
 
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
-import controleur.Controleur;
-import modele.DemandeDeLivraison;
-import modele.Itineraire;
 import modele.Noeud;
-import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
 import modele.Troncon;
