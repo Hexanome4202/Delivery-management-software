@@ -14,7 +14,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.GroupLayout;
@@ -621,18 +620,22 @@ public class Fenetre extends JFrame {
 		jFileChooserXML = new JFileChooser();
 		// Note: source for ExampleFileFilter can be found in FileChooserDemo,
 		// under the demo/jfc directory in the JDK.
-		ExampleFileFilter filter = new ExampleFileFilter();
-		filter.addExtension("xml");
-		filter.setDescription("Fichier XML");
-		jFileChooserXML.setFileFilter(filter);
+		ExampleFileFilter filterCharger = new ExampleFileFilter();
+		ExampleFileFilter filterSave= new libs.ExampleFileFilter("txt","Fichier Texte");
+		filterCharger.addExtension("xml");
+		filterCharger.setDescription("Fichier XML");
+		jFileChooserXML.setFileFilter(filterCharger);
 		jFileChooserXML.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int returnVal;
 		if (mode == 'o') {
-			if (repertoireActuel != null)
+			if (repertoireActuel != null){
 				jFileChooserXML.setCurrentDirectory(new File(repertoireActuel));
+			}
 			returnVal = jFileChooserXML.showOpenDialog(null);
-		} else
+		} else{
+			jFileChooserXML.setFileFilter(filterSave);
 			returnVal = jFileChooserXML.showSaveDialog(null);
+		}
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			repertoireActuel = jFileChooserXML.getSelectedFile()
 					.getAbsolutePath();
@@ -710,7 +713,11 @@ public class Fenetre extends JFrame {
 	 */
 	public void genererFichierImpression() {
 		File f = ouvrirFichier('w');
-		controleur.genererFichierImpression(f);
+		try {
+			controleur.genererFichierImpression(f);
+		} catch (NullPointerException e) {
+
+		}
 	}
 	
 	/**
