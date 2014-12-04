@@ -17,6 +17,11 @@ public class VueItineraire {
 	 */
 	private Set<VueTroncon> vuesTroncons;
 	
+	/**
+	 * Constante contenant l'épaisseur des tronçons d'itinéraire
+	 */
+	private final int EPAISSEUR = 2;
+	
     /**
 	 * @param itineraire
 	 * @param couleur
@@ -27,7 +32,7 @@ public class VueItineraire {
 		VueNoeud noeudPrecedent = vueNoeuds.get(idPremierNoeud);
 		for (Troncon troncon : itineraire.getTronconsItineraire()) {
 			vuesTroncons.add(new VueTroncon(noeudPrecedent,
-						vueNoeuds.get(troncon.getNoeudFin().getId()), couleur, 3));
+						vueNoeuds.get(troncon.getNoeudFin().getId()), couleur, EPAISSEUR));
 			noeudPrecedent = vueNoeuds.get(troncon.getNoeudFin().getId());
 		}
 	}
@@ -38,9 +43,9 @@ public class VueItineraire {
 	/**
      * Méthode permettant d'afficher l'itinéraire
      */
-    public void afficher(mxGraph graph) {
+    public void afficher(mxGraph graph, HashMap<String, Integer> tronconsTraverses) {
         for (VueTroncon vueTroncon : vuesTroncons) {
-			vueTroncon.afficher(graph);
+			vueTroncon.afficher(graph, tronconsTraverses);
 		}
     }
 

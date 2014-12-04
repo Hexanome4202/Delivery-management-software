@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
+import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
 
 import modele.Noeud;
 import modele.Plan;
@@ -100,6 +101,7 @@ public class VuePlan extends mxGraphComponent{
     	vueNoeuds.clear();
     	vueTroncons.clear();
     	vueNoeuds.clear();
+    	tourneeDessinee = false;
 
 		for (Noeud noeud : plan.getToutNoeuds()) {
 			vueNoeuds.put(noeud.getId(), 
@@ -238,6 +240,7 @@ public class VuePlan extends mxGraphComponent{
 	 */
 	public void changerPointSelectionne(Noeud nouvelleSelection) {
 		if (noeudSelectionne != null) {
+			if(vueNoeuds.get(noeudSelectionne.getId()) != null)
 			vueNoeuds.get(noeudSelectionne.getId()).deselectionner(graph);
 		}
 		
@@ -245,8 +248,19 @@ public class VuePlan extends mxGraphComponent{
 		if (noeudSelectionne != null) {
 			vueNoeuds.get(nouvelleSelection.getId()).selectionner(graph);
 		}
-		
 	}
+	
+	/**
+	 * Change le point selectionné sur l'affichage : Déselectionne le point qui
+	 * était selectionné jusque là, et sélectionne le nouveau
+	 * 
+	 * @param idNouvelleSelection
+	 */
+	public void changerPointSelectionne(int idNouvelleSelection) {
+		changerPointSelectionne(vueNoeuds.get(idNouvelleSelection).getNoeud());
+	}
+	
+	
 	
 	/**
 	 * Méthode permettant d'afficher d'une couleur différente les demandes de
@@ -308,6 +322,13 @@ public class VuePlan extends mxGraphComponent{
 	 */
 	public boolean etatBtnSupprimer(Noeud noeud){
 		return tourneeDessinee && vueTournee.estDemandeDeLivraison(noeud.getId());
+	}
+	
+	/**
+	 * Méthode permettant de préciser à la VuePlan que la tournee n'est plus dessinée
+	 */
+	public void resetDessinTournee(){
+		tourneeDessinee = false;
 	}
 
 }

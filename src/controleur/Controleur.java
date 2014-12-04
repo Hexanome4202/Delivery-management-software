@@ -187,6 +187,7 @@ public class Controleur {
 					fen.afficherDemandesLivraisons(tournee);
 					fen.activerCalculItineraire();
 					fen.setMessage("");
+					fen.resetDessinTournee();
 				}  else {
 					resultatConstruction = Codes.PARSE_ERROR;
 				}
@@ -198,6 +199,7 @@ public class Controleur {
 						fen.activerChargementHoraires();
 						fen.setMessage("");
 						fen.majMenuHoraire(tournee.getPlagesHoraires());
+						fen.resetDessinTournee();
 					}
 				}  else {
 					resultatConstruction = Codes.PARSE_ERROR;

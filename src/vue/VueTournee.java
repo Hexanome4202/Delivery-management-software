@@ -150,8 +150,10 @@ public class VueTournee {
 			
 			if(vuesItineraires != null && vueEntrepot!=null){
 				//puis on affiche l'itinéraire
+				HashMap<String, Integer> tronconsTraverses = new HashMap<String, Integer>();
+				
 				for (VueItineraire vueItineraire : vuesItineraires) {
-					vueItineraire.afficher(graph);
+					vueItineraire.afficher(graph, tronconsTraverses);
 				}
 			}
 		}else{

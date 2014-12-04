@@ -440,6 +440,7 @@ public class Fenetre extends JFrame {
 		btnCalculer = new JButton("Calculer");
 		btnCalculer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				vuePlan.changerPointSelectionne(null);
 				controleur.calculerTournee();
 			}
 		});
@@ -528,8 +529,13 @@ public class Fenetre extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				AccordionItem item = (AccordionItem) e.getSource();
-				vuePlan.changerPointSelectionne(controleur.getPlan().getNoeud(
-						Integer.parseInt(item.getName())));
+				try{
+					int idNoeudSelectionne = Integer.parseInt(item.getName());
+					vuePlan.changerPointSelectionne(idNoeudSelectionne);
+					btnSupprimer.setEnabled(true);
+				}catch(Exception exception){
+				}
+
 			}
 		};
 
@@ -655,6 +661,7 @@ public class Fenetre extends JFrame {
 		btnAjouter.setEnabled(false);
 		btnSupprimer.setEnabled(false);
 		btnCalculer.setEnabled(false);
+		btnImprimer.setEnabled(false);
 	}
 	
 	/**
@@ -664,6 +671,9 @@ public class Fenetre extends JFrame {
 	public void afficherPlan(Plan plan){
 		vuePlan.setPlan(plan);		
 		vuePlan.afficherPlan();
+		btnAjouter.setEnabled(false);
+		btnSupprimer.setEnabled(false);
+		btnCalculer.setEnabled(false);
 	}
 	
 	/**
@@ -753,5 +763,15 @@ public class Fenetre extends JFrame {
 	 */
 	public void afficherPopupErreur(String message, String titre){
 		JOptionPane.showMessageDialog(this, message, titre, JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/**
+	 * Méthode permettant de prévenir la VuePlan que la tournée n'est plus dessinée
+	 */
+	public void resetDessinTournee(){
+		vuePlan.resetDessinTournee();
+		btnAjouter.setEnabled(false);
+		btnSupprimer.setEnabled(false);
+		btnImprimer.setEnabled(false);
 	}
 }
