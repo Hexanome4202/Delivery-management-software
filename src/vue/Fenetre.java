@@ -626,23 +626,14 @@ public class Fenetre extends JFrame {
 		}
 		return null;
 	}
-
-
-	/**
-	 * Affiche le plan à partir des données préalablement chargées depuis un XML
-	 * @param noeuds
-	 */
-	public void afficherPlan(Set<Noeud> noeuds) {
-		vuePlan.afficherPlan(noeuds);
-	}
 	
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
 	 * @param plan
 	 */
 	public void afficherPlan(Plan plan){
-		vuePlan.calculeFacteurEchelle(plan.getMaxX(), plan.getMaxY());		
-		afficherPlan(plan.getToutNoeuds());
+		vuePlan.setPlan(plan);		
+		vuePlan.afficherPlan();
 	}
 	
 	/**
@@ -659,8 +650,9 @@ public class Fenetre extends JFrame {
 	 * @param noeuds
 	 * @param tournee
 	 */
-	public void majTotale(Set<Noeud> noeuds, Tournee tournee){
-		afficherPlan(noeuds);
+	public void majTotale(Plan plan, Tournee tournee){
+		vuePlan.setPlan(plan);
+		vuePlan.afficherPlan();
 		vuePlan.afficherDemandesLivraisons(tournee);
 		dessinerTournee(tournee);
 		majMenuHoraire(tournee.getPlagesHoraires());

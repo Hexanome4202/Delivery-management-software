@@ -19,6 +19,7 @@ import modele.DemandeDeLivraison;
 import modele.Itineraire;
 import modele.Noeud;
 import modele.PlageHoraire;
+import modele.Plan;
 import modele.Tournee;
 import modele.Troncon;
 
@@ -31,26 +32,18 @@ public class VuePlan extends mxGraphComponent{
 	 * Constantes contenant les couleurs de remplissage et de bordure 
 	 * des points de livraison en fonction de leur plage horaire
 	 */
-	private final String[] COULEUR_REMPLISSAGE = { "#a7a7a7", "#4407a6",
+	public static final String[] COULEUR_REMPLISSAGE = { "#a7a7a7", "#4407a6",
 			"#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f" };
-	private final String[] COULEUR_BORDURE = { "#838383", "#2d0968", "#0d7412",
+	public static final String[] COULEUR_BORDURE = { "#838383", "#2d0968", "#0d7412",
 			"#b3560b", "#511155", "#0f5f6d", "#522828" };
 	
-	/**
-	 * Constante contenant le rayon du point représentant le noeud
-	 */
-	private final double RAYON_NOEUD = 10;
+
 	
 	/**
 	 * Facteurs de mise à l'échelle pour l'affichage sur le plan
 	 */
 	private double hY;
 	private double hX;
-	
-	/**
-	 * La liste des points affichés sur le plan
-	 */
-	private HashMap<Integer, Object> points;
 	
 	/**
 	 * Le noeud actuellement selectionné
@@ -74,9 +67,14 @@ public class VuePlan extends mxGraphComponent{
 	private boolean tourneeDessinee = false;
 	
 	/**
-	 * L'ensemble des <code>Noeud</code> du plan
+	 * L'ensemble des <code>VueNoeud</code> du plan
 	 */
-	private Set<Noeud> tousNoeuds = new HashSet<Noeud>();
+	private HashMap<Integer, VueNoeud> vueNoeuds;
+	
+	/**
+	 * L'ensemble des <code>VueTroncon</code> du plan
+	 */
+	private Set<VueTroncon> vueTroncons;
 	
 	/**
 	 * L'id des noeuds à livrer associé au numéro de plage horaire
@@ -101,6 +99,34 @@ public class VuePlan extends mxGraphComponent{
     	super(new mxGraph());
     	//this.controleur = controleur;
     	setParamsPlan();
+    	
+		noeudAAjouter = null;
+		noeudSelectionne = null;
+		tourneeDessinee = false;
+		
+		vueNoeuds = new HashMap<Integer, VueNoeud>();
+		vueTroncons = new HashSet<VueTroncon>();
+		
+		demandesTempsDepasse = new HashSet<Integer>();
+    }
+    
+    public void setPlan(Plan plan){
+    	calculeFacteurEchelle(plan.getMaxX(), plan.getMaxY());
+
+		for (Noeud noeud : plan.getToutNoeuds()) {
+			vueNoeuds.put(noeud.getId(), 
+					new VueNoeud(noeud, hX, hY, COULEUR_REMPLISSAGE[0], COULEUR_BORDURE[0]));
+		}
+		
+		for (Noeud noeud : plan.getToutNoeuds()) {
+			for (Troncon troncon : noeud.getTronconSortants()) {
+				vueTroncons.add(new VueTroncon(
+						vueNoeuds.get(noeud.getId()), 
+						vueNoeuds.get(troncon.getNoeudFin().getId()), 
+						COULEUR_REMPLISSAGE[0]));
+			}
+			
+		}
     }
     
     /**
@@ -184,8 +210,8 @@ public class VuePlan extends mxGraphComponent{
 						+ mxConstants.STYLE_ROUNDED + "=1;"
 						: "";
 
-				graph.insertEdge(parent, null, "", points.get(noeudPrecedent),
-						points.get(troncon.getNoeudFin().getId()), edgeStyle
+				graph.insertEdge(parent, null, "", vueNoeuds.get(noeudPrecedent).getPoint(),
+						vueNoeuds.get(troncon.getNoeudFin().getId()).getPoint(), edgeStyle
 								+ "strokeWidth=2;strokeColor=" + color);
 
 				if (noeudsTraverses.containsKey(key)) {
@@ -219,53 +245,27 @@ public class VuePlan extends mxGraphComponent{
 			graph.setCellStyle(
 					"shape=triangle;strokeWidth=2;fillColor=red;strokeColor="
 							+ COULEUR_BORDURE[numPlage], 
-					new Object[] { points.get(idNoeud) });
+					new Object[] { vueNoeuds.get(idNoeud).getPoint() });
 		}
 	}
 	
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
 	 */
-	public void afficherPlan(Set<Noeud> noeuds) {
-		tousNoeuds = noeuds;
+	public void afficherPlan() {
 		
-		demandesTempsDepasse = new HashSet<Integer>();
-		noeudAAjouter = null;
-		noeudSelectionne = null;
-		tourneeDessinee = false;
-
-		points = new HashMap<Integer, Object>();
-		Iterator<Noeud> it = noeuds.iterator();
-
-		Object parent = graph.getDefaultParent();
 		graph.getModel().beginUpdate();
-		graph.removeCells(graph.getChildCells(parent));
+		//On commence par supprimer tout ce qui était affiché précédemment
+		graph.removeCells(graph.getChildCells(graph.getDefaultParent()));
 
-		// On commence par placer les points
-		while (it.hasNext()) {
-			Noeud noeudCourant = it.next();
-			double x = noeudCourant.getX();
-			double y = noeudCourant.getY();
-			points.put(noeudCourant.getId(), graph.insertVertex(parent, "", "",
-					hX * x, hY * y, RAYON_NOEUD, RAYON_NOEUD, "fillColor="
-							+ COULEUR_REMPLISSAGE[0] + ";strokeColor="
-							+ COULEUR_BORDURE[0]));
+		//On affiche d'abord tous les points
+		Set<Integer> cles = vueNoeuds.keySet();
+		for (Integer cle : cles) {
+			vueNoeuds.get(cle).afficher(graph);
 		}
-
-		// Puis on trace les tronçons
-		it = noeuds.iterator();
-		while (it.hasNext()) {
-			Noeud noeudCourant = it.next();
-
-			Iterator<Troncon> itTroncons = noeudCourant.getTronconSortants()
-					.iterator();
-			while (itTroncons.hasNext()) {
-				graph.insertEdge(parent, null, "",
-						points.get(noeudCourant.getId()),
-						points.get(itTroncons.next().getNoeudFin().getId()),
-						"strokeColor=" + COULEUR_REMPLISSAGE[0]);
-			}
-
+		
+		for (VueTroncon vueTroncon : vueTroncons) {
+			vueTroncon.afficher(graph);
 		}
 
 		graph.getModel().endUpdate();
@@ -278,7 +278,7 @@ public class VuePlan extends mxGraphComponent{
 	 * @param xMax
 	 * @param yMax
 	 */
-	public void calculeFacteurEchelle(int xMax, int yMax){
+	private void calculeFacteurEchelle(int xMax, int yMax){
 		hY = (getSize().getHeight() - 20)
 				/ yMax;
 		hX = (getSize().getWidth() - 20)
@@ -295,17 +295,13 @@ public class VuePlan extends mxGraphComponent{
 	 * @return le noeud à ces coordonnées s'il existe
 	 */
 	public Noeud getNoeudA(int x, int y) {
-		if (points == null)
+		if (vueNoeuds == null)
 			return null;
 		else {
-			Iterator<Noeud> it = tousNoeuds.iterator();
-			while (it.hasNext()) {
-				Noeud n = it.next();
-				double nX = n.getX() * hX;
-				double nY = n.getY() * hY;
-				if ((x > nX - RAYON_NOEUD && x < nX + RAYON_NOEUD)
-						&& (y > nY - RAYON_NOEUD && y < nY + RAYON_NOEUD)) {
-					return n;
+			Set<Integer> cles = vueNoeuds.keySet();
+			for (Integer cle : cles) {
+				if(vueNoeuds.get(cle).estLa(x, y)){
+					return  vueNoeuds.get(cle).getNoeud();
 				}
 			}
 		}
@@ -325,7 +321,7 @@ public class VuePlan extends mxGraphComponent{
 			int idCouleur = (noeudsALivrer != null
 					&& noeudsALivrer.containsKey(noeudSelectionne.getId()) ? noeudsALivrer
 					.get(noeudSelectionne.getId()) : 0);
-			Object[] cells = { points.get(noeudSelectionne.getId()) };
+			Object[] cells = { vueNoeuds.get(noeudSelectionne.getId()).getPoint() };
 			graph.setCellStyle("fillColor=" + COULEUR_REMPLISSAGE[idCouleur]
 					+ ";strokeColor=" + COULEUR_BORDURE[idCouleur], cells);
 		}
@@ -335,7 +331,7 @@ public class VuePlan extends mxGraphComponent{
 			int idCouleur = (noeudsALivrer != null
 					&& noeudsALivrer.containsKey(nouvelleSelection.getId()) ? noeudsALivrer
 					.get(nouvelleSelection.getId()) : 0);
-			Object[] cells = { points.get(noeudSelectionne.getId()) };
+			Object[] cells = { vueNoeuds.get(noeudSelectionne.getId()).getPoint() };
 			graph.setCellStyle("strokeColor=red;strokeWidth=3;fillColor="
 					+ COULEUR_REMPLISSAGE[idCouleur], cells);
 		}
@@ -349,15 +345,12 @@ public class VuePlan extends mxGraphComponent{
 		noeudsALivrer = new HashMap<Integer, Integer>();
 
 		// On réaffiche le plan proprement, sans point de livraison
-		afficherPlan(tousNoeuds);
+		afficherPlan();
 
 		if (tournee.getEntrepot() != null) {
 			entrepot = tournee.getEntrepot().getNoeud();
 
-			graph.insertVertex(graph.getDefaultParent(), "", "",
-					hX * entrepot.getX(), hY * entrepot.getY(),
-					RAYON_NOEUD + 6, RAYON_NOEUD + 6,
-					"shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow");
+			vueNoeuds.put(entrepot.getId(), new VueEntrepot(entrepot, hX, hY));
 		}
 
 		int numPlage = 1;
@@ -365,10 +358,10 @@ public class VuePlan extends mxGraphComponent{
 
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				int noeud = livraison.getNoeud().getId();
-				if(points.containsKey(noeud)){
+				if(vueNoeuds.containsKey(noeud)){
 					graph.setCellStyle("fillColor=" + COULEUR_REMPLISSAGE[numPlage]
 							+ ";strokeColor=" + COULEUR_BORDURE[numPlage],
-							new Object[] { points.get(noeud) });
+							new Object[] { vueNoeuds.get(noeud).getPoint() });
 					noeudsALivrer.put(noeud, numPlage);
 				}
 			}
