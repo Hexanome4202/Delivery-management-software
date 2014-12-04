@@ -416,31 +416,4 @@ public class VuePlan extends mxGraphComponent{
 		return tourneeDessinee && noeudsALivrer.containsKey(noeud.getId());
 	}
 
-    
-    
-    //==================================== ANCIEN==============
-
-
-
-
-
-
-
-	/**
-     * 
-     */
-    private Set<VueTroncon> vuesTroncons;
-
-    /**
-     * 
-     */
-    private Set<VueNoeud> vuesNoeud;
-
-    /**
-     * @param noeud
-     */
-    public void surbrillanceNoeud(Noeud noeud) {
-        // TODO implement here
-    }
-
 }
