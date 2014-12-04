@@ -63,11 +63,11 @@ public class Controleur {
 	 */
 	public Controleur() {
 		tournee = new Tournee();
-		vueTournee = new VueTournee(null);
 		plan = new Plan();
 		this.fen = new Fenetre(this);
 		this.fen.setTitle("Préparation et supervision des livraisons");
 		this.fen.setVisible(true);
+		this.fen.setTitle("Préparation et supervision des livraisons");
 		this.modeTests = false;
 		this.gestionnaire = new GestionnaireDeCommandes();
 	}
@@ -123,7 +123,7 @@ public class Controleur {
 		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
-		fen.majTotale(plan.getToutNoeuds(), tournee);
+		fen.majTotale(plan, tournee);
 		fen.setBtnAnnulerEnabled(true);
 		fen.setMessage("");
 	}
@@ -148,7 +148,7 @@ public class Controleur {
 		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
-		fen.majTotale(plan.getToutNoeuds(), tournee);;
+		fen.majTotale(plan, tournee);
 		fen.setBtnAnnulerEnabled(true);
 		fen.setMessage("");
 	}
@@ -274,7 +274,7 @@ public class Controleur {
 	public void undo() {
 		if (gestionnaire.annulerDerniereCommande()) {
 			testBoutonsAnnulerRetablir();
-			fen.majTotale(plan.getToutNoeuds(), tournee);
+			fen.majTotale(plan, tournee);
 		}else{
 			fen.afficherPopupErreur("Undo n'est pas possible!","Erreur 151");
 		}
@@ -286,7 +286,7 @@ public class Controleur {
 	public void redo() {
 		if (gestionnaire.refaireCommandeAnnulee()) {
 			testBoutonsAnnulerRetablir();
-			fen.majTotale(plan.getToutNoeuds(), tournee);
+			fen.majTotale(plan, tournee);
 		} else {
 			fen.afficherPopupErreur("Redo n'est pas possible!", "Erreur 152");
 		}
