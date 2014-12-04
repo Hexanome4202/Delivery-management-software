@@ -719,7 +719,8 @@ public class Fenetre extends JFrame {
 	public void afficherPopupErreur(String message, String titre){
 		JOptionPane.showMessageDialog(this, message, titre, JOptionPane.ERROR_MESSAGE);
 	}
-	
+
+
 
 
 

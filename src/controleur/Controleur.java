@@ -153,7 +153,7 @@ public class Controleur {
 		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
-		fen.majTotale(plan, tournee);;
+		fen.majTotale(plan, tournee);
 		fen.setBtnAnnulerEnabled(true);
 	}
 

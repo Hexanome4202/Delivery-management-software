@@ -83,6 +83,16 @@ public class VueTournee {
 	
 	public void setTournee(Tournee tournee){
 		if(tournee != null){
+			
+			//On remet tous les noeuds en gris
+			Set<Integer> cles = vuesDemandeDeLivraison.keySet();
+			for (Integer cle : cles) {
+				vueNoeuds.get(cle).setColors(0);
+			}
+			
+			vuesDemandeDeLivraison.clear();
+			
+			chargerVuesDemandeDeLivraison(tournee);
 			this.tournee = tournee;
 			
 			if(tournee.getEntrepot() != null){
@@ -101,8 +111,7 @@ public class VueTournee {
 				idPremierNoeud = itineraire.getArrivee().getNoeud().getId();
 			}
 		}
-		
-		chargerVuesDemandeDeLivraison(tournee);
+
 			
 		
 	}
@@ -166,6 +175,10 @@ public class VueTournee {
 	 */
 	public boolean estDemandeDeLivraison(int idNoeud){
 		return vuesDemandeDeLivraison.containsKey(idNoeud);
+	}
+	
+	public void supprimerDemandeDeLivraison(int idNoeud){
+		vueNoeuds.get(idNoeud).setColors(0);
 	}
 
 }
