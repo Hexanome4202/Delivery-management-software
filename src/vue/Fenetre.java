@@ -11,9 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -35,19 +32,13 @@ import javax.swing.border.BevelBorder;
 
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
-import modele.Itineraire;
 import modele.Noeud;
 import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
-import modele.Troncon;
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionLeafItem;
 import b4.advancedgui.menu.AccordionMenu;
-
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.view.mxGraph;
 
 import controleur.Controleur;
 
@@ -55,8 +46,6 @@ import controleur.Controleur;
  * 
  */
 public class Fenetre extends JFrame implements Observer {
-	
-
 
 	private VueTournee vueTournee;
 	
@@ -582,14 +571,12 @@ public class Fenetre extends JFrame implements Observer {
 	 * @param noeud
 	 */
 	public void surbrillanceNoeud(Noeud noeud) {
-		// TODO implement here
 	}
 
 	/**
 	 * @param client
 	 */
 	public void afficherListeClients(List<Integer> client) {
-		// TODO implement here
 	}
 
 	/**
@@ -606,7 +593,6 @@ public class Fenetre extends JFrame implements Observer {
 	 * @param demandes
 	 */
 	public void creerVuesDemandeDeLivraison(List<DemandeDeLivraison> demandes) {
-		// TODO implement here
 	}
 
 	public void lireDepuisFichierXML(String typeFichier) {
@@ -727,8 +713,4 @@ public class Fenetre extends JFrame implements Observer {
 	public void afficherPopupErreur(String message, String title){
 		JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
 	}
-	
-
-
-
 }

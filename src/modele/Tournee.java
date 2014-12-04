@@ -177,7 +177,6 @@ public class Tournee {
 	}
 
 	/**
-	 * TODO: Not even sure of what it is doing...
 	 * Edite la feuille de route
 	 * @return la feuille de route editée
 	 */
@@ -319,7 +318,6 @@ public class Tournee {
 	 * @return la position de l'<code>Itineraire</code> supprimé dans la liste d'<code>Itineraire</code>
 	 */
 	public int effacerItineraire(Noeud noeudPrecedent) {
-		// TODO: tester
 		int cpt = 0;
 		Iterator<Itineraire> it = this.itineraires.iterator();
 		Itineraire itineraire;

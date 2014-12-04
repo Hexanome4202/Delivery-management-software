@@ -1,6 +1,5 @@
 package vue;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,13 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
-import controleur.Controleur;
 import modele.DemandeDeLivraison;
 import modele.Itineraire;
 import modele.Noeud;
@@ -27,6 +23,10 @@ import modele.Troncon;
  */
 public class VuePlan extends mxGraphComponent{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3941514355042064714L;
 	/**
 	 * Constantes contenant les couleurs de remplissage et de bordure 
 	 * des points de livraison en fonction de leur plage horaire
@@ -63,7 +63,7 @@ public class VuePlan extends mxGraphComponent{
 	private Noeud entrepot;
 	
 	/**
-	 * Le noeud sur lequel l'utilisateur veut ajout une demande de livraison
+	 * Le noeud sur lequel l'utilisateur veut ajouter une demande de livraison
 	 * Est null tant qu'il n'a pas sélectionné un point puis cliqué sur "Ajouter"
 	 */
 	private Noeud noeudAAjouter = null;
@@ -88,11 +88,6 @@ public class VuePlan extends mxGraphComponent{
 	 * plage horaire demandée.
 	 */
 	private Set<Integer> demandesTempsDepasse;	
-	
-	/**
-	 * 
-	 */
-	private Controleur controleur;
 
     /**
      * 
@@ -442,5 +437,4 @@ public class VuePlan extends mxGraphComponent{
     public void surbrillanceNoeud(Noeud noeud) {
         // TODO implement here
     }
-
 }
