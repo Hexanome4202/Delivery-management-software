@@ -200,7 +200,7 @@ public class VuePlan extends mxGraphComponent{
 	 * livraisons qui ne pourront pas être livrés dans la plage horaire demandée
 	 */
 	public void afficherDemandesTempsDepasse(List<DemandeDeLivraison> demandesTempsDepasse) {
-		if (this.demandesTempsDepasse == null) {
+		if (this.demandesTempsDepasse.isEmpty()) {
 			this.demandesTempsDepasse = new HashSet<Integer>();
 			Iterator<DemandeDeLivraison> it = demandesTempsDepasse.iterator();
 			while (it.hasNext()) {
