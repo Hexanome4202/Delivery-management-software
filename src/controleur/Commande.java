@@ -1,4 +1,4 @@
-package commande;
+package controleur;
 
 /**
  * Interface d'une commande

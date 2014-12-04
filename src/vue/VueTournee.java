@@ -152,7 +152,7 @@ public class VueTournee {
 				vuesDemandeDeLivraison.get(cle).afficher(graph, vueNoeuds.get(cle).getPoint());
 			}
 			
-			if(vuesItineraires != null){			
+			if(vuesItineraires != null && vueEntrepot!=null){			
 				int idPremierNoeud = vueEntrepot.getNoeud().getId();
 				//puis on affiche l'itinéraire
 				for (VueItineraire vueItineraire : vuesItineraires) {

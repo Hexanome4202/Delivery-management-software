@@ -29,6 +29,21 @@ import modele.Troncon;
 public class VuePlan extends mxGraphComponent{
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3941514355042064714L;
+	/**
+	 * Constantes contenant les couleurs de remplissage et de bordure 
+	 * des points de livraison en fonction de leur plage horaire
+	 */
+	public static final String[] COULEUR_REMPLISSAGE = { "#a7a7a7", "#4407a6",
+			"#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f" };
+	public static final String[] COULEUR_BORDURE = { "#838383", "#2d0968", "#0d7412",
+			"#b3560b", "#511155", "#0f5f6d", "#522828" };
+	
+
+	
+	/**
 	 * Facteurs de mise à l'échelle pour l'affichage sur le plan
 	 */
 	private double hY;
@@ -132,7 +147,8 @@ public class VuePlan extends mxGraphComponent{
     public void setNoeudAAjouter(){
     	noeudAAjouter = noeudSelectionne;
     }
-    
+
+
     /**
      * Méthode permettant de vider l'attribut gardant en mémoire le noeud à ajouter
      */
@@ -162,7 +178,6 @@ public class VuePlan extends mxGraphComponent{
 		System.out.println("On dessine la tournée");
 	}
 	
-	
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
 	 */
@@ -183,9 +198,7 @@ public class VuePlan extends mxGraphComponent{
 		}
 
 		graph.getModel().endUpdate();
-		
-		System.out.println("On affiche le plan!");
-	
+
 	}
 	
 	/**
