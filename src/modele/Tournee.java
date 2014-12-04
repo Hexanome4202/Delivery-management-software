@@ -280,17 +280,30 @@ public class Tournee {
 			int client) {
 		int pos;
 		DemandeDeLivraison precedent;
+		DemandeDeLivraison livraison;
 		if ((pos = effacerItineraire(noeudPrecedent)) == -1)
 			return;
-		if((precedent = getDemandeDeLivraison(noeudPrecedent)) == null) return;
-		DemandeDeLivraison livraison = new DemandeDeLivraison(noeudCourant,
-				client, precedent.getPlage());
-		precedent.getPlage().getDemandeLivraison().add(livraison);
+		if(noeudPrecedent == entrepot.getNoeud()){
+			precedent = entrepot;
+			livraison = new DemandeDeLivraison(noeudCourant, client, plagesHoraires.get(0));
+			plagesHoraires.get(0).getDemandeLivraison().add(livraison);
+		}
+		else{
+			precedent = getDemandeDeLivraison(noeudPrecedent); 
+			if(precedent == null) return;
+			livraison = new DemandeDeLivraison(noeudCourant, client, precedent.getPlage());
+			precedent.getPlage().getDemandeLivraison().add(livraison);
+		}
 		Dijkstra.calculerDijkstra(noeudPrecedent, noeudCourant,
 				this.planTournee.getToutNoeuds());
 		List<Troncon> troncons = Dijkstra.chemin;
-		Itineraire it1 = new Itineraire(this.itineraires.get(pos - 1)
-				.getArrivee(), livraison, troncons);
+		Itineraire it1;
+		if(precedent == entrepot){
+			it1 = new Itineraire(entrepot, livraison, troncons);
+		}else{
+			it1 = new Itineraire(this.itineraires.get(pos - 1)
+					.getArrivee(), livraison, troncons);
+		}
 		int entrepot = pos == this.itineraires.size() ? 0 : pos;
 		Dijkstra.calculerDijkstra(noeudCourant, this.itineraires.get(entrepot)
 				.getDepart().getNoeud(), this.planTournee.getToutNoeuds());

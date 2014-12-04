@@ -104,7 +104,15 @@ public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {
 	// ----- Méthode(s)
 	@Override
 	public int compareTo(DemandeDeLivraison demande) {
-		return (demande != null && this.id == demande.getId()) ? 
-				0 : this.id - demande.getId();
+		if(demande != null && this.id == demande.getId()){
+			if(this.plageHoraire != null && demande.getPlage() != null){
+				if(this.plageHoraire.getHeureDebut().getTime() == demande.getPlage().getHeureDebut().getTime()){
+					return 0;
+				}
+				return 1;
+			}
+			return 0;
+		}
+		return 1;
 	}
 }

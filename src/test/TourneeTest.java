@@ -244,7 +244,7 @@ public class TourneeTest {
 	public void testEditerFeuilleRoute() {
 		Controleur c = new Controleur();
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
-		c.gererFichier(new File("XML/testLivraisons.xml"), "horaires");
+		c.gererFichier(new File("XML/testLivraisons2.xml"), "horaires");
 		
 		c.getTournee().calculerTournee();
 		try(BufferedReader br = new BufferedReader(new FileReader("feuilleTest.txt"))) {
