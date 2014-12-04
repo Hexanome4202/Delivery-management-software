@@ -3,7 +3,7 @@ package vue;
 import modele.DemandeDeLivraison;
 
 public class VueEntrepot extends VueDemandeDeLivraison {
-	
+
 	private final int TAILLE = 15;
 
 	/**
@@ -15,15 +15,15 @@ public class VueEntrepot extends VueDemandeDeLivraison {
 	 */
 	public VueEntrepot(DemandeDeLivraison entrepot, double hX, double hY) {
 		super(entrepot, hX, hY, "yellow", "black");
-		modifierForme("shape=ellipse;"
-				, TAILLE);
-	}	
-	
+		modifierForme("shape=ellipse;", TAILLE);
+	}
+
 	/**
 	 * Renvoie la taille de la VueEntrepot
+	 * 
 	 * @return
 	 */
-	public int getTaille(){
+	public int getTaille() {
 		return TAILLE;
 	}
 
