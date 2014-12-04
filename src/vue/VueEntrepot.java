@@ -16,6 +16,7 @@ public class VueEntrepot extends VueDemandeDeLivraison {
 	 */
 	public VueEntrepot(DemandeDeLivraison entrepot, double hX, double hY) {
 		super(entrepot, hX, hY, "yellow", "black");
+		System.out.println("Création Entrepot");
 	}
 
 	/* (non-Javadoc)
@@ -23,7 +24,7 @@ public class VueEntrepot extends VueDemandeDeLivraison {
 	 */
 	@Override
 	public void afficher(mxGraph graph) {
-		// TODO Auto-generated method stub
+		System.out.println("Affichage Entrepot");
 		super.afficher(graph,
 				"shape=ellipse;perimeter=30;strokeColor=black;strokeWidth=3;fillColor=yellow");
 	}

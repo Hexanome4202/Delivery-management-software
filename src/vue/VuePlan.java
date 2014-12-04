@@ -110,6 +110,7 @@ public class VuePlan extends mxGraphComponent{
     	calculeFacteurEchelle(plan.getMaxX(), plan.getMaxY());
     	vueNoeuds.clear();
     	vueTroncons.clear();
+    	vueNoeuds.clear();
 
 		for (Noeud noeud : plan.getToutNoeuds()) {
 			vueNoeuds.put(noeud.getId(), 
@@ -169,9 +170,11 @@ public class VuePlan extends mxGraphComponent{
 	public void dessinerTournee() {
 		noeudAAjouter = null;
 		noeudSelectionne = null;
-		
-		tourneeDessinee = true;
+		tourneeDessinee = true;		
 		entrepot = vueTournee.getTournee().getEntrepot().getNoeud();
+		VueEntrepot vueEntrepot = new VueEntrepot(vueTournee.getTournee().getEntrepot(), hX, hY);
+		vueEntrepot.afficher(graph);
+		vueNoeuds.put(entrepot.getId(), vueEntrepot);
 		vueTournee.setTournee(vueTournee.getTournee());
 		vueTournee.afficher(graph);
 		

@@ -75,7 +75,6 @@ public class VueTroncon {
 				depart.getPoint(),
 				arrivee.getPoint(),
 				"strokeColor=" + couleur+";strokeWidth="+epaisseur);
-		System.out.println(epaisseur);
 	}
 
 
