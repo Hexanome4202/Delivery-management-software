@@ -201,6 +201,7 @@ public class Controleur {
 						fen.afficherPlan(plan);
 						fen.activerChargementHoraires();
 						fen.setMessage("");
+						fen.majMenuHoraire(tournee.getPlagesHoraires());
 					}
 				}  else {
 					resultatConstruction = Codes.PARSE_ERROR;
