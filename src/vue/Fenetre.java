@@ -657,6 +657,8 @@ public class Fenetre extends JFrame {
 		vuePlan.calculeFacteurEchelle(plan.getMaxX(), plan.getMaxY());		
 		afficherPlan(plan.getToutNoeuds());
 		btnCalculer.setEnabled(false);
+		btnAjouter.setEnabled(false);
+		btnSupprimer.setEnabled(false);
 	}
 	
 	/**

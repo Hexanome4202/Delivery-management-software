@@ -320,9 +320,16 @@ public class VuePlan extends mxGraphComponent{
 			int idCouleur = (noeudsALivrer != null
 					&& noeudsALivrer.containsKey(noeudSelectionne.getId()) ? noeudsALivrer
 					.get(noeudSelectionne.getId()) : 0);
-			Object[] cells = { points.get(noeudSelectionne.getId()) };
-			graph.setCellStyle("fillColor=" + COULEUR_REMPLISSAGE[idCouleur]
-					+ ";strokeColor=" + COULEUR_BORDURE[idCouleur], cells);
+			
+			if(demandesTempsDepasse.contains(noeudSelectionne.getId())){
+				Object[] cells = { points.get(noeudSelectionne.getId()) };
+				graph.setCellStyle("shape=triangle;strokeWidth=2;fillColor=red;strokeColor=" 
+				+ COULEUR_BORDURE[idCouleur], cells);
+			}else{
+				Object[] cells = { points.get(noeudSelectionne.getId()) };
+				graph.setCellStyle("fillColor=" + COULEUR_REMPLISSAGE[idCouleur]
+						+ ";strokeColor=" + COULEUR_BORDURE[idCouleur], cells);
+			}
 		}
 		noeudSelectionne = nouvelleSelection;
 
