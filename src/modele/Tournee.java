@@ -138,10 +138,9 @@ public class Tournee {
 	// ----- Méthode(s)
 	/**
 	 * Supprime une <code>DemandeDeLivraison</code>
-	 * @param livraison
+	 * @param livraison : la livraison à supprimer
 	 */
 	public boolean supprimerLivraison(DemandeDeLivraison livraison) {
-		// TODO : tester
 		Iterator<Itineraire> it = this.itineraires.iterator();
 		Itineraire itineraire;
 		Itineraire avant = null;
@@ -178,7 +177,6 @@ public class Tournee {
 	}
 
 	/**
-	 * TODO: Not even sure of what it is doing...
 	 * Edite la feuille de route
 	 * @return la feuille de route editée
 	 */
@@ -320,7 +318,6 @@ public class Tournee {
 	 * @return la position de l'<code>Itineraire</code> supprimé dans la liste d'<code>Itineraire</code>
 	 */
 	public int effacerItineraire(Noeud noeudPrecedent) {
-		// TODO: tester
 		int cpt = 0;
 		Iterator<Itineraire> it = this.itineraires.iterator();
 		Itineraire itineraire;
@@ -427,7 +424,6 @@ public class Tournee {
 				minCoutArc);
 
 		TSP tsp = new TSP(graphe);
-		// TODO : changer timeLimit -> peut changer après plusieurs tentatives
 		tsp.solve(200000, graphe.getNbVertices() * graphe.getMaxArcCost() + 1);
 		if (tsp.getSolutionState() == SolutionState.SOLUTION_FOUND
 				|| tsp.getSolutionState() == SolutionState.OPTIMAL_SOLUTION_FOUND) {
@@ -447,10 +443,7 @@ public class Tournee {
 					}
 				}
 			}
-		} else {
-			// TODO : rappeler avec plus de temps ? peut-être ?
 		}
-
 	}
 
 	/**
@@ -459,10 +452,6 @@ public class Tournee {
 	 * @return le code d'erreur généré, s'il y en a une
 	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
-
-		// TODO : gerer les erreurs de syntaxe dans le fichier XML
-		// lecture des attributs
-
 		NodeList liste = noeudDOMRacine.getElementsByTagName("Entrepot");
 		if (liste.getLength() != 1) {
 			return Codes.ERREUR_306;

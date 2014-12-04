@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import javax.swing.GroupLayout;
@@ -47,8 +45,7 @@ import controleur.Controleur;
 /**
  * 
  */
-public class Fenetre extends JFrame implements Observer {
-	
+public class Fenetre extends JFrame {
 	
 	private VuePlan vuePlan;
 
@@ -100,7 +97,6 @@ public class Fenetre extends JFrame implements Observer {
 		menuHoraires.setMenuBorders(new BevelBorder(BevelBorder.RAISED));
 		menuHoraires.setSelectionColor(Color.lightGray);
 		menuHoraires.setLeafHorizontalAlignment(AccordionItem.LEFT);
-		//creerMenuHoraires();
 
 		horairesPannel.add(menuHoraires);
 
@@ -148,14 +144,12 @@ public class Fenetre extends JFrame implements Observer {
 		pack();
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
-
 		/*---------------------PLAN------------------------------*/
 		JLabel planLabel = new JLabel("Plan");
 		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		
 		vuePlan = new VuePlan();
 
-		//TODO revoir le mouseListener
 		vuePlan.getGraphControl().addMouseListener(new MouseAdapter() {
 
 					public void mouseReleased(MouseEvent e) {
@@ -163,9 +157,10 @@ public class Fenetre extends JFrame implements Observer {
 						if (n != null) {
 							// Si on est dans l'ajout de point de livraison
 							if(vuePlan.doitAjouterPoint(n)){
-								int idClient=Integer.parseInt(
-										JOptionPane.showInputDialog(Fenetre.this,"Veuillez saisir le numero du client:", null));
 								try {
+									int idClient=Integer.parseInt(
+											JOptionPane.showInputDialog(Fenetre.this,"Veuillez saisir le numero du client:", null));
+									
 									if (idClient>=0) {
 										controleur.ajouterLivraison(idClient,
 												vuePlan.getNoeudAAjouter(), n);
@@ -604,13 +599,6 @@ public class Fenetre extends JFrame implements Observer {
 
 
 	/**
-	 * @param demandes
-	 */
-	public void creerVuesDemandeDeLivraison(List<DemandeDeLivraison> demandes) {
-		// TODO implement here
-	}
-
-	/**
 	 * Methode permettant de lire un fichier XML pour l'importer
 	 * @param typeFichier
 	 */
@@ -650,11 +638,6 @@ public class Fenetre extends JFrame implements Observer {
 			return new File(jFileChooserXML.getSelectedFile().getAbsolutePath());
 		}
 		return null;
-	}
-
-	
-	public void update(Observable arg0, Object arg1) {
-		//TODO compléter ou supprimer
 	}
 
 	/**
@@ -755,8 +738,4 @@ public class Fenetre extends JFrame implements Observer {
 	public void afficherPopupErreur(String message, String titre){
 		JOptionPane.showMessageDialog(this, message, titre, JOptionPane.ERROR_MESSAGE);
 	}
-	
-
-
-
 }
