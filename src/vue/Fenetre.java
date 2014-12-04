@@ -606,7 +606,8 @@ public class Fenetre extends JFrame {
 	public void dessinerTournee(Tournee tournee) {
 		btnCalculer.setEnabled(false);
 		btnImprimer.setEnabled(true);
-		vuePlan.dessinerTournee(tournee);
+		vuePlan.setTournee(tournee);
+		vuePlan.dessinerTournee();
 	}
 
 
@@ -691,7 +692,7 @@ public class Fenetre extends JFrame {
 	 */
 	public void majTotale(Plan plan, Tournee tournee){
 		vuePlan.setPlan(plan);
-		vuePlan.afficherPlan();
+		vuePlan.setTournee(tournee);
 		vuePlan.afficherDemandesLivraisons(tournee);
 		dessinerTournee(tournee);
 		majMenuHoraire(tournee.getPlagesHoraires());

@@ -133,7 +133,7 @@ public class Controleur {
 	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
-		fen.dessinerTournee(tournee);
+		fen.dessinerTournee(this.tournee);
 	}
 
 	/**
