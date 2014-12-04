@@ -56,9 +56,6 @@ import controleur.Controleur;
  */
 public class Fenetre extends JFrame implements Observer {
 	
-
-
-	private VueTournee vueTournee;
 	
 	private VuePlan vuePlan;
 
@@ -479,6 +476,7 @@ public class Fenetre extends JFrame implements Observer {
 
 	/**
 	 * Met à jour le menu horaires
+	 * @param plagesHoraires
 	 */
 	public void majMenuHoraire(ArrayList<PlageHoraire> plagesHoraires) {
 
@@ -537,8 +535,8 @@ public class Fenetre extends JFrame implements Observer {
 	}
 
 	/**
-	 * Crée le menu contenant les demandes de livraisons classées par Plage
-	 * Horaire
+	 * Crée le menu contenant les demandes de livraisons classées par Plage Horaire
+	 * @param plagesHoraires
 	 */
 	public void creerMenuHoraires(ArrayList<PlageHoraire> plagesHoraires) {
 		int iteratorPlage = 1;
@@ -579,21 +577,8 @@ public class Fenetre extends JFrame implements Observer {
 	}
 
 	/**
-	 * @param noeud
-	 */
-	public void surbrillanceNoeud(Noeud noeud) {
-		// TODO implement here
-	}
-
-	/**
-	 * @param client
-	 */
-	public void afficherListeClients(List<Integer> client) {
-		// TODO implement here
-	}
-
-	/**
 	 * Méthode permettant de dessiner la tournée
+	 * @param tournee
 	 */
 	public void dessinerTournee(Tournee tournee) {
 		btnCalculer.setEnabled(false);
@@ -609,6 +594,10 @@ public class Fenetre extends JFrame implements Observer {
 		// TODO implement here
 	}
 
+	/**
+	 * Methode permettant de lire un fichier XML pour l'importer
+	 * @param typeFichier
+	 */
 	public void lireDepuisFichierXML(String typeFichier) {
 		File xml = ouvrirFichier('o');
 		if (xml != null) {
@@ -616,7 +605,13 @@ public class Fenetre extends JFrame implements Observer {
 			this.controleur.gererFichier(xml, typeFichier);
 		}
 	}
-
+	
+	/**
+	 * Méthode permettant d'ouvrir un fichier grâce à la fenêtre dédiée
+	 * @param mode
+	 * 			lecture ou écriture
+	 * @return le fichier ouvert
+	 */
 	private File ouvrirFichier(char mode) {
 		jFileChooserXML = new JFileChooser();
 		// Note: source for ExampleFileFilter can be found in FileChooserDemo,
@@ -641,23 +636,32 @@ public class Fenetre extends JFrame implements Observer {
 		return null;
 	}
 
+	
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-
+		//TODO compléter ou supprimer
 	}
 
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
+	 * @param noeuds
 	 */
 	public void afficherPlan(Set<Noeud> noeuds) {
 		vuePlan.afficherPlan(noeuds);
 	}
 	
+	/**
+	 * Affiche le plan à partir des données préalablement chargées depuis un XML
+	 * @param plan
+	 */
 	public void afficherPlan(Plan plan){
 		vuePlan.calculeFacteurEchelle(plan.getMaxX(), plan.getMaxY());		
 		afficherPlan(plan.getToutNoeuds());
 	}
 	
+	/**
+	 * Méthode permettant d'afficher les demandes de livraison sur le plan
+	 * @param tournee
+	 */
 	public void afficherDemandesLivraisons(Tournee tournee){
 		vuePlan.afficherDemandesLivraisons(tournee);
 	}
@@ -665,6 +669,8 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * Méthode appelant toutes les méthodes permettant de 
 	 * redessiner complètement le plan
+	 * @param noeuds
+	 * @param tournee
 	 */
 	public void majTotale(Set<Noeud> noeuds, Tournee tournee){
 		afficherPlan(noeuds);
@@ -725,8 +731,13 @@ public class Fenetre extends JFrame implements Observer {
 		actionRetablir.setEnabled(valeur);
 	}
 	
-	public void afficherPopupErreur(String message, String title){
-		JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+	/**
+	 * Méthode permettant d'afficher une popup d'erreur
+	 * @param message
+	 * @param titre
+	 */
+	public void afficherPopupErreur(String message, String titre){
+		JOptionPane.showMessageDialog(this, message, titre, JOptionPane.ERROR_MESSAGE);
 	}
 	
 
