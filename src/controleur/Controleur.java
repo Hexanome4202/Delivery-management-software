@@ -26,9 +26,7 @@ import commande.Commande;
 import commande.CommandeAjouterLivraison;
 import commande.CommandeSupprimerLivraison;
 import commande.GestionnaireDeCommandes;
-import vue.Fenetre;
-import vue.VueTournee;
-import errors.Codes;
+import erreurs.Codes;
 
 /**
  * 
@@ -169,7 +167,6 @@ public class Controleur {
 		return this.tournee.editerFeuilleRoute();
 	}
 
-
 	/**
 	 * Methode responsable du traitement du fichier xml
 	 * 
@@ -277,7 +274,7 @@ public class Controleur {
 	 * Méthode permettant d'annuler une <code>Commande</code>
 	 */
 	public void undo() {
-		if(gestionnaire.annulerDerniereCommande()) {
+		if (gestionnaire.annulerDerniereCommande()) {
 			testBoutonsAnnulerRetablir();
 			fen.majTotale(plan.getToutNoeuds(), tournee);
 		}else{
@@ -289,20 +286,17 @@ public class Controleur {
 	 * Méthode permettant de rétablir l'exécution d'une <code>commande</code>
 	 */
 	public void redo() {
-		if(gestionnaire.refaireCommandeAnnulee()) {
+		if (gestionnaire.refaireCommandeAnnulee()) {
 			testBoutonsAnnulerRetablir();
 			fen.majTotale(plan.getToutNoeuds(), tournee);
 		} else {
-			fen.afficherPopupErreur("Redo n'est pas possible!","Erreur 152");
+			fen.afficherPopupErreur("Redo n'est pas possible!", "Erreur 152");
 		}
 	}
-
-
 
 	public static void main(String[] args) {
 		new Controleur();
 	}
-	
 
 	/**
 	 * Permet d'enregistrer la feuille de route dans un fichier texte
@@ -321,7 +315,7 @@ public class Controleur {
 			System.err.println("Probleme de creation du fichier d'impression");
 		}
 	}
-	
+
 	/**
 	 * Méthode qui grise ou dégrise les boutons Annuler et Rétablir en fonction
 	 * du gestionnaire

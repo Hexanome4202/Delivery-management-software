@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
 
 import tsp.SolutionState;
 import tsp.TSP;
-import errors.Codes;
+import erreurs.Codes;
 
 /**
  * La classe représentant la tournée calculée et à effectuer par le livreur
