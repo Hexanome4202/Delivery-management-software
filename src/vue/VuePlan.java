@@ -381,7 +381,7 @@ public class VuePlan extends mxGraphComponent{
 	 * 			false sinon
 	 */
 	public boolean doitAjouterPoint(Noeud noeud){
-		return (noeudAAjouter != null && noeudsALivrer.containsKey(noeud.getId()));
+		return (noeudAAjouter != null && (noeudsALivrer.containsKey(noeud.getId()) || noeud.getId() == entrepot.getId()));
 	}
 	
     /**
@@ -410,31 +410,4 @@ public class VuePlan extends mxGraphComponent{
 	public boolean etatBtnSupprimer(Noeud noeud){
 		return tourneeDessinee && noeudsALivrer.containsKey(noeud.getId());
 	}
-
-    
-    
-    //==================================== ANCIEN==============
-
-
-
-
-
-
-
-	/**
-     * 
-     */
-    private Set<VueTroncon> vuesTroncons;
-
-    /**
-     * 
-     */
-    private Set<VueNoeud> vuesNoeud;
-
-    /**
-     * @param noeud
-     */
-    public void surbrillanceNoeud(Noeud noeud) {
-        // TODO implement here
-    }
 }
