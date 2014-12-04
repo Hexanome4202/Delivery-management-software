@@ -65,6 +65,8 @@ public class VueTournee {
 			
 			if(tournee.getEntrepot() != null){
 				vueEntrepot = new VueEntrepot(tournee.getEntrepot(), hX, hY);
+				vuesDemandeDeLivraison.put(vueEntrepot.getNoeud().getId(), vueEntrepot);
+				vueNoeuds.get(vueEntrepot.getNoeud().getId()).modifierForme(vueEntrepot.getStyle(), vueEntrepot.getTaille());;
 			}
 		}
 		
