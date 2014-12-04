@@ -188,7 +188,7 @@ public class Controleur {
 				if (racine.getNodeName().equals("JourneeType")) {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
 					fen.majMenuHoraire(tournee.getPlagesHoraires());
-					fen.afficherDemandesLivraisonsSurPlan(tournee);
+					fen.afficherDemandesLivraisons(tournee);
 					fen.activerCalculItineraire();
 					fen.setMessage("");
 				}  else {
