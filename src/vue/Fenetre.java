@@ -640,7 +640,7 @@ public class Fenetre extends JFrame {
 		}
 		return null;
 	}
-dsfdf
+
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
 	 * @param noeuds
