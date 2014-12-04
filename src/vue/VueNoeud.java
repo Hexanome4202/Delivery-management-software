@@ -114,15 +114,19 @@ public class VueNoeud {
     /**
      * Met à jour l'affichage pour montrer que le noeud est sélectionné
      */
-    public void selectionner() {
-        
+    public void selectionner(mxGraph graph) {
+
+		graph.setCellStyle("strokeColor=red;strokeWidth=3;fillColor="
+				+ couleurRemplissage, new Object[] {point});
+		
     }
     
     /**
      * Désélectionne le noeud
      */
-    public void deselectionner(){
-    	
+    public void deselectionner(mxGraph graph){
+		graph.setCellStyle("fillColor=" + couleurRemplissage
+				+ ";strokeColor=" + couleurBordure, new Object[] {point});
     }
 
 	/**
@@ -153,12 +157,18 @@ public class VueNoeud {
 
 
 	/**
-	 * @return the couleurBordure
+	 * @return la couleur de bordure
 	 */
 	public String getCouleurBordure() {
 		return couleurBordure;
 	}
 	
+	/**
+	 * @return la couleur de remplissage
+	 */
+	public String getCouleurRemplissage() {
+		return couleurBordure;
+	}
     
 
 }

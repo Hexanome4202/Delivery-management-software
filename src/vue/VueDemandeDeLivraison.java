@@ -71,13 +71,15 @@ public class VueDemandeDeLivraison extends VueNoeud{
 		this.tempsDepasse = tempsDepasse;
 	}
 	
-	public void afficher(mxGraph graph){
+	public void afficher(mxGraph graph, Object point){
 		if(!tempsDepasse){
 			//TODO Grossir le temps dépassé
-			super.afficher(graph);
+			graph.setCellStyle("fillColor=" + getCouleurRemplissage() + 
+				";strokeColor=" + getCouleurBordure(), 
+					new Object[] {point});
 		}else{
-			super.afficher(graph,
-					"shape=triangle;strokeWidth=2;fillColor=red;strokeColor="+getCouleurBordure());
+			graph.setCellStyle("shape=triangle;strokeWidth=2;fillColor=red;strokeColor="+getCouleurBordure(), 
+					new Object[] {point});
 		}
 	}
 

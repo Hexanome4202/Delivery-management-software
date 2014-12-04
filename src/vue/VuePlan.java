@@ -232,28 +232,15 @@ public class VuePlan extends mxGraphComponent{
 	 * @param nouvelleSelection
 	 */
 	public void changerPointSelectionne(Noeud nouvelleSelection) {
-		//TODO rendre possible la sélection de nouveau
-		/*
-		// On commence par déselectionner l'ancienne sélection
 		if (noeudSelectionne != null) {
-			int idCouleur = (noeudsALivrer != null
-					&& noeudsALivrer.containsKey(noeudSelectionne.getId()) ? noeudsALivrer
-					.get(noeudSelectionne.getId()) : 0);
-			Object[] cells = { vueNoeuds.get(noeudSelectionne.getId()).getPoint() };
-			graph.setCellStyle("fillColor=" + COULEUR_REMPLISSAGE[idCouleur]
-					+ ";strokeColor=" + COULEUR_BORDURE[idCouleur], cells);
+			vueNoeuds.get(noeudSelectionne.getId()).deselectionner(graph);
 		}
+		
 		noeudSelectionne = nouvelleSelection;
-
 		if (noeudSelectionne != null) {
-			int idCouleur = (noeudsALivrer != null
-					&& noeudsALivrer.containsKey(nouvelleSelection.getId()) ? noeudsALivrer
-					.get(nouvelleSelection.getId()) : 0);
-			Object[] cells = { vueNoeuds.get(noeudSelectionne.getId()).getPoint() };
-			graph.setCellStyle("strokeColor=red;strokeWidth=3;fillColor="
-					+ COULEUR_REMPLISSAGE[idCouleur], cells);
+			vueNoeuds.get(nouvelleSelection.getId()).selectionner(graph);
 		}
-		*/
+		
 	}
 	
 	/**

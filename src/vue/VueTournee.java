@@ -138,7 +138,7 @@ public class VueTournee {
 			//On affiche les demandes de livraison
 			Set<Integer> cles = vuesDemandeDeLivraison.keySet();
 			for (Integer cle : cles) {
-				vuesDemandeDeLivraison.get(cle).afficher(graph);
+				vuesDemandeDeLivraison.get(cle).afficher(graph, vueNoeuds.get(cle).getPoint());
 			}
 			
 			if(vuesItineraires != null){			
