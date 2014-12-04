@@ -149,6 +149,7 @@ public class Controleur {
 
 		fen.majTotale(plan.getToutNoeuds(), tournee);;
 		fen.setBtnAnnulerEnabled(true);
+		fen.setMessage("");
 	}
 
 	/**
