@@ -158,5 +158,14 @@ public class VueTournee {
 			}
 		}
  	}
+	
+	/**
+	 * Methode indiquant si le noeud avec l'id passé est une demande de livraison
+	 * @param idNoeud l'id du noeud à tester
+	 * @return
+	 */
+	public boolean estDemandeDeLivraison(int idNoeud){
+		return vuesDemandeDeLivraison.containsKey(idNoeud);
+	}
 
 }

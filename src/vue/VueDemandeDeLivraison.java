@@ -88,8 +88,7 @@ public class VueDemandeDeLivraison extends VueNoeud{
 	 */
 	public int getNumPlage() {
 		return numPlage;
-	}
-	
+	}	
 	
 	
 

@@ -66,12 +66,7 @@ public class VuePlan extends mxGraphComponent{
 	private Set<VueTroncon> vueTroncons;
 	
 	private VueTournee vueTournee;
-	
-	/**
-	 * L'id des noeuds à livrer associé au numéro de plage horaire
-	 */
-	private HashMap<Integer, Integer> noeudsALivrer;
-	
+
 	/**
 	 * L'id des demandes de livraison qui ne pouront pas être livrés dans la
 	 * plage horaire demandée.
@@ -144,7 +139,7 @@ public class VuePlan extends mxGraphComponent{
     }
     
     public Noeud getNoeudLivraisonSelectionne(){
-    	if (noeudsALivrer.containsKey(noeudSelectionne.getId())) {
+    	if (vueTournee.estDemandeDeLivraison(noeudSelectionne.getId())) {
 			return noeudSelectionne;
 		}
     	return null;
@@ -157,6 +152,8 @@ public class VuePlan extends mxGraphComponent{
 		noeudAAjouter = null;
 		noeudSelectionne = null;
 		
+		tourneeDessinee = true;
+		entrepot = tournee.getEntrepot().getNoeud();
 		vueTournee.setTournee(tournee);
 		vueTournee.afficher(graph);
 		
@@ -248,7 +245,6 @@ public class VuePlan extends mxGraphComponent{
 	 * livraison sur le plan
 	 */
 	public void afficherDemandesLivraisons(Tournee tournee) {
-		noeudsALivrer = new HashMap<Integer, Integer>();
 
 		// On réaffiche le plan proprement, sans point de livraison
 		afficherPlan();
@@ -276,7 +272,7 @@ public class VuePlan extends mxGraphComponent{
 	 * 			false sinon
 	 */
 	public boolean doitAjouterPoint(Noeud noeud){
-		return (noeudAAjouter != null && (noeudsALivrer.containsKey(noeud.getId()) || noeud.getId() == entrepot.getId()));
+		return (noeudAAjouter != null && (vueTournee.estDemandeDeLivraison(noeud.getId()) || noeud.getId() == entrepot.getId()));
 	}
 	
     /**
@@ -293,7 +289,7 @@ public class VuePlan extends mxGraphComponent{
 	 * @return	l'état que doit avoir le bouton
 	 */
 	public boolean etatBtnAjouter(Noeud noeud){
-		return tourneeDessinee && entrepot!= null && noeud!= entrepot && !noeudsALivrer.containsKey(noeud.getId())  ;
+		return tourneeDessinee && entrepot!= null && noeud!= entrepot && !vueTournee.estDemandeDeLivraison(noeud.getId())  ;
 	}
 	
 	/**
@@ -303,7 +299,7 @@ public class VuePlan extends mxGraphComponent{
 	 * @return	l'état que doit avoir le bouton
 	 */
 	public boolean etatBtnSupprimer(Noeud noeud){
-		return tourneeDessinee && noeudsALivrer.containsKey(noeud.getId());
+		return tourneeDessinee && vueTournee.estDemandeDeLivraison(noeud.getId());
 	}
 
 }
