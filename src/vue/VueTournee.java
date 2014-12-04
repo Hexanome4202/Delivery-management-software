@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -64,6 +65,7 @@ public class VueTournee {
 	public VueTournee(Tournee tournee, double hX, double hY, HashMap<Integer, VueNoeud> vueNoeuds) {
 		this.vueNoeuds = vueNoeuds;
 		vuesDemandeDeLivraison = new HashMap<Integer, VueDemandeDeLivraison>();
+		vuesItineraires = new HashSet<VueItineraire>();
 		
 		this.hX = hX;
 		this.hY = hY;
@@ -90,9 +92,13 @@ public class VueTournee {
 			int idPremierNoeud = vueEntrepot.getNoeud().getId();
 			
 			for (Itineraire itineraire : tournee.getItineraires()) {
-				String couleur = VueNoeud.COULEUR_BORDURE[vuesDemandeDeLivraison.get(idPremierNoeud).getNumPlage()];
+				String couleur = VueNoeud.COULEUR_BORDURE[1];
+				if(vuesDemandeDeLivraison.containsKey(idPremierNoeud)){
+					couleur = VueNoeud.COULEUR_BORDURE[vuesDemandeDeLivraison.get(idPremierNoeud).getNumPlage()];
+				}
 				vuesItineraires.add(
 						new VueItineraire(itineraire, vueNoeuds, idPremierNoeud, couleur));
+				idPremierNoeud = itineraire.getArrivee().getNoeud().getId();
 			}
 		}
 		
@@ -118,9 +124,8 @@ public class VueTournee {
 	}
 	
 	public void afficher(mxGraph graph){
-		System.out.println("VueTournée 163 : on devrait afficher");
 		if(tournee.getItineraires() != null){
-			System.out.println("VueTournée 163 : On affiche les demandes de livraison IF");
+
 			//On indique aux DemandesDeLivraison au Temps Dépassé qu'elles le sont
 			if(tournee.getDemandesTempsDepasse()!= null){
 				for (DemandeDeLivraison demande : tournee.getDemandesTempsDepasse()) {
@@ -133,12 +138,10 @@ public class VueTournee {
 			//On affiche les demandes de livraison
 			Set<Integer> cles = vuesDemandeDeLivraison.keySet();
 			for (Integer cle : cles) {
-				System.out.println("Et une demande");
 				vuesDemandeDeLivraison.get(cle).afficher(graph);
 			}
 			
-			if(vuesItineraires != null){
-			
+			if(vuesItineraires != null){			
 				int idPremierNoeud = vueEntrepot.getNoeud().getId();
 				//puis on affiche l'itinéraire
 				for (VueItineraire vueItineraire : vuesItineraires) {
@@ -146,7 +149,6 @@ public class VueTournee {
 				}
 			}
 		}else{
-			System.out.println("VueTournée 163 : On affiche les demandes de livraison ELSE");
 			//On affiche seulement les demandes de livraison si la tournée n'est pas calculée
 			Set<Integer> cles = vuesDemandeDeLivraison.keySet();
 			for (Integer cle : cles) {

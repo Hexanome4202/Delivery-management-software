@@ -74,7 +74,8 @@ public class VueTroncon {
 		graph.insertEdge(graph.getDefaultParent(), null, "",
 				depart.getPoint(),
 				arrivee.getPoint(),
-				"strokeColor=" + couleur+";stokeWidth="+epaisseur);
+				"strokeColor=" + couleur+";strokeWidth="+epaisseur);
+		System.out.println(epaisseur);
 	}
 
 

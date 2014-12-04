@@ -35,7 +35,6 @@ public class VueDemandeDeLivraison extends VueNoeud{
 		super(demandeDeLivraison.getNoeud(), hX, hY, COULEUR_REMPLISSAGE[numPlage], COULEUR_BORDURE[numPlage]);
 		this.demandeDeLivraison = demandeDeLivraison;
 		this.numPlage = numPlage;
-		System.out.println(""+ demandeDeLivraison.getId()+" "+demandeDeLivraison.getNoeud().getId()+ " " +numPlage);
 	}
 
 	/**
@@ -74,6 +73,7 @@ public class VueDemandeDeLivraison extends VueNoeud{
 	
 	public void afficher(mxGraph graph){
 		if(!tempsDepasse){
+			//TODO Grossir le temps dépassé
 			super.afficher(graph);
 		}else{
 			super.afficher(graph,

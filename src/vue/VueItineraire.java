@@ -32,11 +32,13 @@ public class VueItineraire {
 	public VueItineraire(Itineraire itineraire, HashMap<Integer, VueNoeud> vueNoeuds, int idPremierNoeud, String couleur) {
 		this.itineraire = itineraire;
 		this.couleur = couleur;
+		vuesTroncons = new HashSet<VueTroncon>();
 		
 		VueNoeud noeudPrecedent = vueNoeuds.get(idPremierNoeud);
 		for (Troncon troncon : itineraire.getTronconsItineraire()) {
 			vuesTroncons.add(new VueTroncon(noeudPrecedent,
-						vueNoeuds.get(troncon.getNoeudFin().getId()), couleur, 2));
+						vueNoeuds.get(troncon.getNoeudFin().getId()), couleur, 3));
+			noeudPrecedent = vueNoeuds.get(troncon.getNoeudFin().getId());
 		}
 	}
 

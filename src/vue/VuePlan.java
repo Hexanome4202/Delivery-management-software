@@ -156,7 +156,8 @@ public class VuePlan extends mxGraphComponent{
 	public void dessinerTournee(Tournee tournee) {
 		noeudAAjouter = null;
 		noeudSelectionne = null;
-
+		
+		vueTournee.setTournee(tournee);
 		vueTournee.afficher(graph);
 		
 		System.out.println("On dessine la tournée");
