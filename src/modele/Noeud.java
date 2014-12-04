@@ -3,11 +3,6 @@ package modele;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import controleur.Controleur;
-
 /**
  * Classe correspondant à un noeud géographique de l'application
  */

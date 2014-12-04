@@ -213,15 +213,9 @@ public class Plan {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Méthode permettant de construire les <code>Troncon</code> grâce à un fichier XML
 	 * @param liste la liste des troncons à créer
 	 * @return le code d'erreur rencontré, s'il y en a un
-=======
-	 * Methode responsable pour construire les tronçons a partir de une NodeList xml
-	 * @param liste
-	 * @return
->>>>>>> 7c18470fe806c808c81a8aed78e0f36bfc0e8cfb
 	 */
 	public int construireTronconAPartirDeDOMXML(NodeList liste) {
 
