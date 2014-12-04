@@ -186,6 +186,7 @@ public class Tournee {
 		String ret = "";
 		PlageHoraire plage = null;
 		Double tempsSortie = 0.0;
+		GregorianCalendar calendar = new GregorianCalendar();
 		for (Itineraire it : this.getItineraires()) {
 
 			DemandeDeLivraison dArrive = it.getArrivee();
@@ -193,9 +194,9 @@ public class Tournee {
 
 			if (dArrive.getPlage() != plage
 					&& it.getArrivee().getId() != -1) {
-
-				tempsSortie = (double) dArrive.getPlage().getHeureDebut().getHours()*60
-						+ dArrive.getPlage().getHeureDebut().getMinutes();
+				calendar.setTime(dArrive.getPlage().getHeureDebut());
+				tempsSortie = (double) calendar.get(GregorianCalendar.HOUR_OF_DAY)*60
+						+ calendar.get(GregorianCalendar.MINUTE);
 				plage = dArrive.getPlage();
 			}
 			tempsPourLivrer = it.getTemps() / 60;
