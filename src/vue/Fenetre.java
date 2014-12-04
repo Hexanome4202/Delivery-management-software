@@ -517,8 +517,9 @@ public class Fenetre extends JFrame {
 
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
 				menuHorairesMaj.addNewLeafTo("menu" + iteratorPlage, ""
-						+ livraison.getNoeud().getId(),
-						String.valueOf(livraison.getIdClient()));
+						+ livraison.getNoeud().getId(),"Client "+
+						String.valueOf(livraison.getIdClient()) +
+						" -> Livraison n°" + String.valueOf(livraison.getId()));
 			}
 			iteratorPlage++;
 		}
