@@ -106,7 +106,6 @@ public class Fenetre extends JFrame {
 		menuHoraires.setMenuBorders(new BevelBorder(BevelBorder.RAISED));
 		menuHoraires.setSelectionColor(Color.lightGray);
 		menuHoraires.setLeafHorizontalAlignment(AccordionItem.LEFT);
-		//creerMenuHoraires();
 
 		horairesPannel.add(menuHoraires);
 
@@ -154,7 +153,6 @@ public class Fenetre extends JFrame {
 		pack();
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
-
 		/*---------------------PLAN------------------------------*/
 		JLabel planLabel = new JLabel("Plan");
 		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -168,9 +166,10 @@ public class Fenetre extends JFrame {
 						if (n != null) {
 							// Si on est dans l'ajout de point de livraison
 							if(vuePlan.doitAjouterPoint(n)){
-								int idClient=Integer.parseInt(
-										JOptionPane.showInputDialog(Fenetre.this,"Veuillez saisir le numero du client:", null));
 								try {
+									int idClient=Integer.parseInt(
+											JOptionPane.showInputDialog(Fenetre.this,"Veuillez saisir le numero du client:", null));
+									
 									if (idClient>=0) {
 										controleur.ajouterLivraison(idClient,
 												vuePlan.getNoeudAAjouter(), n);
