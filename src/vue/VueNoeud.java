@@ -100,8 +100,6 @@ public class VueNoeud {
 		point = graph.insertVertex(graph.getDefaultParent(), "", "",
 				 x, y, rayonNoeud, rayonNoeud, 
 				style);
-		
-		System.out.println("STYLE "+style);
     }
 	
 	/**

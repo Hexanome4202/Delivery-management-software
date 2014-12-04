@@ -211,7 +211,6 @@ public class Controleur {
 			return resultatConstruction;
 
 		} catch (ParserConfigurationException pce) {
-			System.out.println("Erreur de configuration du parseur DOM");
 			if (!this.modeTests)
 				fen.afficherPopupErreur(
 						"Erreur de configuration du parseur DOM!", "Erreur");
@@ -310,7 +309,6 @@ public class Controleur {
 			w.write(this.editerFeuilleRoute());
 			w.close();
 		} catch (IOException e) {
-			System.err.println("Probleme de creation du fichier d'impression");
 		}
 	}
 

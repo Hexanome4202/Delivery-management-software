@@ -617,7 +617,6 @@ public class Tournee {
 				if(demandes.get(j).getNoeud().compareTo(n) == 0) return demandes.get(j);
 			}
 		}
-		System.out.println("nope");
 		return demande;
 	}
 	
