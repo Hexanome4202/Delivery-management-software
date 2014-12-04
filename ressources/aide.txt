@@ -5,5 +5,5 @@ Pour pouvoir utiliser pleinement notre application, vous devez :
 
 Il vous est ensuite possible de :
 - Ajouter une livraison en cliquant sur un noeud non affecté à une livraison, puis sur le bouton "Ajouter" et enfin sur un noeud de livraison.
-- Supprimer un noeud de livraison en cliquant dessus puis sur le bouton "Supprimer"
+- Supprimer un noeud de livraison en cliquant dessus puis sur le bouton "Supprimer".
 - Imprimer le feuille de route en appuyant sur le bouton "Imprimer".

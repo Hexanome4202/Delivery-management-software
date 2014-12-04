@@ -709,9 +709,12 @@ public class Fenetre extends JFrame {
 		controleur.genererFichierImpression(f);
 	}
 	
+	/**
+	 * Setter de l'attribut <code>Message</code>
+	 * @param message Message à afficher
+	 */
 	public void setMessage(String message){
 		this.message.setText(message);
-		System.out.println(message);
 	}
 	
 	/**
