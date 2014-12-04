@@ -7,11 +7,11 @@ import javax.swing.JOptionPane;
  */
 public class Codes {
 	/**
-	 * 
+	 * Code d'erreur lié à une erreur de parsage
 	 */
 	static public final int PARSE_ERROR = -1;
 	/**
-	 * 
+	 * Parsage XML OK
 	 */
 	static public final int PARSE_OK = 1;
 	/**
