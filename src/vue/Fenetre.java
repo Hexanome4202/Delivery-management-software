@@ -8,12 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -35,20 +35,13 @@ import javax.swing.border.BevelBorder;
 
 import libs.ExampleFileFilter;
 import modele.DemandeDeLivraison;
-import modele.Itineraire;
 import modele.Noeud;
 import modele.PlageHoraire;
 import modele.Plan;
 import modele.Tournee;
-import modele.Troncon;
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionLeafItem;
 import b4.advancedgui.menu.AccordionMenu;
-
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.view.mxGraph;
-
 import controleur.Controleur;
 
 /**
@@ -70,6 +63,7 @@ public class Fenetre extends JFrame implements Observer {
 	private JMenuItem actionAnnuler;
 	private JMenuItem actionRetablir;
 	private JMenuItem actionChargerHoraires;
+	private JMenuItem actionHelp;
 	
 	private javax.swing.JPanel horairesPannel;
 	private AccordionMenu menuHoraires;
@@ -369,7 +363,27 @@ public class Fenetre extends JFrame implements Observer {
 		actionAnnuler.setEnabled(false);
 		actionRetablir.setEnabled(false);
 
-		JMenu menuAide = new JMenu("Aide");
+		JMenu menuAide = new JMenu("?");
+		actionHelp = new JMenuItem("Aide");
+		actionHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String message = "";
+				try(BufferedReader br = new BufferedReader(new FileReader("ressources/aide.txt"))) {
+			        StringBuilder sb = new StringBuilder();
+			        String line = br.readLine();
+
+			        while (line != null) {
+			            sb.append(line);
+			            sb.append(System.lineSeparator());
+			            line = br.readLine();
+			        }
+			        message = sb.toString();
+			        JOptionPane.showMessageDialog(null, message, "Aide", JOptionPane.INFORMATION_MESSAGE);
+			    } catch (IOException e1) {
+				}
+			}
+		});
 
 		actionChargerPlan.addActionListener(new ActionListener() {
 			@Override
@@ -419,6 +433,8 @@ public class Fenetre extends JFrame implements Observer {
 		menuBar.add(menuFichier);
 		menuBar.add(menuEdition);
 		menuBar.add(menuAide);
+		
+		menuAide.add(actionHelp);
 
 		this.setJMenuBar(menuBar);
 	}
