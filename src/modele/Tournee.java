@@ -411,7 +411,8 @@ public class Tournee {
 
 				if (cout > maxCoutArc) {
 					maxCoutArc = cout;
-				} else if (cout < minCoutArc) {
+				} 
+				if (cout < minCoutArc) {
 					minCoutArc = cout;
 				}
 
@@ -548,7 +549,7 @@ public class Tournee {
 					if (dateLivreur.getTime().compareTo(tempsDebut) < 0) {
 						dateLivreur.setTime(tempsDebut);
 					}
-					dateLivreur.add(Calendar.MINUTE, 10);
+					dateLivreur.add(Calendar.MINUTE, TEMPS_REPOS);
 				} else {
 
 					dateLivreur.add(GregorianCalendar.SECOND,
@@ -558,10 +559,10 @@ public class Tournee {
 						if (dateLivreur.getTime().compareTo(tempsDebut) < 0) {
 							dateLivreur.setTime(tempsDebut);
 						}
-						dateLivreur.add(GregorianCalendar.MINUTE, 10);
+						dateLivreur.add(GregorianCalendar.MINUTE, TEMPS_REPOS);
 					} else {
 						demandesDepassees.add(demande);
-						dateLivreur.add(GregorianCalendar.MINUTE, 10);
+						dateLivreur.add(GregorianCalendar.MINUTE, TEMPS_REPOS);
 					}
 				}
 			}
