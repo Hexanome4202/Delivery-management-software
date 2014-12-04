@@ -118,6 +118,8 @@ public class VueTournee {
 				}
 				vuesDemandeDeLivraison.put(demandeDeLivraison.getNoeud().getId(), 
 						vueDemande);
+				
+				vueNoeuds.get(demandeDeLivraison.getNoeud().getId()).setColors(numPlage);
 			}
 			numPlage ++;
 		}

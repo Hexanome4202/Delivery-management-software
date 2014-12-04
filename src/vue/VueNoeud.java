@@ -169,6 +169,17 @@ public class VueNoeud {
 	public String getCouleurRemplissage() {
 		return couleurBordure;
 	}
+
+
+	/**
+	 * Méthode permettant de changer les couleurs d'une vueNoeud
+	 * @param numPlage le numéro de la plage horaire à laquelle il appartient
+	 */
+	public void setColors(int numPlage) {
+		this.couleurRemplissage = COULEUR_REMPLISSAGE[numPlage];
+		this.couleurBordure = COULEUR_BORDURE[numPlage];
+		
+	}
     
 
 }
