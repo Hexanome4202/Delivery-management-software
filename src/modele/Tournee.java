@@ -510,7 +510,7 @@ public class Tournee {
 			}
 
 		}
-
+		if(code==1)
 		code = testerListePlagesHoraires();
 
 		if (code != Codes.PARSE_OK) {
