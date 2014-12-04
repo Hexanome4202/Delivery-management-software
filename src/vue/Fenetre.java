@@ -425,6 +425,7 @@ public class Fenetre extends JFrame {
 		menuFichier.add(actionQuitter);
 		menuEdition.add(actionAnnuler);
 		menuEdition.add(actionRetablir);
+		menuAide.add(actionHelp);
 
 		menuBar.add(menuFichier);
 		menuBar.add(menuEdition);
@@ -474,9 +475,6 @@ public class Fenetre extends JFrame {
 				Noeud noeudASupprimer = vuePlan.getNoeudLivraisonSelectionne();
 				if (noeudASupprimer != null) {
 					controleur.supprimerLivraison(noeudASupprimer);
-				} else {
-					// TODO remplacer ça par un affichage graphique
-					System.out.println("Rien à supprimer");
 				}
 				btnSupprimer.setEnabled(false);
 			}

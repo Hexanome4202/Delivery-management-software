@@ -1,7 +1,5 @@
 package vue;
 
-import com.mxgraph.view.mxGraph;
-
 import modele.DemandeDeLivraison;
 
 public class VueEntrepot extends VueDemandeDeLivraison {
@@ -19,7 +17,6 @@ public class VueEntrepot extends VueDemandeDeLivraison {
 		super(entrepot, hX, hY, "yellow", "black");
 		modifierForme("shape=ellipse;"
 				, TAILLE);
-		System.out.println("Création Entrepot");
 	}	
 	
 	/**

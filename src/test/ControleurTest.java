@@ -166,7 +166,7 @@ public class ControleurTest {
 	@Test
 	public void testGererFichierLivraisonsPlagesChevauchent(){
 		Controleur c = new Controleur();
-		c.setModeTest(true);
+		//c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/errors/livraisonsChevauche.xml"), "horaires");
 		PlageHoraire plage = null;
@@ -200,7 +200,6 @@ public class ControleurTest {
 	@Test
 	public void testGererFichierLivraisonsPlageHoraireInvalide(){
 		Controleur c = new Controleur();
-		c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/errors/livraisonsPlageInvalide.xml"), "horaires");
 		
@@ -215,7 +214,6 @@ public class ControleurTest {
 	@Test
 	public void testGererFichierLivraisonsLivraisonInvalide(){
 		Controleur c = new Controleur();
-		c.setModeTest(true);
 		c.gererFichier(new File("XML/plan2.xml"), "plan");
 		c.gererFichier(new File("XML/errors/livraisonsLivraisonInvalide.xml"), "horaires");
 		

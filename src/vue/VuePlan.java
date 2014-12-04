@@ -169,8 +169,6 @@ public class VuePlan extends mxGraphComponent{
 		vueNoeuds.put(entrepot.getId(), vueEntrepot);
 		vueTournee.setTournee(vueTournee.getTournee());
 		vueTournee.afficher(graph);
-		
-		System.out.println("On dessine la tournée");
 	}
 	
 	/**
@@ -271,9 +269,6 @@ public class VuePlan extends mxGraphComponent{
 		// On réaffiche le plan proprement, sans point de livraison
 		afficherPlan();
 		vueTournee.afficher(graph);
-		
-		System.out.println("On affiche les demandes de livraison");
-		
 	}
 	
 	
