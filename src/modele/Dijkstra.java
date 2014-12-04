@@ -8,6 +8,7 @@ import java.util.Set;
 
 /**
  * Classe regroupant les méthodes utilisées pour trouver des plus courts chemins
+ * 
  * @author Alexandre
  *
  */
@@ -16,30 +17,31 @@ public class Dijkstra {
 	private static Noeud noeudDepart = null;
 	private static Noeud noeudDestination = null;
 	public static LinkedList<Troncon> chemin = new LinkedList<Troncon>();
-	
+
 	private static HashMap<Noeud, Double> graphePonderation = new HashMap<Noeud, Double>();
 	private static HashMap<Noeud, Noeud> grapheVoisinPrecedent = new HashMap<Noeud, Noeud>();
-	
+
 	private static ArrayList<Noeud> noeudsVisites = new ArrayList<Noeud>();
 	private static ArrayList<Noeud> noeudsNonVisites = new ArrayList<Noeud>();
-	
 
 	/**
 	 * Méthode calculant le plus court chemin entre deux noeuds
 	 * 
 	 * @param noeudDepart
 	 * @param noeudDestination
-	 * @param noeuds : ensemble de tous les noeuds du plan
+	 * @param noeuds
+	 *            : ensemble de tous les noeuds du plan
 	 * @return la pondération du chemin total (soit le temps total pour ce
 	 *         chemin)
 	 */
-	public static double calculerDijkstra(Noeud noeudDepart, Noeud noeudDestination, Set<Noeud> noeuds) {
+	public static double calculerDijkstra(Noeud noeudDepart,
+			Noeud noeudDestination, Set<Noeud> noeuds) {
 
 		reinitialiserVariables();
-		
+
 		Dijkstra.noeudDepart = noeudDepart;
 		Dijkstra.noeudDestination = noeudDestination;
-		
+
 		Iterator<Noeud> itNoeuds = noeuds.iterator();
 		while (itNoeuds.hasNext()) {
 			Noeud noeud = itNoeuds.next();
@@ -55,7 +57,8 @@ public class Dijkstra {
 			Noeud noeudCourant = noeudDePlusPetitePonderation();
 			noeudsNonVisites.remove(noeudCourant);
 			noeudsVisites.add(noeudCourant);
-			if(graphePonderation.get(noeudCourant) < graphePonderation.get(Dijkstra.noeudDestination)){
+			if (graphePonderation.get(noeudCourant) < graphePonderation
+					.get(Dijkstra.noeudDestination)) {
 				evaluerVoisins(noeudCourant);
 			}
 		}
@@ -64,7 +67,7 @@ public class Dijkstra {
 		Noeud noeudFin = Dijkstra.noeudDestination;
 
 		Dijkstra.chemin = new LinkedList<Troncon>();
-		
+
 		while (noeudDebut != Dijkstra.noeudDepart) {
 			noeudDebut = grapheVoisinPrecedent.get(noeudFin);
 			if (noeudDebut == null) {
@@ -93,7 +96,7 @@ public class Dijkstra {
 		grapheVoisinPrecedent = new HashMap<Noeud, Noeud>();
 		noeudsVisites = new ArrayList<Noeud>();
 		noeudsNonVisites = new ArrayList<Noeud>();
-		
+
 	}
 
 	/**

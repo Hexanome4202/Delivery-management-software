@@ -40,9 +40,10 @@ public class PlageHoraire {
 	 * 
 	 * @param heureDebut
 	 * @param heureFin
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
-	public PlageHoraire(String heureDebut, String heureFin) throws ParseException {
+	public PlageHoraire(String heureDebut, String heureFin)
+			throws ParseException {
 		this.heureDebut = new SimpleDateFormat("H:m:s", Locale.ENGLISH)
 				.parse(heureDebut);
 		this.heureFin = new SimpleDateFormat("H:m:s", Locale.ENGLISH)
@@ -56,7 +57,7 @@ public class PlageHoraire {
 	 * 
 	 * @param heureDebut
 	 * @param heureFin
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public PlageHoraire(String heureDebut, String heureFin,
 			Set<DemandeDeLivraison> demandes) throws ParseException {
@@ -67,6 +68,7 @@ public class PlageHoraire {
 	// ----- Getter(s)
 	/**
 	 * Getter de l'attribut <code>heureDebut</code>
+	 * 
 	 * @return l'heure de début de la <code>PlageHoraire</code>
 	 */
 	public Date getHeureDebut() {
@@ -81,9 +83,10 @@ public class PlageHoraire {
 	public Date getHeureFin() {
 		return this.heureFin;
 	}
-	
+
 	/**
 	 * Getter de l'attribut <code>demandesLivraisonPlage</code>
+	 * 
 	 * @return
 	 */
 	public Set<DemandeDeLivraison> getDemandeLivraison() {
@@ -93,15 +96,18 @@ public class PlageHoraire {
 	// ----- Setter(s)
 	/**
 	 * Setter(s) de l'attribut <code>demandeLivraisonPlage</codes>
+	 * 
 	 * @param demandes
 	 */
 	public void setDemandesDeLivraison(Set<DemandeDeLivraison> demandes) {
 		this.demandesLivraisonPlage = demandes;
 	}
-	
+
 	// ----- Méthode(s)
 	/**
-	 * Méthode permettant de récupérer tous les noeuds de la <code>PlageHoraire</code>
+	 * Méthode permettant de récupérer tous les noeuds de la
+	 * <code>PlageHoraire</code>
+	 * 
 	 * @return les noeuds correspondants aux demandes de livraisons de la plage
 	 *         horaire
 	 */
@@ -116,13 +122,15 @@ public class PlageHoraire {
 		}
 		return noeuds;
 	}
-	
+
 	/**
-	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de son id
+	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de son
+	 * id
+	 * 
 	 * @param id
 	 *            Id du noeud que l'on souhaite trouver.
-	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>,
-	 *         null sinon
+	 * @return Le noeud ayant comme <code>id<code> égal à <code>id</code>, null
+	 *         sinon
 	 */
 	public Noeud recupererNoeud(Integer id) {
 		Noeud noeud = null;
@@ -156,32 +164,33 @@ public class PlageHoraire {
 		String tag = "Livraison";
 		NodeList liste = plageElement.getElementsByTagName(tag);
 		demandesLivraisonPlage.clear();
-		int code=Codes.PARSE_OK;
+		int code = Codes.PARSE_OK;
 		for (int i = 0; i < liste.getLength(); i++) {
-			try{
+			try {
 				Element livraisonElement = (Element) liste.item(i);
-				Integer id = Integer.parseInt(livraisonElement.getAttribute("id"));
+				Integer id = Integer.parseInt(livraisonElement
+						.getAttribute("id"));
 				Integer adresse = Integer.parseInt(livraisonElement
 						.getAttribute("adresse"));
 				Integer idClient = Integer.parseInt(livraisonElement
 						.getAttribute("client"));
 				Noeud noeud = planTournee.recupererNoeud(adresse);
-	
+
 				if (noeud != null) {
-					DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(id,
-							noeud, idClient, this);
+					DemandeDeLivraison nouvelleDemande = new DemandeDeLivraison(
+							id, noeud, idClient, this);
 					demandesLivraisonPlage.add(nouvelleDemande);
 				} else {
-					//demandesLivraisonPlage.clear();
-					code= Codes.ERREUR_305;
+					// demandesLivraisonPlage.clear();
+					code = Codes.ERREUR_305;
 				}
 			} catch (NumberFormatException e) {
-				code=Codes.ERREUR_308;
+				code = Codes.ERREUR_308;
 			}
 
 			// ajout des elements crees dans la structure objet
 		}
 
 		return code;
-	}	
+	}
 }

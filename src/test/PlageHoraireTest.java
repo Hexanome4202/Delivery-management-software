@@ -35,11 +35,12 @@ public class PlageHoraireTest {
 		PlageHoraire plage;
 		try {
 			plage = new PlageHoraire("18:00:00", "20:00:00", demandes);
-			assertEquals("Erreur - La liste de noeuds n'est pas correcte", plage.getNoeuds(), noeuds);
+			assertEquals("Erreur - La liste de noeuds n'est pas correcte",
+					plage.getNoeuds(), noeuds);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Test
@@ -66,6 +67,6 @@ public class PlageHoraireTest {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 }

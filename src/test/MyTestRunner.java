@@ -10,17 +10,17 @@ public class MyTestRunner {
 		for (Failure failure : result.getFailures()) {
 			System.out.println(failure.toString());
 		}
-		
+
 		result = JUnitCore.runClasses(ItineraireTest.class);
 		for (Failure failure : result.getFailures()) {
 			System.out.println(failure.toString());
 		}
-		
+
 		result = JUnitCore.runClasses(TronconTest.class);
 		for (Failure failure : result.getFailures()) {
 			System.out.println(failure.toString());
 		}
-		
+
 		result = JUnitCore.runClasses(TourneeTest.class);
 		for (Failure failure : result.getFailures()) {
 			System.out.println(failure.toString());

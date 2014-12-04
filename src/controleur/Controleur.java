@@ -28,27 +28,30 @@ import erreurs.Codes;
  */
 public class Controleur {
 	/**
-	 * La <code>Tournee</code> calculée à partir du <code>Plan</code> et des <code>DemandeDeLivraison</code>
+	 * La <code>Tournee</code> calculée à partir du <code>Plan</code> et des
+	 * <code>DemandeDeLivraison</code>
 	 */
 	private Tournee tournee;
-	
+
 	/**
 	 * La vue correspondant à la <code>Tournee</code> calculée
 	 */
 	private VueTournee vueTournee;
-	
+
 	/**
-	 * Le <code>Plan</code> contenant les <code>Noeud</code>s ainsi que les <code>Troncon</code>s
+	 * Le <code>Plan</code> contenant les <code>Noeud</code>s ainsi que les
+	 * <code>Troncon</code>s
 	 */
 	private Plan plan;
-	
+
 	/**
 	 * La <code>Fenetre</code>, c'est à dire l'IHM
 	 */
 	private Fenetre fen;
-	
+
 	/**
-	 * Booléen permettant d'activier/désactiver le mode de test afin d'éviter l'affichage des IHMs durant les tests
+	 * Booléen permettant d'activier/désactiver le mode de test afin d'éviter
+	 * l'affichage des IHMs durant les tests
 	 */
 	private boolean modeTests;
 
@@ -75,6 +78,7 @@ public class Controleur {
 	// ----- Getter(s)
 	/**
 	 * Getter de l'attribut <code>plan</code>
+	 * 
 	 * @return le <code>Plan</code>
 	 */
 	public Plan getPlan() {
@@ -83,12 +87,13 @@ public class Controleur {
 
 	/**
 	 * Getter de l'attribut <code>tournee</code>
+	 * 
 	 * @return la <code>Tournee</code>
 	 */
 	public Tournee getTournee() {
 		return this.tournee;
 	}
-	
+
 	// ----- Setter(s)
 	/**
 	 * Permet de lancer les tests sans obtenir de pop-up qui doit être fermée à
@@ -103,7 +108,7 @@ public class Controleur {
 		else
 			this.fen.setVisible(false);
 	}
-	
+
 	// ----- Méthode(s)
 	/**
 	 * Ajouter une nouvelle livraison
@@ -129,7 +134,8 @@ public class Controleur {
 	}
 
 	/**
-	 * Calcule la tournée correspondant au <code>Plan</code> ainsi qu'aux <code>DemandeDeLivraison</code>s
+	 * Calcule la tournée correspondant au <code>Plan</code> ainsi qu'aux
+	 * <code>DemandeDeLivraison</code>s
 	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
@@ -137,12 +143,16 @@ public class Controleur {
 	}
 
 	/**
-	 * Supprime une <code>DemandeDeLivraison</code> à partir de son <code>Noeud</code>
-	 * @param noeudASupprimer le <code>Noeud</code> correspondant à la <code>DemandeDeLivraison</code> à supprimer
+	 * Supprime une <code>DemandeDeLivraison</code> à partir de son
+	 * <code>Noeud</code>
+	 * 
+	 * @param noeudASupprimer
+	 *            le <code>Noeud</code> correspondant à la
+	 *            <code>DemandeDeLivraison</code> à supprimer
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
 		fen.setMessage("Suppression du point de livraison en cours...");
-	
+
 		Commande commande = new CommandeSupprimerLivraison(tournee,
 				noeudASupprimer);
 		gestionnaire.executerNouvelleCommande(commande);
@@ -155,6 +165,7 @@ public class Controleur {
 
 	/**
 	 * Permet d'éditer la feuille de route
+	 * 
 	 * @return un object de type <code>String</code> contenant la feuille éditée
 	 */
 	public String editerFeuilleRoute() {
@@ -188,8 +199,8 @@ public class Controleur {
 					fen.afficherDemandesLivraisons(tournee);
 					fen.activerCalculItineraire();
 					fen.setMessage("");
-					
-				}  else {
+
+				} else {
 					resultatConstruction = Codes.PARSE_ERROR;
 				}
 			} else if (typeFichier.equals("plan")) {
@@ -202,7 +213,7 @@ public class Controleur {
 						fen.setMessage("");
 						fen.majMenuHoraire(tournee.getPlagesHoraires());
 					}
-				}  else {
+				} else {
 					resultatConstruction = Codes.PARSE_ERROR;
 				}
 			}
@@ -277,8 +288,8 @@ public class Controleur {
 		if (gestionnaire.annulerDerniereCommande()) {
 			testBoutonsAnnulerRetablir();
 			fen.majTotale(plan, tournee);
-		}else{
-			fen.afficherPopupErreur("Undo n'est pas possible!","Erreur 151");
+		} else {
+			fen.afficherPopupErreur("Undo n'est pas possible!", "Erreur 151");
 		}
 	}
 
@@ -294,12 +305,9 @@ public class Controleur {
 		}
 	}
 
-	public static void main(String[] args) {
-		new Controleur();
-	}
-
 	/**
 	 * Permet d'enregistrer la feuille de route dans un fichier texte
+	 * 
 	 * @param fichier
 	 *            dont on va realiser la sauvegarde de la tournee
 	 */
@@ -332,4 +340,9 @@ public class Controleur {
 			fen.setBtnRetablirEnabled(false);
 		}
 	}
+
+	public static void main(String[] args) {
+		new Controleur();
+	}
+
 }
