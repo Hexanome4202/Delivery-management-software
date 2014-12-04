@@ -224,7 +224,18 @@ public class Fenetre extends JFrame implements Observer {
 					// Si on est dans l'ajout de point de livraison
 					if (noeudAAjouter != null) {
 						if (noeudsALivrer.containsKey(n.getId())) {
-							controleur.ajouterLivraison(0, noeudAAjouter, n);
+							String idClient = JOptionPane.showInputDialog(null,"Veuillez saisir le numero du client:", null);
+							int id=Integer.parseInt(idClient);
+							try {
+								if (id>=0) {
+									controleur.ajouterLivraison(id,
+											noeudAAjouter, n);
+								}else{
+									JOptionPane.showMessageDialog(null,"L'identifiant doit être positif!","Erreur",JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (NumberFormatException e1) {
+								JOptionPane.showMessageDialog(null,"Erreur de saisie!","Erreur",JOptionPane.ERROR_MESSAGE);
+							}
 							noeudAAjouter = null;
 						}
 					} else {
@@ -438,8 +449,11 @@ public class Fenetre extends JFrame implements Observer {
 		actionQuitter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false); // you can't see me!
-				dispose(); // Destroy the JFrame object
+				int dialogueConfirmation = JOptionPane.showConfirmDialog (null, "Voulez-vous vraiment quitter?","Quitter",JOptionPane.YES_NO_OPTION);
+				if(dialogueConfirmation == JOptionPane.YES_OPTION){
+					setVisible(false); // you can't see me!
+					dispose(); // Destroy the JFrame object
+				}
 			}
 		});
 

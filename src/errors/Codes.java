@@ -2,6 +2,9 @@ package errors;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Classe contenant les codes d'erreur de l'application ainsi qu'une fonction gérant l'affichage des erreurs
+ */
 public class Codes {
 	/**
 	 * 
@@ -35,7 +38,13 @@ public class Codes {
 	 * Noued correspondant a l'entrepot n'existe pas
 	 */
 	static public final int ERREUR_306 = 306;
+	/**
+	 * L'heure de debut de la plage horaire est plus grande que la fin
+	 */
 	static public final int ERREUR_307 = 307;
+	/**
+	 * erreur dans la construction des livraisons
+	 */
 	static public final int ERREUR_308 = 308;
 	/**
 	 * Le fichier contient des plages horaires qui se chevauchent

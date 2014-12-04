@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,9 +14,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import modele.Noeud;
 import modele.Plan;
 import modele.Tournee;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+
+import vue.Fenetre;
+import vue.VueTournee;
 
 import commande.Commande;
 import commande.CommandeAjouterLivraison;
@@ -30,17 +35,39 @@ import errors.Codes;
  */
 public class Controleur {
 
+
+
+	/**
+	 * La <code>Tournee</code> calculée à partir du <code>Plan</code> et des <code>DemandeDeLivraison</code>
+	 */
 	private Tournee tournee;
-	private VueTournee vueTournee;
-	private Plan plan;
-	private Fenetre fen;
-	private boolean modeTests;
 	
+	/**
+	 * La vue correspondant à la <code>Tournee</code> calculée
+	 */
+	private VueTournee vueTournee;
+	
+	/**
+	 * Le <code>Plan</code> contenant les <code>Noeud</code>s ainsi que les <code>Troncon</code>s
+	 */
+	private Plan plan;
+	
+	/**
+	 * La <code>Fenetre</code>, c'est à dire l'IHM
+	 */
+	private Fenetre fen;
+	
+	/**
+	 * Booléen permettant d'activier/désactiver le mode de test afin d'éviter l'affichage des IHMs durant les tests
+	 */
+	private boolean modeTests;
+
 	/**
 	 * Le gestionnaire des commandes de l'application
 	 */
 	private GestionnaireDeCommandes gestionnaire;
 
+	// ----- Constructeur(s)
 	/**
 	 * Constructeur par défaut de la classe <code>Controleur</code>
 	 */
@@ -54,14 +81,54 @@ public class Controleur {
 		this.gestionnaire = new GestionnaireDeCommandes();
 	}
 
+	// ----- Getter(s)
+	/**
+	 * Getter de l'attribut <code>plan</code>
+	 * @return le <code>Plan</code>
+	 */
+	public Plan getPlan() {
+		return this.plan;
+	}
+
+	/**
+	 * Getter de l'attribut <code>tournee</code>
+	 * @return la <code>Tournee</code>
+	 */
+	public Tournee getTournee() {
+		return this.tournee;
+	}
+	
+	// ----- Setter(s)
+	/**
+	 * Permet de lancer les tests sans obtenir de pop-up qui doit être fermée à
+	 * la main
+	 * 
+	 * @param val
+	 */
+	public void setModeTest(boolean val) {
+		this.modeTests = val;
+		if (val)
+			this.fen.setVisible(false);
+		else
+			this.fen.setVisible(false);
+	}
+	
+	// ----- Méthode(s)
 	/**
 	 * Ajouter une nouvelle livraison
-	 * @param client l'id du client
-	 * @param noeud le <code>Noeud</code> pour lequel on souhaite ajouter une <code>DemandeDeLivraison</code>
-	 * @param precedent le <code>Noeud</code> après lequel on souhaite ajouter une <code>DemandeDeLivraison</code>
+	 * 
+	 * @param client
+	 *            l'id du client
+	 * @param noeud
+	 *            le <code>Noeud</code> pour lequel on souhaite ajouter une
+	 *            <code>DemandeDeLivraison</code>
+	 * @param precedent
+	 *            le <code>Noeud</code> après lequel on souhaite ajouter une
+	 *            <code>DemandeDeLivraison</code>
 	 */
 	public void ajouterLivraison(int client, Noeud courant, Noeud precedent) {
-		Commande commande = new CommandeAjouterLivraison(tournee, client, courant, precedent);
+		Commande commande = new CommandeAjouterLivraison(tournee, client,
+				courant, precedent);
 		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
@@ -71,7 +138,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Calcule la tournée
+	 * Calcule la tournée correspondant au <code>Plan</code> ainsi qu'aux <code>DemandeDeLivraison</code>s
 	 */
 	public void calculerTournee() {
 		this.tournee.calculerTournee();
@@ -79,13 +146,15 @@ public class Controleur {
 	}
 
 	/**
-	 * @param livraison
+	 * Supprime une <code>DemandeDeLivraison</code> à partir de son <code>Noeud</code>
+	 * @param noeudASupprimer le <code>Noeud</code> correspondant à la <code>DemandeDeLivraison</code> à supprimer
 	 */
 	public void supprimerLivraison(Noeud noeudASupprimer) {
 		fen.setMessage("Suppression du point de livraison en cours...");
-		
-		Commande commande = new CommandeSupprimerLivraison(tournee, noeudASupprimer);
-		gestionnaire.executerNouvelleCommande(commande);		
+
+		Commande commande = new CommandeSupprimerLivraison(tournee,
+				noeudASupprimer);
+		gestionnaire.executerNouvelleCommande(commande);
 		testBoutonsAnnulerRetablir();
 
 		fen.majTotale(plan.getToutNoeuds(), tournee);;
@@ -93,19 +162,13 @@ public class Controleur {
 	}
 
 	/**
-	 * @return un object de type <code>String</code> contenant la feuille editee
+	 * Permet d'éditer la feuille de route
+	 * @return un object de type <code>String</code> contenant la feuille éditée
 	 */
 	public String editerFeuilleRoute() {
 		return this.tournee.editerFeuilleRoute();
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 */
-	public void planClique(int x, int y) {
-		// TODO implement here
-	}
 
 	/**
 	 * Methode responsable du traitement du fichier xml
@@ -155,17 +218,20 @@ public class Controleur {
 		} catch (ParserConfigurationException pce) {
 			System.out.println("Erreur de configuration du parseur DOM");
 			if (!this.modeTests)
-				fen.afficherPopupErreur("Erreur de configuration du parseur DOM!", "Erreur");
-			System.out.println("lors de l'appel a fabrique.newDocumentBuilder();");
+				fen.afficherPopupErreur(
+						"Erreur de configuration du parseur DOM!", "Erreur");
+			System.out
+					.println("lors de l'appel a fabrique.newDocumentBuilder();");
 		} catch (SAXException se) {
 			System.out.println("Erreur lors du parsing du document");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
 			if (!this.modeTests)
-				fen.afficherPopupErreur("Problème de parsing du document xml!", "Erreur");
+				fen.afficherPopupErreur("Problème de parsing du document xml!",
+						"Erreur");
 		} catch (IOException ioe) {
 			System.out.println("Erreur d'entree/sortie");
 			if (!this.modeTests)
-				fen.afficherPopupErreur("Erreur d'entree/sortie!","Erreur");
+				fen.afficherPopupErreur("Erreur d'entree/sortie!", "Erreur");
 			System.out.println("lors de l'appel a construteur.parse(xml)");
 		}
 		return Codes.PARSE_ERROR;
@@ -191,8 +257,7 @@ public class Controleur {
 	}
 
 	/**
-	 * Methode responsable de la construction du plan à partir d'un element
-	 * xml
+	 * Methode responsable de la construction du plan à partir d'un element xml
 	 * 
 	 * @param planElement
 	 * @return
@@ -208,8 +273,11 @@ public class Controleur {
 		return Codes.PARSE_OK;
 	}
 
+	/**
+	 * Méthode permettant d'annuler une <code>Commande</code>
+	 */
 	public void undo() {
-		if(gestionnaire.annulerDerniereCommande()){
+		if(gestionnaire.annulerDerniereCommande()) {
 			testBoutonsAnnulerRetablir();
 			fen.majTotale(plan.getToutNoeuds(), tournee);
 		}else{
@@ -217,8 +285,11 @@ public class Controleur {
 		}
 	}
 
+	/**
+	 * Méthode permettant de rétablir l'exécution d'une <code>commande</code>
+	 */
 	public void redo() {
-		if(gestionnaire.refaireCommandeAnnulee()){
+		if(gestionnaire.refaireCommandeAnnulee()) {
 			testBoutonsAnnulerRetablir();
 			fen.majTotale(plan.getToutNoeuds(), tournee);
 		} else {
@@ -226,35 +297,7 @@ public class Controleur {
 		}
 	}
 
-	/**
-	 * 
-	 * @return le <code>Plan</code>
-	 */
-	public Plan getPlan() {
-		return this.plan;
-	}
 
-	/**
-	 * 
-	 * @return la <code>Tournee</code>
-	 */
-	public Tournee getTournee() {
-		return this.tournee;
-	}
-
-	/**
-	 * Permet de lancer les tests sans obtenir de pop-up qui doit être fermée à
-	 * la main
-	 * 
-	 * @param val
-	 */
-	public void setModeTest(boolean val) {
-		this.modeTests = val;
-		if (val)
-			this.fen.setVisible(false);
-		else
-			this.fen.setVisible(false);
-	}
 
 	public static void main(String[] args) {
 		new Controleur();
@@ -262,8 +305,9 @@ public class Controleur {
 	
 
 	/**
-	 * 
-	 * @param fichier dont on va realiser la sauvegarde de la tournee
+	 * Permet d'enregistrer la feuille de route dans un fichier texte
+	 * @param fichier
+	 *            dont on va realiser la sauvegarde de la tournee
 	 */
 	public void genererFichierImpression(File fichier) {
 		try {
@@ -279,19 +323,19 @@ public class Controleur {
 	}
 	
 	/**
-	 * Méthode qui grise ou dégrise les boutons Annuler et Rétablir
-	 * en fonction du gestionnaire
+	 * Méthode qui grise ou dégrise les boutons Annuler et Rétablir en fonction
+	 * du gestionnaire
 	 */
-	public void testBoutonsAnnulerRetablir(){
-		if(gestionnaire.getIndex()>0){
+	public void testBoutonsAnnulerRetablir() {
+		if (gestionnaire.getIndex() > 0) {
 			fen.setBtnAnnulerEnabled(true);
-		}else{
+		} else {
 			fen.setBtnAnnulerEnabled(false);
 		}
-		
-		if(gestionnaire.getIndex() < gestionnaire.getCommandesSize()){
+
+		if (gestionnaire.getIndex() < gestionnaire.getCommandesSize()) {
 			fen.setBtnRetablirEnabled(true);
-		}else{
+		} else {
 			fen.setBtnRetablirEnabled(false);
 		}
 	}
