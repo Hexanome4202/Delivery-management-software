@@ -318,7 +318,8 @@ public class VuePlan extends mxGraphComponent {
 	 */
 	public boolean etatBtnSupprimer(Noeud noeud) {
 		return tourneeDessinee
-				&& vueTournee.estDemandeDeLivraison(noeud.getId());
+				&& vueTournee.estDemandeDeLivraison(noeud.getId())
+				&& noeud != vueTournee.getVueEntrepot().getNoeud();
 	}
 
 	/**

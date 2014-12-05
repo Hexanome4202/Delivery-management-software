@@ -127,7 +127,7 @@ public class VueTournee {
 			for (DemandeDeLivraison demandeDeLivraison : plage
 					.getDemandeLivraison()) {
 				VueDemandeDeLivraison vueDemande = new VueDemandeDeLivraison(
-						demandeDeLivraison, hX, hY, numPlage);
+						demandeDeLivraison.getNoeud(), hX, hY, numPlage);
 				if (tournee.getDemandesTempsDepasse() != null
 						&& tournee.getDemandesTempsDepasse().contains(
 								demandeDeLivraison)) {
@@ -253,7 +253,10 @@ public class VueTournee {
 	private void chargerEntrepotDepuisTournee(){
 		if (tournee.getEntrepot() != null) {
 			System.out.println("Chargement de l'entrepot");
-			vueEntrepot = new VueEntrepot(tournee.getEntrepot(), hX, hY);
+			vueEntrepot = new VueEntrepot(
+					vueNoeuds.get(tournee.getEntrepot().getNoeud().getId()).getNoeud(),
+					hX, hY);
+
 			vuesDemandeDeLivraison.put(vueEntrepot.getNoeud().getId(),
 					vueEntrepot);
 			vueNoeuds.get(vueEntrepot.getNoeud().getId()).modifierForme(

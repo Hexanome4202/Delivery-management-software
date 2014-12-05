@@ -3,16 +3,13 @@ package vue;
 import com.mxgraph.view.mxGraph;
 
 import modele.DemandeDeLivraison;
+import modele.Noeud;
 
 /**
  * @author: hexanome 4202
  * Vue représentant une demande de livraison
  */
 public class VueDemandeDeLivraison extends VueNoeud {
-	/**
-	 * La demande de livraison
-	 */
-	private DemandeDeLivraison demandeDeLivraison;
 
 	/**
 	 * Boolean indiquant si la demande de livraison peut être satisfaite dans la
@@ -31,11 +28,10 @@ public class VueDemandeDeLivraison extends VueNoeud {
 	 * @param hY
 	 * @param numPlage
 	 */
-	public VueDemandeDeLivraison(DemandeDeLivraison demandeDeLivraison,
+	public VueDemandeDeLivraison(Noeud demandeDeLivraison,
 			double hX, double hY, int numPlage) {
-		super(demandeDeLivraison.getNoeud(), hX, hY,
+		super(demandeDeLivraison, hX, hY,
 				COULEUR_REMPLISSAGE[numPlage], COULEUR_BORDURE[numPlage]);
-		this.demandeDeLivraison = demandeDeLivraison;
 		this.numPlage = numPlage;
 		modifierForme("shape=triangle;strokeWidth=2;fillColor=red;strokeColor="
 		+ getCouleurBordure(), RAYON_POINT); 
@@ -48,12 +44,11 @@ public class VueDemandeDeLivraison extends VueNoeud {
 	 * @param couleurRemplissage
 	 * @param couleurBordure
 	 */
-	protected VueDemandeDeLivraison(DemandeDeLivraison demandeDeLivraison,
+	protected VueDemandeDeLivraison(Noeud demandeDeLivraison,
 			double hX, double hY, String couleurRemplissage,
 			String couleurBordure) {
-		super(demandeDeLivraison.getNoeud(), hX, hY, couleurRemplissage,
+		super(demandeDeLivraison, hX, hY, couleurRemplissage,
 				couleurBordure);
-		this.demandeDeLivraison = demandeDeLivraison;
 	}
 
 	/**
@@ -62,7 +57,7 @@ public class VueDemandeDeLivraison extends VueNoeud {
 	 * @param hY
 	 * @param numPlage
 	 */
-	public VueDemandeDeLivraison(DemandeDeLivraison demandeDeLivraison,
+	public VueDemandeDeLivraison(Noeud demandeDeLivraison,
 			double hX, double hY, int numPlage, boolean tempsDepasse) {
 		this(demandeDeLivraison, hX, hY, COULEUR_REMPLISSAGE[numPlage],
 				COULEUR_BORDURE[numPlage]);
@@ -109,15 +104,6 @@ public class VueDemandeDeLivraison extends VueNoeud {
 	 */
 	public int getNumPlage() {
 		return numPlage;
-	}
-
-	/**
-	 * Renvoie la demande livraison
-	 * 
-	 * @return la <code>DemandeDeLivraison</code>
-	 */
-	public DemandeDeLivraison getDemandeDeLivraison() {
-		return this.demandeDeLivraison;
 	}
 
 }

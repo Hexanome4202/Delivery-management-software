@@ -1,6 +1,7 @@
 package vue;
 
 import modele.DemandeDeLivraison;
+import modele.Noeud;
 
 /**
  * @author: hexanome 4202
@@ -17,7 +18,7 @@ public class VueEntrepot extends VueDemandeDeLivraison {
 	 * @param couleurRemplissage
 	 * @param couleurBordure
 	 */
-	public VueEntrepot(DemandeDeLivraison entrepot, double hX, double hY) {
+	public VueEntrepot(Noeud entrepot, double hX, double hY) {
 		super(entrepot, hX, hY, "yellow", "black");
 		modifierForme("shape=ellipse;", TAILLE);
 	}
