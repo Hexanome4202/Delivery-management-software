@@ -189,6 +189,7 @@ public class Controleur {
 			if (typeFichier.equals("horaires")) {
 				if (racine.getNodeName().equals("JourneeType")) {
 					resultatConstruction = construireLivraisonsAPartirDeDOMXML(racine);
+					gestionnaire = new GestionnaireDeCommandes();
 					fen.resetDessinTournee();
 					fen.majMenuHoraire(tournee.getPlagesHoraires());
 					fen.afficherDemandesLivraisons(tournee);
@@ -201,6 +202,7 @@ public class Controleur {
 			} else if (typeFichier.equals("plan")) {
 				if (racine.getNodeName().equals("Reseau")) {
 					resultatConstruction = construirePlanAPartirDeDOMXML(racine);
+					gestionnaire = new GestionnaireDeCommandes();
 					if (!this.modeTests) {
 						fen.resetDessinTournee();
 						fen.afficherPlan(plan);
