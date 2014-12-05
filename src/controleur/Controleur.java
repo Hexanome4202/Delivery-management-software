@@ -20,22 +20,17 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import vue.Fenetre;
-import vue.VueTournee;
 import erreurs.Codes;
 
 /**
- * 
+ * Controleur de l'application
+ * Gère toutes les interactions entre la vue et le modèle et pilote l'application.
  */
 public class Controleur {
 	/**
 	 * La <code>Tournee</code> calculée à partir du <code>Plan</code> et des <code>DemandeDeLivraison</code>
 	 */
 	private Tournee tournee;
-	
-	/**
-	 * La vue correspondant à la <code>Tournee</code> calculée
-	 */
-	private VueTournee vueTournee;
 	
 	/**
 	 * Le <code>Plan</code> contenant les <code>Noeud</code>s ainsi que les <code>Troncon</code>s

@@ -69,13 +69,7 @@ public class VuePlan extends mxGraphComponent{
 	 */
 	private Set<VueTroncon> vueTroncons;
 	
-	private VueTournee vueTournee;
-
-	/**
-	 * L'id des demandes de livraison qui ne pouront pas être livrés dans la
-	 * plage horaire demandée.
-	 */
-	private Set<Integer> demandesTempsDepasse;	
+	private VueTournee vueTournee;	
 
     /**
      * 
@@ -91,8 +85,6 @@ public class VuePlan extends mxGraphComponent{
 		
 		vueNoeuds = new HashMap<Integer, VueNoeud>();
 		vueTroncons = new HashSet<VueTroncon>();
-		
-		demandesTempsDepasse = new HashSet<Integer>();
     }
     
     public void setPlan(Plan plan){
