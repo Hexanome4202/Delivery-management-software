@@ -65,14 +65,7 @@ public class VueTournee {
 		if (tournee != null) {
 			this.tournee = tournee;
 
-			if (tournee.getEntrepot() != null) {
-				vueEntrepot = new VueEntrepot(tournee.getEntrepot(), hX, hY);
-				vuesDemandeDeLivraison.put(vueEntrepot.getNoeud().getId(),
-						vueEntrepot);
-				vueNoeuds.get(vueEntrepot.getNoeud().getId()).modifierForme(
-						vueEntrepot.getStyle(), vueEntrepot.getTaille());
-				;
-			}
+			chargerEntrepotDepuisTournee();
 		}
 
 		chargerVuesDemandeDeLivraison(tournee);
@@ -90,17 +83,28 @@ public class VueTournee {
 			chargerVuesDemandeDeLivraison(tournee);
 			this.tournee = tournee;
 
-			if (tournee.getEntrepot() != null) {
-				vueEntrepot = new VueEntrepot(tournee.getEntrepot(), hX, hY);
+			//On remet le style d'un point simple à celui qui représentait l'entrepot jusque là
+			if(vueEntrepot != null){
+				vueEntrepot.resetStyle();
+			}else{
+				System.out.println("Ben... pas d'entrepot");
 			}
+			
+			chargerEntrepotDepuisTournee();
+
 
 			int idPremierNoeud = vueEntrepot.getNoeud().getId();
 
 			for (Itineraire itineraire : tournee.getItineraires()) {
 				String couleur = VueNoeud.COULEUR_BORDURE[1];
 				if (vuesDemandeDeLivraison.containsKey(idPremierNoeud)) {
+					int idCouleur = idPremierNoeud; 
+					if(idPremierNoeud == vueEntrepot.getNoeud().getId()){
+						idCouleur = itineraire.getArrivee().getNoeud().getId();
+					}
+					
 					couleur = VueNoeud.COULEUR_BORDURE[vuesDemandeDeLivraison
-							.get(idPremierNoeud).getNumPlage()];
+							.get(idCouleur).getNumPlage()];
 				}
 				vuesItineraires.add(new VueItineraire(itineraire, vueNoeuds,
 						idPremierNoeud, couleur));
@@ -204,7 +208,8 @@ public class VueTournee {
 	 */
 	public void supprimerDemandeDeLivraison(int idNoeud) {
 		vueNoeuds.get(idNoeud).setColors(0);
-	}
+	}private final int RAYON_POINT = 10;
+
 
 	/**
 	 * Renvoie la tournée
@@ -230,5 +235,29 @@ public class VueTournee {
 		}
 
 		vuesDemandeDeLivraison.clear();
+	}
+	
+	/**
+	 * Méthode permettant de récupérer la VueEntrepot
+	 * @return l'entrepot
+	 */
+	public VueEntrepot getVueEntrepot(){
+		return vueEntrepot;
+	}
+	
+	/**
+	 * Méthode permettant de donner au point sur lequel est placé l'entrepot
+	 * le style de l'entrepot
+	 */
+	private void chargerEntrepotDepuisTournee(){
+		if (tournee.getEntrepot() != null) {
+			System.out.println("Chargement de l'entrepot");
+			vueEntrepot = new VueEntrepot(tournee.getEntrepot(), hX, hY);
+			vuesDemandeDeLivraison.put(vueEntrepot.getNoeud().getId(),
+					vueEntrepot);
+			vueNoeuds.get(vueEntrepot.getNoeud().getId()).modifierForme(
+					vueEntrepot.getStyle(), vueEntrepot.getTaille());
+			;
+		}
 	}
 }

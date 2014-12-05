@@ -16,12 +16,17 @@ public class VueNoeud {
 			"#07a60f", "#ff7300", "#84088c", "#08788c", "#792f2f" };
 	public final static String[] COULEUR_BORDURE = { "#838383", "#2d0968",
 			"#0d7412", "#b3560b", "#511155", "#0f5f6d", "#522828" };
+	
+	/**
+	 * Constante contenant le rayon d'un noeud du plan
+	 */
+	protected final int RAYON_POINT = 10;
 
 	/**
 	 * Le rayon du point représentant le noeud Vaut 10 par défaut, mais peut
 	 * être modifié si besoin
 	 */
-	private double rayonNoeud = 10;
+	private int rayonNoeud = 10;
 
 	/**
 	 * Le noeud à afficher
@@ -207,6 +212,15 @@ public class VueNoeud {
 	public void modifierForme(String style, int taille) {
 		this.style = style;
 		this.rayonNoeud = taille;
+	}
+	
+	/**
+	 * Méthode permettant d'assigner à la VueNoeud le style d'un point gris
+	 * du plan
+	 */
+	public void resetStyle(){
+		System.out.println("Reset style");
+		modifierForme(null, RAYON_POINT);
 	}
 
 	/**

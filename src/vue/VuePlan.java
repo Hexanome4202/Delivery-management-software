@@ -43,11 +43,6 @@ public class VuePlan extends mxGraphComponent {
 	private Noeud noeudSelectionne;
 
 	/**
-	 * Le noeud correspondant à l'entrepot
-	 */
-	private Noeud entrepot;
-
-	/**
 	 * Le noeud sur lequel l'utilisateur veut ajout une demande de livraison Est
 	 * null tant qu'il n'a pas sélectionné un point puis cliqué sur "Ajouter"
 	 */
@@ -67,11 +62,10 @@ public class VuePlan extends mxGraphComponent {
 	 * L'ensemble des <code>VueTroncon</code> du plan
 	 */
 	private Set<VueTroncon> vueTroncons;
-<<<<<<< HEAD
-	
-	private VueTournee vueTournee;	
-=======
 
+	/**
+	 * La <code>VueTournée</code>
+	 */
 	private VueTournee vueTournee;
 
 	/**
@@ -170,11 +164,6 @@ public class VuePlan extends mxGraphComponent {
 		noeudSelectionne = null;
 
 		tourneeDessinee = true;
-		entrepot = vueTournee.getTournee().getEntrepot().getNoeud();
-		VueEntrepot vueEntrepot = new VueEntrepot(vueTournee.getTournee()
-				.getEntrepot(), hX, hY);
-		vueEntrepot.afficher(graph);
-		vueNoeuds.put(entrepot.getId(), vueEntrepot);
 		vueTournee.setTournee(vueTournee.getTournee());
 		vueTournee.afficher(graph);
 	}
@@ -293,8 +282,8 @@ public class VuePlan extends mxGraphComponent {
 	 */
 	public boolean doitAjouterPoint(Noeud noeud) {
 		return (noeudAAjouter != null && (vueTournee
-				.estDemandeDeLivraison(noeud.getId()) || noeud.getId() == entrepot
-				.getId()));
+				.estDemandeDeLivraison(noeud.getId()) || 
+				noeud.getId() == vueTournee.getVueEntrepot().getNoeud().getId()));
 	}
 
 	/**
@@ -312,7 +301,9 @@ public class VuePlan extends mxGraphComponent {
 	 * @return l'état que doit avoir le bouton
 	 */
 	public boolean etatBtnAjouter(Noeud noeud) {
-		return tourneeDessinee && entrepot != null && noeud != entrepot
+		return tourneeDessinee 
+				&& vueTournee.getVueEntrepot() != null 
+				&& noeud != vueTournee.getVueEntrepot().getNoeud()
 				&& !vueTournee.estDemandeDeLivraison(noeud.getId());
 	}
 

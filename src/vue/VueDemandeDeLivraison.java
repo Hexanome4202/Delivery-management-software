@@ -36,6 +36,8 @@ public class VueDemandeDeLivraison extends VueNoeud {
 				COULEUR_REMPLISSAGE[numPlage], COULEUR_BORDURE[numPlage]);
 		this.demandeDeLivraison = demandeDeLivraison;
 		this.numPlage = numPlage;
+		modifierForme("shape=triangle;strokeWidth=2;fillColor=red;strokeColor="
+		+ getCouleurBordure(), RAYON_POINT); 
 	}
 
 	/**
@@ -84,6 +86,9 @@ public class VueDemandeDeLivraison extends VueNoeud {
 	 * @param point
 	 */
 	public void afficher(mxGraph graph, Object point) {
+		if(getStyle() != null){
+			super.afficher(graph);
+		}
 		if (!tempsDepasse) {
 			// TODO Grossir le temps dépassé
 			graph.setCellStyle("fillColor=" + getCouleurRemplissage()
