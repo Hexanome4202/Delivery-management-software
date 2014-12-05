@@ -232,10 +232,23 @@ public class VueTournee {
 		Set<Integer> cles = vuesDemandeDeLivraison.keySet();
 		for (Integer cle : cles) {
 			vueNoeuds.get(cle).setColors(0);
+			vueNoeuds.get(cle).resetStyle();
 			vueNoeuds.get(cle).afficher(graph);
 		}
 
 		vuesDemandeDeLivraison.clear();
+	}
+	
+	/**
+	 * Méthode permettant de réinitialiser tous les points du graph
+	 */
+	public void resetNoeuds(){
+		// On remet tous les noeuds en gris
+		Set<Integer> cles = vuesDemandeDeLivraison.keySet();
+		for (Integer cle : cles) {
+			vueNoeuds.get(cle).setColors(0);
+			vueNoeuds.get(cle).resetStyle();
+		}
 	}
 	
 	/**

@@ -264,6 +264,9 @@ public class VuePlan extends mxGraphComponent {
 	 * @param vueTournee
 	 */
 	public void setTournee(Tournee tournee) {
+		if(vueTournee != null){
+			vueTournee.resetNoeuds();
+		}
 		this.vueTournee = new VueTournee(tournee, hX, hY, vueNoeuds);
 	}
 
