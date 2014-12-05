@@ -78,8 +78,8 @@ public class VueDemandeDeLivraison extends VueNoeud {
 	 */
 	public void setTempsDepasse(boolean tempsDepasse) {
 		if(tempsDepasse){
-			modifierForme("fillColor=" + getCouleurRemplissage()
-					+ ";strokeColor=" + getCouleurBordure(), RAYON_POINT);
+			modifierForme("shape=triangle;strokeWidth=2;fillColor=red;strokeColor="
+					+ getCouleurBordure(), RAYON_POINT);
 		}else{
 			modifierForme("fillColor=" + getCouleurRemplissage()+ 
 					";strokeColor=" + getCouleurBordure(), RAYON_POINT);
