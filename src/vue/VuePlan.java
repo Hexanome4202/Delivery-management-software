@@ -14,7 +14,8 @@ import modele.Tournee;
 import modele.Troncon;
 
 /**
- * 
+ * @author: hexanome 4202
+ * Vue correspondant au plan de l'application
  */
 public class VuePlan extends mxGraphComponent {
 
@@ -67,10 +68,6 @@ public class VuePlan extends mxGraphComponent {
 	 * L'ensemble des <code>VueTroncon</code> du plan
 	 */
 	private Set<VueTroncon> vueTroncons;
-<<<<<<< HEAD
-	
-	private VueTournee vueTournee;	
-=======
 
 	private VueTournee vueTournee;
 

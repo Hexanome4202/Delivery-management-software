@@ -12,7 +12,8 @@ import modele.PlageHoraire;
 import modele.Tournee;
 
 /**
- * 
+ * @author: hexanome 4202
+ * Vue correspondant à la tournée de l'application
  */
 public class VueTournee {
 

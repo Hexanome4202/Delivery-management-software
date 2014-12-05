@@ -6,7 +6,7 @@ import tsp.Graph;
 /**
  * Classe définissant le <code>Graph</code> d'une <code>Tournee</code>
  * 
- * @author asarazin1
+ * @author: hexanome 4202
  *
  */
 public class GraphTournee implements Graph {

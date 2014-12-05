@@ -6,7 +6,8 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
 /**
- * 
+ * @author: hexanome 4202
+ * Vue représentant un troncon de l'application
  */
 public class VueTroncon {
 

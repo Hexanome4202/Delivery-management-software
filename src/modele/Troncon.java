@@ -1,6 +1,7 @@
 package modele;
 
 /**
+ * @author: hexanome 4202
  * Classe représentant un tronçon d'une <code>Tournee</code>
  */
 public class Troncon implements Comparable<Troncon> {

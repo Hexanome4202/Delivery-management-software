@@ -1,6 +1,7 @@
 package modele;
 
 /**
+ * @author: hexanome 4202
  * Classe représentant la demande de livraison d'un client
  */
 public class DemandeDeLivraison implements Comparable<DemandeDeLivraison> {

@@ -5,7 +5,8 @@ import com.mxgraph.view.mxGraph;
 import modele.DemandeDeLivraison;
 
 /**
- * 
+ * @author: hexanome 4202
+ * Vue représentant une demande de livraison
  */
 public class VueDemandeDeLivraison extends VueNoeud {
 	/**

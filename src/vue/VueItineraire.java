@@ -8,7 +8,8 @@ import modele.Itineraire;
 import modele.Troncon;
 
 /**
- * 
+ * @author: hexanome 4202
+ * Vue représentant un itinéraire
  */
 public class VueItineraire {
 

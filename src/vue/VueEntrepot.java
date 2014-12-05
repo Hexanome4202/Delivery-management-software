@@ -2,6 +2,10 @@ package vue;
 
 import modele.DemandeDeLivraison;
 
+/**
+ * @author: hexanome 4202
+ * Vue représentant un entrepot
+ */
 public class VueEntrepot extends VueDemandeDeLivraison {
 
 	private final int TAILLE = 15;

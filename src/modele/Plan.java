@@ -12,7 +12,7 @@ import org.w3c.dom.NodeList;
 import erreurs.Codes;
 
 /**
- * 
+ * @author: hexanome 4202
  */
 public class Plan {
 

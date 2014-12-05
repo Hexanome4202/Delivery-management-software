@@ -5,7 +5,8 @@ import com.mxgraph.view.mxGraph;
 import modele.Noeud;
 
 /**
- * 
+ * @author: hexanome 4202
+ * Vue réprésentant un noeud
  */
 public class VueNoeud {
 	/**

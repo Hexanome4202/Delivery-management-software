@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Classe regroupant les méthodes utilisées pour trouver des plus courts chemins
  * 
- * @author Alexandre
+ * @author: hexanome 4202
  *
  */
 public class Dijkstra {

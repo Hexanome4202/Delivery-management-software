@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * @author: hexanome 4202
  * Classe correspondant à un noeud géographique de l'application
  */
 public class Noeud implements Comparable<Noeud> {
