@@ -8,23 +8,24 @@ import java.util.*;
 public class Itineraire {
 
 	/**
-     * Demande de livraison correspondant au départ de l'itinéraire
-     */
+	 * Demande de livraison correspondant au départ de l'itinéraire
+	 */
 	private DemandeDeLivraison depart;
 
 	/**
-     * Demande de livraison correspondant à l'arrivée de l'itinéraire
-     */
+	 * Demande de livraison correspondant à l'arrivée de l'itinéraire
+	 */
 	private DemandeDeLivraison arrivee;
 
 	/**
-     * Tronçons empruntés lors de l'itinéraire
-     */
+	 * Tronçons empruntés lors de l'itinéraire
+	 */
 	private List<Troncon> tronconsItineraire;
-	
+
 	// ----- Constructeur(s)
 	/**
 	 * Constructeur de la classe <code>Itineraire</code>
+	 * 
 	 * @param liv1
 	 * @param liv2
 	 * @param troncons
@@ -54,42 +55,50 @@ public class Itineraire {
 		}
 		return temps;
 	}
-	
+
 	/**
 	 * Getter de l'attribut <code>depart</code>
+	 * 
 	 * @return La demande de livraison du départ de l'itinéraire
 	 */
 	public DemandeDeLivraison getDepart() {
 		return this.depart;
 	}
-	
+
 	/**
 	 * Getter de l'attribut <code>arrivee</code>
+	 * 
 	 * @return La demande de livraison à l'arrivée de l'itinéraire
 	 */
 	public DemandeDeLivraison getArrivee() {
 		return this.arrivee;
 	}
-	
+
 	/**
 	 * Getter de l'attribut <code>tronconsItineraire</code>
-	 * @return Les <code>Troncon</code>s correspondant à l'<code>Itineraire</code>
+	 * 
+	 * @return Les <code>Troncon</code>s correspondant à l'
+	 *         <code>Itineraire</code>
 	 */
 	public List<Troncon> getTronconsItineraire() {
 		return this.tronconsItineraire;
 	}
-	
+
 	// ----- Setter(s)
 	/**
 	 * Setter de l'attribut <code>arrivee</code>
-	 * @param arrivee la <code>DemandeDeLivraison</code> correspondant à la nouvelle arrivée de l'<code>Itineraire</code>
+	 * 
+	 * @param arrivee
+	 *            la <code>DemandeDeLivraison</code> correspondant à la nouvelle
+	 *            arrivée de l'<code>Itineraire</code>
 	 */
 	public void setArrivee(DemandeDeLivraison arrivee) {
 		this.arrivee = arrivee;
 	}
-	
+
 	/**
 	 * Setter de l'attribut <code>troncons</code>
+	 * 
 	 * @param troncons
 	 */
 	public void setTroncons(List<Troncon> troncons) {

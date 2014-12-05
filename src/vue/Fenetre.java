@@ -39,18 +39,15 @@ import modele.Tournee;
 import b4.advancedgui.menu.AccordionItem;
 import b4.advancedgui.menu.AccordionLeafItem;
 import b4.advancedgui.menu.AccordionMenu;
-
 import controleur.Controleur;
 
 /**
  * 
  */
 public class Fenetre extends JFrame {
-	
-	
-	private VuePlan vuePlan;
 
-	private static final long serialVersionUID = 1L;
+	private VuePlan vuePlan;
+	private static final long serialVersionUID = 8887643900481330557L;
 
 	private Controleur controleur;
 
@@ -62,10 +59,10 @@ public class Fenetre extends JFrame {
 	private JMenuItem actionRetablir;
 	private JMenuItem actionChargerHoraires;
 	private JMenuItem actionHelp;
-	
+
 	private javax.swing.JPanel horairesPannel;
 	private AccordionMenu menuHoraires;
-	
+
 	private JFileChooser jFileChooserXML;
 
 	private JTextField message;
@@ -145,50 +142,58 @@ public class Fenetre extends JFrame {
 		pack();
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
-		/*---------------------PLAN------------------------------*/
+		
+		
+		/*---------------------PLAN---------------------------*/
 		JLabel planLabel = new JLabel("Plan");
 		planLabel.setFont(new Font("Arial", Font.BOLD, 24));
-		
+
 		vuePlan = new VuePlan();
 
 		vuePlan.getGraphControl().addMouseListener(new MouseAdapter() {
 
-					public void mouseReleased(MouseEvent e) {
-						Noeud n = vuePlan.getNoeudA(e.getX(), e.getY());
-						if (n != null) {
-							// Si on est dans l'ajout de point de livraison
-							if(vuePlan.doitAjouterPoint(n)){
-								try {
-									int idClient=Integer.parseInt(
-											JOptionPane.showInputDialog(Fenetre.this,"Veuillez saisir le numero du client:", null));
-									
-									if (idClient>=0) {
-										controleur.ajouterLivraison(idClient,
-												vuePlan.getNoeudAAjouter(), n);
-									}else{
-										JOptionPane.showMessageDialog(Fenetre.this,"L'identifiant doit être positif!","Erreur",JOptionPane.ERROR_MESSAGE);
-									}
-								} catch (NumberFormatException e1) {
-									JOptionPane.showMessageDialog(Fenetre.this,"Erreur de saisie!","Erreur",JOptionPane.ERROR_MESSAGE);
-								}
-								
-							}else {
+			public void mouseReleased(MouseEvent e) {
+				Noeud n = vuePlan.getNoeudA(e.getX(), e.getY());
+				if (n != null) {
+					// Si on est dans l'ajout de point de livraison
+					if (vuePlan.doitAjouterPoint(n)) {
+						try {
+							int idClient = Integer.parseInt(JOptionPane
+									.showInputDialog(
+											Fenetre.this,
+											"Veuillez saisir le numero du client:",
+											null));
 
-								vuePlan.changerPointSelectionne(n);
-
-								btnAjouter.setEnabled(vuePlan.etatBtnAjouter(n));
-
-								btnSupprimer.setEnabled(vuePlan.etatBtnSupprimer(n));
-
+							if (idClient >= 0) {
+								controleur.ajouterLivraison(idClient,
+										vuePlan.getNoeudAAjouter(), n);
+							} else {
+								JOptionPane.showMessageDialog(Fenetre.this,
+										"L'identifiant doit être positif!",
+										"Erreur", JOptionPane.ERROR_MESSAGE);
 							}
-						} else {
-							vuePlan.changerPointSelectionne(null);
-							btnAjouter.setEnabled(false);
-							btnSupprimer.setEnabled(false);
+						} catch (NumberFormatException e1) {
+							JOptionPane.showMessageDialog(Fenetre.this,
+									"Erreur de saisie!", "Erreur",
+									JOptionPane.ERROR_MESSAGE);
 						}
+
+					} else {
+
+						vuePlan.changerPointSelectionne(n);
+
+						btnAjouter.setEnabled(vuePlan.etatBtnAjouter(n));
+
+						btnSupprimer.setEnabled(vuePlan.etatBtnSupprimer(n));
+
 					}
-				});
-		
+				} else {
+					vuePlan.changerPointSelectionne(null);
+					btnAjouter.setEnabled(false);
+					btnSupprimer.setEnabled(false);
+				}
+			}
+		});
 
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 
@@ -299,8 +304,7 @@ public class Fenetre extends JFrame {
 																				vuePlan,
 																				GroupLayout.DEFAULT_SIZE,
 																				600,
-																				GroupLayout.DEFAULT_SIZE)
-																		)
+																				GroupLayout.DEFAULT_SIZE))
 
 														.addGroup(
 																groupLayout
@@ -311,8 +315,7 @@ public class Fenetre extends JFrame {
 																				horairesPannel,
 																				GroupLayout.DEFAULT_SIZE,
 																				600,
-																				GroupLayout.DEFAULT_SIZE)
-																		))
+																				GroupLayout.DEFAULT_SIZE)))
 										.addPreferredGap(
 												ComponentPlacement.UNRELATED)
 										.addGroup(
@@ -322,12 +325,11 @@ public class Fenetre extends JFrame {
 														.addComponent(
 																btnImprimer)
 														.addComponent(
-															message,
-															GroupLayout.PREFERRED_SIZE,
-															GroupLayout.DEFAULT_SIZE,
-															GroupLayout.PREFERRED_SIZE)
-														.addGap(20)				
-												)
+																message,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE)
+														.addGap(20))
 										.addContainerGap()));
 
 		pack();
@@ -365,18 +367,20 @@ public class Fenetre extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String message = "";
-				try(BufferedReader br = new BufferedReader(new FileReader("ressources/aide.txt"))) {
-			        StringBuilder sb = new StringBuilder();
-			        String line = br.readLine();
+				try (BufferedReader br = new BufferedReader(new FileReader(
+						"ressources/aide.txt"))) {
+					StringBuilder sb = new StringBuilder();
+					String line = br.readLine();
 
-			        while (line != null) {
-			            sb.append(line);
-			            sb.append(System.lineSeparator());
-			            line = br.readLine();
-			        }
-			        message = sb.toString();
-			        JOptionPane.showMessageDialog(null, message, "Aide", JOptionPane.INFORMATION_MESSAGE);
-			    } catch (IOException e1) {
+					while (line != null) {
+						sb.append(line);
+						sb.append(System.lineSeparator());
+						line = br.readLine();
+					}
+					message = sb.toString();
+					JOptionPane.showMessageDialog(null, message, "Aide",
+							JOptionPane.INFORMATION_MESSAGE);
+				} catch (IOException e1) {
 				}
 			}
 		});
@@ -398,10 +402,12 @@ public class Fenetre extends JFrame {
 		actionQuitter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int dialogueConfirmation = JOptionPane.showConfirmDialog (null, "Voulez-vous vraiment quitter?","Quitter",JOptionPane.YES_NO_OPTION);
-				if(dialogueConfirmation == JOptionPane.YES_OPTION){
-					setVisible(false); // you can't see me!
-					dispose(); // Destroy the JFrame object
+				int dialogueConfirmation = JOptionPane.showConfirmDialog(null,
+						"Voulez-vous vraiment quitter?", "Quitter",
+						JOptionPane.YES_NO_OPTION);
+				if (dialogueConfirmation == JOptionPane.YES_OPTION) {
+					setVisible(false);
+					dispose();
 				}
 			}
 		});
@@ -441,6 +447,7 @@ public class Fenetre extends JFrame {
 		btnCalculer = new JButton("Calculer");
 		btnCalculer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				vuePlan.changerPointSelectionne(null);
 				controleur.calculerTournee();
 			}
 		});
@@ -484,6 +491,7 @@ public class Fenetre extends JFrame {
 
 	/**
 	 * Met à jour le menu horaires
+	 * 
 	 * @param plagesHoraires
 	 */
 	public void majMenuHoraire(ArrayList<PlageHoraire> plagesHoraires) {
@@ -513,10 +521,12 @@ public class Fenetre extends JFrame {
 							+ timeFormatFin.format(plage.getHeureFin()));
 
 			for (DemandeDeLivraison livraison : plage.getDemandeLivraison()) {
-				menuHorairesMaj.addNewLeafTo("menu" + iteratorPlage, ""
-						+ livraison.getNoeud().getId(),"Client "+
-						String.valueOf(livraison.getIdClient()) +
-						" -> Livraison n°" + String.valueOf(livraison.getId()));
+				menuHorairesMaj.addNewLeafTo(
+						"menu" + iteratorPlage,
+						"" + livraison.getNoeud().getId(),
+						"Client " + String.valueOf(livraison.getIdClient())
+								+ " -> Livraison n°"
+								+ String.valueOf(livraison.getId()));
 			}
 			iteratorPlage++;
 		}
@@ -526,8 +536,13 @@ public class Fenetre extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				AccordionItem item = (AccordionItem) e.getSource();
-				vuePlan.changerPointSelectionne(controleur.getPlan().getNoeud(
-						Integer.parseInt(item.getName())));
+				try {
+					int idNoeudSelectionne = Integer.parseInt(item.getName());
+					vuePlan.changerPointSelectionne(idNoeudSelectionne);
+					btnSupprimer.setEnabled(true);
+				} catch (Exception exception) {
+				}
+
 			}
 		};
 
@@ -544,7 +559,9 @@ public class Fenetre extends JFrame {
 	}
 
 	/**
-	 * Crée le menu contenant les demandes de livraisons classées par Plage Horaire
+	 * Crée le menu contenant les demandes de livraisons classées par Plage
+	 * Horaire
+	 * 
 	 * @param plagesHoraires
 	 */
 	public void creerMenuHoraires(ArrayList<PlageHoraire> plagesHoraires) {
@@ -587,6 +604,7 @@ public class Fenetre extends JFrame {
 
 	/**
 	 * Méthode permettant de dessiner la tournée
+	 * 
 	 * @param tournee
 	 */
 	public void dessinerTournee(Tournee tournee) {
@@ -596,9 +614,9 @@ public class Fenetre extends JFrame {
 		vuePlan.dessinerTournee();
 	}
 
-
 	/**
 	 * Methode permettant de lire un fichier XML pour l'importer
+	 * 
 	 * @param typeFichier
 	 */
 	public void lireDepuisFichierXML(String typeFichier) {
@@ -608,11 +626,12 @@ public class Fenetre extends JFrame {
 			this.controleur.gererFichier(xml, typeFichier);
 		}
 	}
-	
+
 	/**
 	 * Méthode permettant d'ouvrir un fichier grâce à la fenêtre dédiée
+	 * 
 	 * @param mode
-	 * 			lecture ou écriture
+	 *            lecture ou écriture
 	 * @return le fichier ouvert
 	 */
 	private File ouvrirFichier(char mode) {
@@ -620,10 +639,10 @@ public class Fenetre extends JFrame {
 		// Note: source for ExampleFileFilter can be found in FileChooserDemo,
 		// under the demo/jfc directory in the JDK.
 		ExampleFileFilter filter = new ExampleFileFilter();
-		if(mode == 'o') {
+		if (mode == 'o') {
 			filter.addExtension("xml");
 			filter.setDescription("Fichier XML");
-		} else if(mode == 'w') {
+		} else if (mode == 'w') {
 			filter.addExtension("txt");
 			filter.setDescription("Fichier texte");
 		}
@@ -646,6 +665,7 @@ public class Fenetre extends JFrame {
 
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
+	 * 
 	 * @param noeuds
 	 */
 	public void afficherPlan(Set<Noeud> noeuds) {
@@ -653,41 +673,46 @@ public class Fenetre extends JFrame {
 		btnAjouter.setEnabled(false);
 		btnSupprimer.setEnabled(false);
 		btnCalculer.setEnabled(false);
+		btnImprimer.setEnabled(false);
 	}
-	
+
 	/**
 	 * Affiche le plan à partir des données préalablement chargées depuis un XML
+	 * 
 	 * @param plan
 	 */
-	public void afficherPlan(Plan plan){
-		vuePlan.setPlan(plan);		
+	public void afficherPlan(Plan plan) {
+		vuePlan.setPlan(plan);
 		vuePlan.afficherPlan();
+		btnAjouter.setEnabled(false);
+		btnSupprimer.setEnabled(false);
+		btnCalculer.setEnabled(false);
 	}
-	
+
 	/**
 	 * Méthode permettant d'afficher les demandes de livraison sur le plan
+	 * 
 	 * @param tournee
 	 */
-	public void afficherDemandesLivraisons(Tournee tournee){
+	public void afficherDemandesLivraisons(Tournee tournee) {
 		vuePlan.setTournee(tournee);
 		vuePlan.afficherDemandesLivraisons(tournee);
 	}
-	
+
 	/**
-	 * Méthode appelant toutes les méthodes permettant de 
-	 * redessiner complètement le plan
+	 * Méthode appelant toutes les méthodes permettant de redessiner
+	 * complètement le plan
+	 * 
 	 * @param noeuds
 	 * @param tournee
 	 */
-	public void majTotale(Plan plan, Tournee tournee){
+	public void majTotale(Plan plan, Tournee tournee) {
 		vuePlan.setPlan(plan);
 		vuePlan.setTournee(tournee);
 		vuePlan.afficherDemandesLivraisons(tournee);
 		dessinerTournee(tournee);
 		majMenuHoraire(tournee.getPlagesHoraires());
 	}
-	
-
 
 	/**
 	 * Methode permettant d'activer le bouton Charger les Horaires
@@ -715,41 +740,58 @@ public class Fenetre extends JFrame {
 	 */
 	public void genererFichierImpression() {
 		File f = ouvrirFichier('w');
-		if(f != null) {
+		if (f != null) {
 			controleur.genererFichierImpression(f);
 		}
 	}
-	
+
 	/**
 	 * Setter de l'attribut <code>Message</code>
-	 * @param message Message à afficher
+	 * 
+	 * @param message
+	 *            Message à afficher
 	 */
-	public void setMessage(String message){
+	public void setMessage(String message) {
 		this.message.setText(message);
 	}
-	
+
 	/**
 	 * Permet d'activer ou désactiver le bouton Annuler
+	 * 
 	 * @param valeur
 	 */
-	public void setBtnAnnulerEnabled(boolean valeur){
+	public void setBtnAnnulerEnabled(boolean valeur) {
 		actionAnnuler.setEnabled(valeur);
 	}
-	
+
 	/**
 	 * Permet d'activer ou désactiver le bouton Annuler
+	 * 
 	 * @param valeur
 	 */
-	public void setBtnRetablirEnabled(boolean valeur){
+	public void setBtnRetablirEnabled(boolean valeur) {
 		actionRetablir.setEnabled(valeur);
 	}
-	
+
 	/**
 	 * Méthode permettant d'afficher une popup d'erreur
+	 * 
 	 * @param message
 	 * @param titre
 	 */
-	public void afficherPopupErreur(String message, String titre){
-		JOptionPane.showMessageDialog(this, message, titre, JOptionPane.ERROR_MESSAGE);
+	public void afficherPopupErreur(String message, String titre) {
+		JOptionPane.showMessageDialog(this, message, titre,
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	/**
+	 * Méthode permettant de prévenir la VuePlan que la tournée n'est plus
+	 * dessinée
+	 */
+	public void resetDessinTournee() {
+		vuePlan.resetDessinTournee();
+		btnAjouter.setEnabled(false);
+		btnSupprimer.setEnabled(false);
+		btnImprimer.setEnabled(false);
 	}
 }

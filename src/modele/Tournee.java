@@ -28,7 +28,7 @@ import erreurs.Codes;
 public class Tournee {
 
 	public static final int TEMPS_REPOS = 10;
-	
+
 	/**
 	 * <code>DemandeDeLivraison</code> correspondant à l'entrepot
 	 */
@@ -72,10 +72,11 @@ public class Tournee {
 		this.entrepot = new DemandeDeLivraison(t.getEntrepot().getNoeud());
 		this.planTournee = new Plan(t.getPlanTournee());
 	}
-	
+
 	// ----- Getter(s)
 	/**
 	 * Getter de l'attribut <code>itineraires/code>
+	 * 
 	 * @return la liste des <code>Itineraire</code> de la tournée
 	 */
 	public ArrayList<Itineraire> getItineraires() {
@@ -84,6 +85,7 @@ public class Tournee {
 
 	/**
 	 * Getter de l'attribut <code>entrepot</code>
+	 * 
 	 * @return la <code>DemandeDeLivraison</code> correspondant à l'entrepôt
 	 */
 	public DemandeDeLivraison getEntrepot() {
@@ -92,6 +94,7 @@ public class Tournee {
 
 	/**
 	 * Getter de l'attribut <code>plageHoraires</codes>
+	 * 
 	 * @return une liste de <code>PlageHoraire</code>s appartenant à la
 	 *         <code>Tournee</code>
 	 */
@@ -101,24 +104,27 @@ public class Tournee {
 
 	/**
 	 * Getter de l'attribut <code>planTournee</code>
+	 * 
 	 * @return le plan de la <code>Tournee</code>
 	 */
 	public Plan getPlanTournee() {
 		return planTournee;
 	}
-	
+
 	// ----- Setter(s)
 	/**
 	 * Setter de l'attribut <code>plageHoraires</code>
+	 * 
 	 * @param plagesHoraires
 	 *            : liste <b>ordonnée</b> de plages horaires
 	 */
 	public void setPlagesHoraires(ArrayList<PlageHoraire> plagesHoraires) {
 		this.plagesHoraires = plagesHoraires;
 	}
-	
+
 	/**
 	 * Setter de l'attribut <code>planTournee</code>
+	 * 
 	 * @param planTournee
 	 *            : la <code>Plan</code> de la tournée
 	 */
@@ -128,6 +134,7 @@ public class Tournee {
 
 	/**
 	 * Setter de l'attribut <code>entrepot</code>
+	 * 
 	 * @param entrepot
 	 *            : la <code>DemandeDeLivraison</code> représentant l'entrepot
 	 */
@@ -138,7 +145,9 @@ public class Tournee {
 	// ----- Méthode(s)
 	/**
 	 * Supprime une <code>DemandeDeLivraison</code>
-	 * @param livraison : la livraison à supprimer
+	 * 
+	 * @param livraison
+	 *            : la livraison à supprimer
 	 */
 	public boolean supprimerLivraison(DemandeDeLivraison livraison) {
 		Iterator<Itineraire> it = this.itineraires.iterator();
@@ -162,15 +171,18 @@ public class Tournee {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Supprimer une <code>DemandeDeLivraison</code> à partir d'un <code>Noeud n</code>
-	 * @param n <code>Noeud</code> à supprimer
+	 * Supprimer une <code>DemandeDeLivraison</code> à partir d'un
+	 * <code>Noeud n</code>
+	 * 
+	 * @param n
+	 *            <code>Noeud</code> à supprimer
 	 * @return vrai si la suppression a été faite, faux sinon
 	 */
 	public boolean supprimerLivraison(Noeud n) {
 		DemandeDeLivraison demande;
-		if((demande = getDemandeDeLivraison(n)) == null) {
+		if ((demande = getDemandeDeLivraison(n)) == null) {
 			return false;
 		}
 		return supprimerLivraison(demande);
@@ -178,6 +190,7 @@ public class Tournee {
 
 	/**
 	 * Edite la feuille de route
+	 * 
 	 * @return la feuille de route editée
 	 */
 	public String editerFeuilleRoute() {
@@ -190,10 +203,11 @@ public class Tournee {
 			DemandeDeLivraison dArrive = it.getArrivee();
 			Double tempsPourLivrer = 0.0;
 
-			if (dArrive.getPlage() != plage
-					&& it.getArrivee().getId() != -1) {
+			if (dArrive.getPlage() != plage && it.getArrivee().getId() != -1) {
 				calendar.setTime(dArrive.getPlage().getHeureDebut());
-				tempsSortie = (double) calendar.get(GregorianCalendar.HOUR_OF_DAY)*60
+				tempsSortie = (double) calendar
+						.get(GregorianCalendar.HOUR_OF_DAY)
+						* 60
 						+ calendar.get(GregorianCalendar.MINUTE);
 				plage = dArrive.getPlage();
 			}
@@ -210,27 +224,24 @@ public class Tournee {
 				descLivraison = "Retour Entrepot";
 			}
 
-			ret+=descLivraison + "\n";
-			ret+="\tCoordonées de l'adresse: ("
-					+ dArrive.getNoeud().getX() + ","
-					+ dArrive.getNoeud().getY() + ")" + "\n";
-			ret+="\tHeure d'arrivé prevue: "
-					+ formatter.format(tempsArriveH) + ":"
-					+ formatter.format(tempsArriveM) + "\n";
+			ret += descLivraison + "\n";
+			ret += "\tCoordonées de l'adresse: (" + dArrive.getNoeud().getX()
+					+ "," + dArrive.getNoeud().getY() + ")" + "\n";
+			ret += "\tHeure d'arrivé prevue: " + formatter.format(tempsArriveH)
+					+ ":" + formatter.format(tempsArriveM) + "\n";
 			if (dArrive.getId() != -1) {
-				ret+="\tHeure de départ prevu: "
+				ret += "\tHeure de départ prevu: "
 						+ formatter.format(tempsDepartH) + ":"
 						+ formatter.format(tempsDepartM) + "\n";
 			}
-			ret+="\tChemin:\n";
+			ret += "\tChemin:\n";
 			for (Troncon t : it.getTronconsItineraire()) {
-				ret+="\t\t" + t.getNomRue() + ": ("
-						+ t.getNoeudFin().getX() + ","
-						+ t.getNoeudFin().getY() + ")\n";
+				ret += "\t\t" + t.getNomRue() + ": (" + t.getNoeudFin().getX()
+						+ "," + t.getNoeudFin().getY() + ")\n";
 			}
-			ret+="\tIdentifiant du client à contacter en cas de problème: "
+			ret += "\tIdentifiant du client à contacter en cas de problème: "
 					+ dArrive.getIdClient();
-			ret+="\n";
+			ret += "\n";
 
 			tempsSortie = tempsDepart;
 		}
@@ -239,9 +250,13 @@ public class Tournee {
 	}
 
 	/**
-	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de ses coordonnées
-	 * @param coordX coordonnée sur l'axe des abscisses
-	 * @param coordY coordonnée sur l'axe des ordonnées
+	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de ses
+	 * coordonnées
+	 * 
+	 * @param coordX
+	 *            coordonnée sur l'axe des abscisses
+	 * @param coordY
+	 *            coordonnée sur l'axe des ordonnées
 	 * @return le <code>Noeud</code> correspondant, ou null
 	 */
 	public Noeud recupererNoeud(int coordX, int coordY) {
@@ -260,8 +275,11 @@ public class Tournee {
 	}
 
 	/**
-	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de son id
-	 * @param idNoeud l'id du <code>Noeud</code> à récupérer
+	 * Méthode permettant de récupérer un <code>Noeud</code> en fonction de son
+	 * id
+	 * 
+	 * @param idNoeud
+	 *            l'id du <code>Noeud</code> à récupérer
 	 * @return le <code>Noeud</code> correspondant ou null
 	 */
 	public Noeud recupererNoeud(int idNoeud) {
@@ -270,9 +288,14 @@ public class Tournee {
 
 	/**
 	 * Méthode permettant d'ajouter une livraison
-	 * @param noeudPrecedent <code>Noeud</code> précédent celui qu'on doit ajouter
-	 * @param noeudCourant <code>Noeud</code> correspondant à la <code>DemandeDeLivraison</code> à ajouter
-	 * @param client l'id du client concerné par la <code>DemandeDeLivraison</code>
+	 * 
+	 * @param noeudPrecedent
+	 *            <code>Noeud</code> précédent celui qu'on doit ajouter
+	 * @param noeudCourant
+	 *            <code>Noeud</code> correspondant à la
+	 *            <code>DemandeDeLivraison</code> à ajouter
+	 * @param client
+	 *            l'id du client concerné par la <code>DemandeDeLivraison</code>
 	 */
 	public void ajouterLivraison(Noeud noeudPrecedent, Noeud noeudCourant,
 			int client) {
@@ -281,41 +304,46 @@ public class Tournee {
 		DemandeDeLivraison livraison;
 		if ((pos = effacerItineraire(noeudPrecedent)) == -1)
 			return;
-		if(noeudPrecedent == entrepot.getNoeud()){
+		if (noeudPrecedent == entrepot.getNoeud()) {
 			precedent = entrepot;
-			livraison = new DemandeDeLivraison(noeudCourant, client, plagesHoraires.get(0));
+			livraison = new DemandeDeLivraison(noeudCourant, client,
+					plagesHoraires.get(0));
 			plagesHoraires.get(0).getDemandeLivraison().add(livraison);
-		}
-		else{
-			precedent = getDemandeDeLivraison(noeudPrecedent); 
-			if(precedent == null) return;
-			livraison = new DemandeDeLivraison(noeudCourant, client, precedent.getPlage());
+		} else {
+			precedent = getDemandeDeLivraison(noeudPrecedent);
+			if (precedent == null)
+				return;
+			livraison = new DemandeDeLivraison(noeudCourant, client,
+					precedent.getPlage());
 			precedent.getPlage().getDemandeLivraison().add(livraison);
 		}
 		Dijkstra.calculerDijkstra(noeudPrecedent, noeudCourant,
 				this.planTournee.getToutNoeuds());
 		List<Troncon> troncons = Dijkstra.chemin;
 		Itineraire it1;
-		if(precedent == entrepot){
+		if (precedent == entrepot) {
 			it1 = new Itineraire(entrepot, livraison, troncons);
-		}else{
-			it1 = new Itineraire(this.itineraires.get(pos - 1)
-					.getArrivee(), livraison, troncons);
+		} else {
+			it1 = new Itineraire(this.itineraires.get(pos - 1).getArrivee(),
+					livraison, troncons);
 		}
 		int entrepot = pos == this.itineraires.size() ? 0 : pos;
 		Dijkstra.calculerDijkstra(noeudCourant, this.itineraires.get(entrepot)
 				.getDepart().getNoeud(), this.planTournee.getToutNoeuds());
 		troncons = Dijkstra.chemin;
-		Itineraire it2 = new Itineraire(livraison, this.itineraires.get(entrepot)
-				.getDepart(), troncons);
+		Itineraire it2 = new Itineraire(livraison, this.itineraires.get(
+				entrepot).getDepart(), troncons);
 		this.itineraires.add(pos, it1);
 		this.itineraires.add(pos + 1, it2);
 	}
 
 	/**
 	 * Méthode permettant de supprimer un itinéraire
-	 * @param noeudPrecedent <code>Noeud</code> d'arrivée de l'<code>Itineraire</code>
-	 * @return la position de l'<code>Itineraire</code> supprimé dans la liste d'<code>Itineraire</code>
+	 * 
+	 * @param noeudPrecedent
+	 *            <code>Noeud</code> d'arrivée de l'<code>Itineraire</code>
+	 * @return la position de l'<code>Itineraire</code> supprimé dans la liste
+	 *         d'<code>Itineraire</code>
 	 */
 	public int effacerItineraire(Noeud noeudPrecedent) {
 		int cpt = 0;
@@ -411,7 +439,7 @@ public class Tournee {
 
 				if (cout > maxCoutArc) {
 					maxCoutArc = cout;
-				} 
+				}
 				if (cout < minCoutArc) {
 					minCoutArc = cout;
 				}
@@ -448,8 +476,11 @@ public class Tournee {
 	}
 
 	/**
-	 * Méthode permettant de construire les <code>Livraison</code>s à partir d'un élément XML
-	 * @param noeudDOMRacine noeud XML
+	 * Méthode permettant de construire les <code>Livraison</code>s à partir
+	 * d'un élément XML
+	 * 
+	 * @param noeudDOMRacine
+	 *            noeud XML
 	 * @return le code d'erreur généré, s'il y en a une
 	 */
 	public int construireLivraisonsAPartirDeDOMXML(Element noeudDOMRacine) {
@@ -457,19 +488,19 @@ public class Tournee {
 		if (liste.getLength() != 1) {
 			return Codes.ERREUR_306;
 		}
-		try{
-		Element adresseElement = (Element) liste.item(0);
-		int idAdresseEntrepot = Integer.parseInt(adresseElement
-				.getAttribute("adresse"));
+		try {
+			Element adresseElement = (Element) liste.item(0);
+			int idAdresseEntrepot = Integer.parseInt(adresseElement
+					.getAttribute("adresse"));
 
-		Noeud noeudEntrepot = recupererNoeud(idAdresseEntrepot);
+			Noeud noeudEntrepot = recupererNoeud(idAdresseEntrepot);
 
-		if (noeudEntrepot != null) {
-			this.entrepot = new DemandeDeLivraison(noeudEntrepot);
-		} else {
-			return Codes.ERREUR_306;
-		}
-		}catch(NumberFormatException e){
+			if (noeudEntrepot != null) {
+				this.entrepot = new DemandeDeLivraison(noeudEntrepot);
+			} else {
+				return Codes.ERREUR_306;
+			}
+		} catch (NumberFormatException e) {
 			return Codes.ERREUR_306;
 		}
 
@@ -524,11 +555,14 @@ public class Tournee {
 	}
 
 	/**
-	 * Méthode permettant de détecter les <code>DemandeDeLivraison</code> qui arrivent en dehors de leur <code>PlageHoraire</code>
-	 * @return la liste des <code>DemandeDeLivraison</code> dont le temps est dépassé
+	 * Méthode permettant de détecter les <code>DemandeDeLivraison</code> qui
+	 * arrivent en dehors de leur <code>PlageHoraire</code>
+	 * 
+	 * @return la liste des <code>DemandeDeLivraison</code> dont le temps est
+	 *         dépassé
 	 */
 	public List<DemandeDeLivraison> getDemandesTempsDepasse() {
-		if(itineraires == null || itineraires.size() < 1){
+		if (itineraires == null || itineraires.size() < 1) {
 			return null;
 		}
 		ArrayList<DemandeDeLivraison> demandesDepassees = new ArrayList<DemandeDeLivraison>();
@@ -574,7 +608,9 @@ public class Tournee {
 	}
 
 	/**
-	 * Permet de tester la liste des plages horaires par rapport à la lecture du XML
+	 * Permet de tester la liste des plages horaires par rapport à la lecture du
+	 * XML
+	 * 
 	 * @return le code d'erreur rencontré
 	 */
 	private int testerListePlagesHoraires() {
@@ -603,34 +639,42 @@ public class Tournee {
 
 	/**
 	 * Cherche la demande de livraison associée au <code>Noeud</code>
-	 * @param n Le <code>Noeud</code> dont on cherche la <code>DemandeDeLivraison</code>
-	 * @return La <code>DemandeDeLivraison</code> associée au <code>Noeud n</code>
+	 * 
+	 * @param n
+	 *            Le <code>Noeud</code> dont on cherche la
+	 *            <code>DemandeDeLivraison</code>
+	 * @return La <code>DemandeDeLivraison</code> associée au
+	 *         <code>Noeud n</code>
 	 */
 	public DemandeDeLivraison getDemandeDeLivraison(Noeud n) {
 		DemandeDeLivraison demande = null;
 		PlageHoraire plage;
 		List<DemandeDeLivraison> demandes;
-		for(int i = 0; i < this.plagesHoraires.size(); ++i) {
+		for (int i = 0; i < this.plagesHoraires.size(); ++i) {
 			plage = this.plagesHoraires.get(i);
-			demandes = new ArrayList<DemandeDeLivraison>(plage.getDemandeLivraison());
-			for(int j = 0; j < demandes.size(); ++j) {
-				if(demandes.get(j).getNoeud().compareTo(n) == 0) return demandes.get(j);
+			demandes = new ArrayList<DemandeDeLivraison>(
+					plage.getDemandeLivraison());
+			for (int j = 0; j < demandes.size(); ++j) {
+				if (demandes.get(j).getNoeud().compareTo(n) == 0)
+					return demandes.get(j);
 			}
 		}
 		return demande;
 	}
-	
+
 	/**
 	 * Méthode qui retourne le noeud précédent d'une demande de livraison
-	 * @param demande : la demande de livraison
-	 * @return : le noeud précédent 
+	 * 
+	 * @param demande
+	 *            : la demande de livraison
+	 * @return : le noeud précédent
 	 */
-	public Noeud getNoeudPrecedent(DemandeDeLivraison demande){
-		if(itineraires != null){
+	public Noeud getNoeudPrecedent(DemandeDeLivraison demande) {
+		if (itineraires != null) {
 			Iterator<Itineraire> it = itineraires.iterator();
-			while(it.hasNext()){
+			while (it.hasNext()) {
 				Itineraire itineraire = it.next();
-				if(itineraire.getArrivee() == demande){
+				if (itineraire.getArrivee() == demande) {
 					return itineraire.getDepart().getNoeud();
 				}
 			}

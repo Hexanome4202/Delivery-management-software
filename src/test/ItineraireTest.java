@@ -10,8 +10,6 @@ import org.junit.Test;
 
 /**
  * Classe de test de la classe <code>Itineraire</code>
- * 
- * @author remimartin
  *
  */
 public class ItineraireTest {
