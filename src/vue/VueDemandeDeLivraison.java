@@ -1,6 +1,9 @@
 package vue;
 
+import solver.search.strategy.SetStrategyFactory;
+
 import com.mxgraph.view.mxGraph;
+
 import modele.Noeud;
 
 /**
@@ -47,6 +50,8 @@ public class VueDemandeDeLivraison extends VueNoeud {
 			String couleurBordure) {
 		super(demandeDeLivraison, hX, hY, couleurRemplissage,
 				couleurBordure);
+		modifierForme("fillColor=" + getCouleurRemplissage()+ 
+				";strokeColor=" + getCouleurBordure(), RAYON_POINT);
 	}
 
 	/**
@@ -61,6 +66,8 @@ public class VueDemandeDeLivraison extends VueNoeud {
 				COULEUR_BORDURE[numPlage]);
 		this.tempsDepasse = tempsDepasse;
 		this.numPlage = numPlage;
+		modifierForme("fillColor=" + getCouleurRemplissage()+ 
+				";strokeColor=" + getCouleurBordure(), RAYON_POINT);
 	}
 
 	/**
@@ -70,7 +77,13 @@ public class VueDemandeDeLivraison extends VueNoeud {
 	 *            (temps dépassé à modifier)
 	 */
 	public void setTempsDepasse(boolean tempsDepasse) {
-		this.tempsDepasse = tempsDepasse;
+		if(tempsDepasse){
+			modifierForme("fillColor=" + getCouleurRemplissage()
+					+ ";strokeColor=" + getCouleurBordure(), RAYON_POINT);
+		}else{
+			modifierForme("fillColor=" + getCouleurRemplissage()+ 
+					";strokeColor=" + getCouleurBordure(), RAYON_POINT);
+		}
 	}
 
 	/**
@@ -80,19 +93,7 @@ public class VueDemandeDeLivraison extends VueNoeud {
 	 * @param point
 	 */
 	public void afficher(mxGraph graph, Object point) {
-		if(getStyle() != null){
-			super.afficher(graph);
-		}
-		if (!tempsDepasse) {
-			// TODO Grossir le temps dépassé
-			graph.setCellStyle("fillColor=" + getCouleurRemplissage()
-					+ ";strokeColor=" + getCouleurBordure(),
-					new Object[] { point });
-		} else {
-			graph.setCellStyle(
-					"shape=triangle;strokeWidth=2;fillColor=red;strokeColor="
-							+ getCouleurBordure(), new Object[] { point });
-		}
+		super.afficher(graph);
 	}
 
 	/**

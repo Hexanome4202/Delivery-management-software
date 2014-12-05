@@ -87,8 +87,6 @@ public class VueTournee {
 			//On remet le style d'un point simple à celui qui représentait l'entrepot jusque là
 			if(vueEntrepot != null){
 				vueEntrepot.resetStyle();
-			}else{
-				System.out.println("Ben... pas d'entrepot");
 			}
 			
 			chargerEntrepotDepuisTournee();
@@ -265,7 +263,6 @@ public class VueTournee {
 	 */
 	private void chargerEntrepotDepuisTournee(){
 		if (tournee.getEntrepot() != null) {
-			System.out.println("Chargement de l'entrepot");
 			vueEntrepot = new VueEntrepot(
 					vueNoeuds.get(tournee.getEntrepot().getNoeud().getId()).getNoeud(),
 					hX, hY);

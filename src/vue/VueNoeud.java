@@ -220,7 +220,6 @@ public class VueNoeud {
 	 * du plan
 	 */
 	public void resetStyle(){
-		System.out.println("Reset style");
 		modifierForme(null, RAYON_POINT);
 	}
 
