@@ -3,6 +3,7 @@ package modele;
 import java.util.*;
 
 /**
+ * @author: hexanome 4202
  * Classe correspondant à un itinéraire d'une tournée
  */
 public class Itineraire {

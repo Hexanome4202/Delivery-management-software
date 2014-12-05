@@ -1,4 +1,4 @@
-﻿package modele;
+package modele;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -23,6 +23,7 @@ import tsp.TSP;
 import erreurs.Codes;
 
 /**
+ * @author: hexanome 4202
  * La classe représentant la tournée calculée et à effectuer par le livreur
  */
 public class Tournee {

@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 import erreurs.Codes;
 
 /**
+ * @author: hexanome 4202
  * Classe correspondant à une plage horaire de livraison
  */
 public class PlageHoraire {

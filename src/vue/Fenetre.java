@@ -42,7 +42,8 @@ import b4.advancedgui.menu.AccordionMenu;
 import controleur.Controleur;
 
 /**
- * 
+ * @author: hexanome 4202
+ * Classe représentant la fenêtre de l'application
  */
 public class Fenetre extends JFrame {
 
