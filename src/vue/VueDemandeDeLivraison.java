@@ -1,8 +1,6 @@
 package vue;
 
 import com.mxgraph.view.mxGraph;
-
-import modele.DemandeDeLivraison;
 import modele.Noeud;
 
 /**

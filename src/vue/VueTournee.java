@@ -209,7 +209,7 @@ public class VueTournee {
 	 */
 	public void supprimerDemandeDeLivraison(int idNoeud) {
 		vueNoeuds.get(idNoeud).setColors(0);
-	}private final int RAYON_POINT = 10;
+	}
 
 
 	/**

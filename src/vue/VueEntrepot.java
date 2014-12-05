@@ -1,6 +1,4 @@
 package vue;
-
-import modele.DemandeDeLivraison;
 import modele.Noeud;
 
 /**

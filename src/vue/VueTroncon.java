@@ -32,11 +32,6 @@ public class VueTroncon {
 	private int epaisseur = 1;
 
 	/**
-	 * Permet de savoir si on parcourt pour la première fois ou plus
-	 */
-	private int numeroTroncon = 1;
-
-	/**
 	 * @param depart
 	 * @param arrivee
 	 * @param couleur
@@ -67,20 +62,6 @@ public class VueTroncon {
 			int epaisseur) {
 		this(depart, arrivee, couleur);
 		this.epaisseur = epaisseur;
-	}
-
-	/**
-	 * @param depart
-	 * @param arrivee
-	 * @param couleur
-	 * @param epaisseur
-	 * @param num
-	 */
-	public VueTroncon(VueNoeud depart, VueNoeud arrivee, String couleur,
-			int epaisseur, int num) {
-		this(depart, arrivee, couleur);
-		this.epaisseur = epaisseur;
-		this.numeroTroncon = num;
 	}
 
 	/**

@@ -70,12 +70,6 @@ public class VuePlan extends mxGraphComponent {
 	private VueTournee vueTournee;
 
 	/**
-	 * L'id des demandes de livraison qui ne pouront pas être livrés dans la
-	 * plage horaire demandée.
-	 */
-	private Set<Integer> demandesTempsDepasse;
-
-	/**
      * 
      */
 	public VuePlan() {
